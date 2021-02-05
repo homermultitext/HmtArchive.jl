@@ -45,7 +45,7 @@ end
 function iliadxmlcorpus(archive::Archive)
     vailiad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:")
     iliadfiles = filter(f -> endswith(f, "xml"), readdir(iliaddir(archive)))
-    fullpath = map(f -> iliadsrc * f, iliadfiles)
+    fullpath = map(f -> iliaddir(archive) * f, iliadfiles)
     corpora = [] 
     for f in fullpath
         contents = open(f) do file
