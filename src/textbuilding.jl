@@ -29,7 +29,7 @@ end
 function iliaddipl(archive::Archive)
     edition(diplbuilder, iliadxmlcorpus(archive))
 end
-function ilianormed(archive::Archive)
+function iliadnormed(archive::Archive)
     edition(normbuilder, iliadxmlcorpus(archive))
 end
 

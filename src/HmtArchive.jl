@@ -18,7 +18,7 @@ export corpus
 # These are available if you only want to
 # work with some pieces of the archive
 export iliadxmlcorpus, scholiaxmlcorpus
-export iliaddipl, ilianormed
+export iliaddipl, iliadnormed
 export scholiadipl, scholianormed
 
 # Useful to make declaration of TEI namespace global
