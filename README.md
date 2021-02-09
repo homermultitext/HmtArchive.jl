@@ -28,7 +28,7 @@ using HmtArchive
 hmt = Archive(dirname(pwd()))
 ```
 
-At that point, you can work with the archive as illustrated in the Pluto notebooks, for example, to create a citable corpus of all texts in the archive:
+At that point, you can work with the archive as illustrated in the Pluto notebooks, for example, to create a citable corpus of all texts in the archive, and count the number of citable passages of text:
 
 ```julia
 julia> texts = corpus(hmt)
