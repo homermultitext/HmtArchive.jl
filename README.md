@@ -39,6 +39,7 @@ Done.
 CitableText.CitableCorpus(Any[CitableText.CitableNode(CitableText.CtsUrn("urn:cts:greekLit:tlg5026.msAim.hmt:24.A1.lemma"), "<div n=\"lemma\">\n                            
 ...
 tlg0012.tlg001.dipl:24.804"), "ὣς οἵ γ᾽ ἀμφίεπον τάφον Ἕκτορος ἱπποδάμοιο:")])
+julia> 
 julia> length(texts.corpus)
 140820
 ```
