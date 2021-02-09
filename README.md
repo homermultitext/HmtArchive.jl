@@ -31,7 +31,13 @@ hmt = Archive(dirname(pwd()))
 At that point, you can work with the archive as illustrated in the Pluto notebooks, for example, to create a citable corpus of all texts in the archive:
 
 ```julia
-texts = corpus(hmt)
+julia> texts = corpus(hmt)
+1. Compiling XML corpora ...
+2. Building dipomatic and normalized editions...
+3. Compositing separate editions...
+Done.
+CitableText.CitableCorpus(Any[CitableText.CitableNode(CitableText.CtsUrn("urn:cts:greekLit:tlg5026.msAim.hmt:24.A1.lemma"), "<div n=\"lemma\">\n                            
+...
 julia> length(texts.corpus)
 140820
 ```
