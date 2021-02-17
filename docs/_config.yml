@@ -1,0 +1,11 @@
+remote_theme: pmarsceill/just-the-docs
+title: "HmtArchive.jl"
+
+
+aux_links:
+  "archive":
+    - "https://github.com/homermultitext/hmt-archive/"
+
+
+
+footer_content: "An unregistered Julia module for working with the Homer Multitext project archive."
