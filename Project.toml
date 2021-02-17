@@ -12,4 +12,4 @@ EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 
 [compat]
 CitableText = "0.5"
-EditionBuilders = "0.2.10"
+EditionBuilders = "0.2.11"
