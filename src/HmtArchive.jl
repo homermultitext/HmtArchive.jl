@@ -24,6 +24,8 @@ export scholiadipl, scholianormed
 # Useful to make declaration of TEI namespace global
 export teins
 
+diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
 
 include("archive.jl")
 include("directories.jl")
