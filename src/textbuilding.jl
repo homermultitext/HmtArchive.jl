@@ -99,7 +99,6 @@ function scholiaxmlcorpus(archive::Archive)
     noreff = filter(cn -> ! occursin("ref", passagecomponent(cn.urn)), nonempty)
     
     CitableCorpus(noreff)
-    
 end
 
 
