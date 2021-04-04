@@ -1,6 +1,4 @@
 
-diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
 
 """
 Builds a single corpus comprising Venetus A Iliad and scholia in
@@ -101,8 +99,6 @@ function scholiaxmlcorpus(archive::Archive)
     noreff = filter(cn -> ! occursin("ref", passagecomponent(cn.urn)), nonempty)
     
     CitableCorpus(noreff)
-    
-    
 end
 
 
