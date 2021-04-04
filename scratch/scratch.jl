@@ -12,6 +12,7 @@ using HmtArchive
 hmt = Archive(dir)
 
 using CitableText
+using EditionBuilders
 
 # Analyzing scholia.
 scholiadiplomatic = scholiadipl(hmt)
@@ -29,26 +30,14 @@ end
 """Compose a Dict mapping group.text values to versions.
 """
 function textversions(c::CitableCorpus)
-    textlist = textids(c)
-    pairs = []
-    for t in textlist
-      filtered = filter(cn -> occursin(t, workcomponent(cn.urn)), c.corpus)
-      verss = unique(map(cn -> versionid(cn.urn) , filtered))
-      push!(pairs, (t => verss))
-    end
-    Dict(pairs)
+  textlist = textids(c)
+  pairs = []
+  for t in textlist
+    filtered = filter(cn -> occursin(t, workcomponent(cn.urn)), c.corpus)
+    verss = unique(map(cn -> versionid(cn.urn) , filtered))
+    push!(pairs, (t => verss))
   end
-
-
-### THESE SHOULD GO IN CitableText
-"""Extract work ID value from a Cts Urn.
-"""
-function textid(u::CtsUrn)
-    workparts(u)[2]
+  Dict(pairs)
 end
 
-"""Extract version ID value from a Cts Urn.
-"""
-function versionid(u::CtsUrn)
-	workparts(u)[3]
-end
+
