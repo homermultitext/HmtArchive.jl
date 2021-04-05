@@ -1,29 +1,27 @@
+```@meta
+CurrentModule = HmtArchive
+```
 
 # HmtArchive
 
+
 `HmtArchive` is a julia package for working with the contents of the Homer Multitext project's archive at  (https://github.com/homermultitext/hmt-archive).  
 
-The archival repository also includes pluto notebooks illustrating usage of `HmtArchive`.) Its `Project.toml` file is already configured to use the library, so you can also easily work from a julia terminal started in that directory by activating and instantiating the environment.  (In package mode, `activate .` and `instantiate`.)
+You create an `Archive` from a copy of the `hmt-archive` repository in your local file system, for example,
 
-At the julia prompt, import the package and instantiate an Archive:
-
-```julia
-using HmtArchive
-hmt = Archive(dirname(pwd()))
+```
+hmt = Archive("PATH/TO/REPOSITORY/ROOT")
 ```
 
-At that point, you can work with the archive as illustrated in the Pluto notebooks, for example, to create a citable corpus of all texts in the archive, and count the number of citable passages of text:
+If you don't have git and don't want to download the repository manually, you can also use the `localcopy` function to create an `Archive` like this:
 
-```julia
-julia> texts = corpus(hmt)
-1. Compiling XML corpora ...
-2. Building dipomatic and normalized editions...
-3. Compositing separate editions...
-Done.
-CitableText.CitableCorpus(Any[CitableText.CitableNode(CitableText.CtsUrn("urn:cts:greekLit:tlg5026.msAim.hmt:24.A1.lemma"), "<div n=\"lemma\">\n                            
-...
-tlg0012.tlg001.dipl:24.804"), "ὣς οἵ γ᾽ ἀμφίεπον τάφον Ἕκτορος ἱπποδάμοιο:")])
-julia> 
-julia> length(texts.corpus)
-140820
 ```
+hmt = localcopy()
+```
+
+!!! warn
+    It will take several seconds to download and unzip the entire repository.
+
+
+On the following page, you'll see examples of live code that download a copy of the repository, and use it to create and work with text corpora.
+

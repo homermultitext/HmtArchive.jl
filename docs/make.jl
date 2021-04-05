@@ -10,11 +10,14 @@ Pkg.instantiate()
 using Documenter, DocStringExtensions
 using CitableText
 using EditionBuilders
+using HmtArchive
 
 makedocs(
     sitename = "HmtArchive",
     pages = [
-        "Home" => "index.md"
+        "Home" => "index.md",
+        "Examples" => "examples.md",
+        "API documentation" => "apis.md"
     ]
     
 )

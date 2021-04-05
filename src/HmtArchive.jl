@@ -3,9 +3,10 @@ module HmtArchive
 using CitableObject, CitableText
 using CitableTeiReaders, EditionBuilders
 using EzXML, ZipFile, Downloads
+using Documenter, DocStringExtensions
 
 export Archive
-export localcopy
+
 
 # Builds a single corpus of all texts
 # in the archive in all editions:
