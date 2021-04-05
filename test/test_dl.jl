@@ -1,4 +1,5 @@
 
 @testset "Test building archive from download" begin
-    zipurl = "https://github.com/homermultitext/hmt-archive/archive/refs/heads/master.zip"
+    hmt = localcopy()
+    @test isa(hmt, Archive)
 end

@@ -5,6 +5,7 @@ using CitableTeiReaders, EditionBuilders
 using EzXML, ZipFile, Downloads
 
 export Archive
+export localcopy
 
 # Builds a single corpus of all texts
 # in the archive in all editions:

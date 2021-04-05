@@ -1,5 +1,7 @@
 
-"""Copied from https://github.com/sylvaticus/LAJuliaUtils.jl
+"""Unzip a zip file.
+
+Copied from https://github.com/sylvaticus/LAJuliaUtils.jl
 """
 function unzip(file,exdir="")
     fileFullPath = isabspath(file) ?  file : joinpath(pwd(),file)
