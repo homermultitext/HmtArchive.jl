@@ -16,10 +16,10 @@ hmt = Archive("PATH/TO/REPOSITORY/ROOT")
 If you don't have git and don't want to download the repository manually, you can also use the `localcopy` function to create an `Archive` like this:
 
 ```
-hmt = localcopy()
+hmt = HmtArchive.localcopy()
 ```
 
-!!! warn
+!!! warning
     It will take several seconds to download and unzip the entire repository.
 
 

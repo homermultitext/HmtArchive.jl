@@ -1,18 +1,33 @@
 
 """Unzip a zip file.
 
-Copied from https://github.com/sylvaticus/LAJuliaUtils.jl
+$(SIGNATURES)
+
+# Arguments
+
+- `file` Zip file to unpackage
+- `exdir` Directory where zip should be unwraped
+- `overwrite` True if you want to overwrite existing files
+
+
+Modified from https://github.com/sylvaticus/LAJuliaUtils.jl to add
+optional overwrite flag.
 """
-function unzip(file,exdir="")
+function unzip(file,exdir=""; overwrite::Bool=true)
     fileFullPath = isabspath(file) ?  file : joinpath(pwd(),file)
     basePath = dirname(fileFullPath)
+
     outPath = (exdir == "" ? basePath : (isabspath(exdir) ? exdir : joinpath(pwd(),exdir)))
     isdir(outPath) ? "" : mkdir(outPath)
+
     zarchive = ZipFile.Reader(fileFullPath)
     for f in zarchive.files
         fullFilePath = joinpath(outPath,f.name)
         if (endswith(f.name,"/") || endswith(f.name,"\\"))
-            mkdir(fullFilePath)
+            if ! isdir(fullFilePath)
+                # check overwrite flag
+                mkdir(fullFilePath)
+            end
         else
             write(fullFilePath, read(f))
         end
