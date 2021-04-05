@@ -9,8 +9,6 @@ using EzXML
 
 export Archive
 
-
-
 # Builds single corpus of all texts
 # in the archive in all editions:
 export corpus
@@ -21,8 +19,7 @@ export iliadxmlcorpus, scholiaxmlcorpus
 export iliaddipl, iliadnormed
 export scholiadipl, scholianormed
 
-# Useful to make declaration of TEI namespace global
-export teins
+
 
 diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
 normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
@@ -30,5 +27,6 @@ normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
 include("archive.jl")
 include("directories.jl")
 include("textbuilding.jl")
+include("TMEdition.jl")
 
 end # module

@@ -10,10 +10,9 @@ end
 
 "Compose edited text of a given XML element using a given builder."
 function editedTMelement(el, accum)
-    basic = MidBasicBuilder("Builder for valid element names", "basic")
     normed = MidNormalizedBuilder("Builder for normalizing choices", "normed")
-    if ! validelname(basic, el.name)
-        str = ezxmlstring(el)
+    if ! validelname(normed, el.name)
+        str = EditionBuilders.ezxmlstring(el)
         msg = "Invalid element $(el.name) in $(str)"
         throw(DomainError(msg))
     end
@@ -27,11 +26,11 @@ function editedTMelement(el, accum)
             children = elements(el)
             childnames = map(n -> n.name, children)
             badlist = join(childnames, ", ")
-            msg = "Invalid children of `choice` element: $(badlist) in  $(ezxmlstring(el))"
+            msg = "Invalid children of `choice` element: $(badlist) in  $(EditionBuilders.ezxmlstring(el))"
             throw(DomainError(msg))
             
         else
-            chosen = TEIchoice(normed, el)
+            chosen = EditionBuilders.TEIchoice(normed, el)
             push!(reply, chosen)
         end
 
@@ -49,14 +48,14 @@ function editedTMelement(el, accum)
        
         
         
-    elseif skipelement(normed, el.name)
+    elseif EditionBuilders.skipelement(normed, el.name)
         # do nothing
 
     else
         children = nodes(el)
         if !(isempty(children))
             for c in children
-                childres =  editedtext(builder, c, accum)
+                childres =  editedTMtext(c, accum)
                 push!(reply, childres)
             end
         end
@@ -67,14 +66,14 @@ end
 
 """Convert a parsed node of XML to appropriate text string.
 """
-function editedTMtext(builder::MidBasicBuilder, n::EzXML.Node, accum = "")::AbstractString
+function editedTMtext(n::EzXML.Node, accum = "")::AbstractString
 	rslts = [accum]
     if n.type == EzXML.ELEMENT_NODE 
         elresults = editedTMelement(n, accum)
         push!(rslts, elresults)
 
 	elseif 	n.type == EzXML.TEXT_NODE
-		tidier = EditonBuilders.cleanws(n.content )
+		tidier = EditionBuilders.cleanws(n.content )
 		if !isempty(tidier)
 			push!(rslts, accum * tidier)
 		end

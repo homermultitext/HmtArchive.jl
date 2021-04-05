@@ -76,13 +76,13 @@ function scholiaxmlcorpus(archive::Archive)
             doc = readxml(f).root
             # One book per file: use the book-containing element
             # to save the book value we'll need for passage URNs.
-            booklevel = findall(bookxp, doc,["ns"=> teins]) 
+            booklevel = findall(bookxp, doc,["ns"=> EditionBuilders.teins]) 
             book = booklevel[1]["n"]
 
             # Scholia documents for the book in this file,
             # and their sigla, which we'll use for text ID 
             # in URNs
-            scholiadocs = findall(docxp, doc,["ns"=> teins]) 
+            scholiadocs = findall(docxp, doc,["ns"=> EditionBuilders.teins]) 
             sigla = map(root -> root["n"], scholiadocs)
 
             for sdoc in scholiadocs
