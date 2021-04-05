@@ -4,6 +4,8 @@
 Builds a single corpus comprising Venetus A Iliad and scholia in
 mulitvalent archival XML edition, and univocal diplomatic and
 normalized editions.
+
+$(SIGNATURES)
 """
 function corpus(archive::Archive)
     println("1. Compiling XML corpora ...")
