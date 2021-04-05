@@ -1,5 +1,5 @@
 
 @testset "Test building archive from download" begin
-    hmt = localcopy()
+    hmt = HmtArchive.localcopy()
     @test isa(hmt, Archive)
 end

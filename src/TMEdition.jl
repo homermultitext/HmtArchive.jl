@@ -1,14 +1,44 @@
-"""
-Builder to compose editions for topic modelling.
 
-
+"""Builder to compose editions for topic modelling.
 """
 struct TMEditionBuilder  <:  EditionBuilder
     name
     versionid
 end
 
-"Compose edited text of a given XML element using a given builder."
+"""Construct an edition builder for topic modelling editions
+
+$(SIGNATURES)
+"""
+function tmbuilder()
+    TMEditionBuilder("Edition with named entities resolved", "tm")
+end
+
+"""Builder for constructing a citable node for a diplomatic text from a citable node in archival XML.
+
+$(SIGNATURES)
+"""
+function editednode(builder::TMEditionBuilder, citablenode::CitableNode)
+    nd  = root(parsexml(citablenode.text))
+    editiontext = editedTMtext(nd)
+    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+end
+
+
+function tmcorpus(xml::CitableCorpus)
+    builder = tmbuilder()
+    nodelist = map(n -> editednode(builder, n), xml.corpus)
+    CitableCorpus(nodelist)
+end
+
+
+"""Compose edited text of a given XML element using a given builder.
+
+$(SIGNATURES)
+
+Piggy back on the `MidNormalizedBuilder` to normalize everything except
+named entities.
+"""
 function editedTMelement(el, accum)
     normed = MidNormalizedBuilder("Builder for normalizing choices", "normed")
     if ! validelname(normed, el.name)
@@ -18,7 +48,10 @@ function editedTMelement(el, accum)
     end
 
     reply = []
-    if el.name == "foreign"
+    if isnamedentity(el.name)
+        push!(reply, namedentityid(el))
+
+    elseif el.name == "foreign"
         push!(reply, "«" * el.content * "»")
 
     elseif el.name == "choice"
@@ -35,19 +68,8 @@ function editedTMelement(el, accum)
         end
 
     elseif el.name == "w"
-        push!(reply, EditionBuilders.collectw(el, builder))
+        push!(reply, EditionBuilders.collectw(el, normed))       
        
-        # check for word-fragment convention:
-        # `w` with `@n` attribute:
-        # mark for subsequent peek-ahead
-        #if hasattribute(el, "n")
-        #    push!(reply, " ++$(singletoken)++ ")
-        #else
-        #    push!(reply, " $(singletoken) ")
-        #end
-       
-        
-        
     elseif EditionBuilders.skipelement(normed, el.name)
         # do nothing
 
@@ -64,7 +86,10 @@ function editedTMelement(el, accum)
 end
 
 
+
 """Convert a parsed node of XML to appropriate text string.
+
+$(SIGNATURES)
 """
 function editedTMtext(n::EzXML.Node, accum = "")::AbstractString
 	rslts = [accum]
@@ -88,9 +113,27 @@ function editedTMtext(n::EzXML.Node, accum = "")::AbstractString
 end
 
 
-"Builder for constructing a citable node for a diplomatic text from a citable node in archival XML."
-function editednode(builder::MidBasicBuilder, citablenode::CitableNode)
-    nd  = root(parsexml(citablenode.text))
-    editiontext = editedTMtext(builder, nd)
-    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+
+"""Composes.
+
+$(SIGNATURES)
+"""
+function namedentityid(nd)
+    try 
+        nodeurn = Cite2Urn(nd["n"])
+        string("abbr:",abbreviate(nodeurn))
+    catch e
+        @warn "$e"
+        "abbr:namedentity.badurn"
+    end
+end
+
+"""True if `elname` is the name of an element tagging a named entity.
+
+$(SIGNATURES)
+"""
+function isnamedentity(elname::AbstractString)::Bool
+    namedentityels = ["persName", "placeName"]
+    # Checking for `rs` requires looking at `@type` attr
+    elname in namedentityels
 end

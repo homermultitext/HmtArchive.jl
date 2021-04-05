@@ -16,7 +16,11 @@ makedocs(
     sitename = "HmtArchive",
     pages = [
         "Home" => "index.md",
-        "Examples" => "examples.md",
+        "Guide" => [
+            "validation.md",
+            "analysis.md"
+            
+        ],
         "API documentation" => "apis.md"
     ]
     

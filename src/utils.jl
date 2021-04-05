@@ -1,4 +1,3 @@
-
 ### THESE SHOULD GO IN CitableText
 """Extract work ID value from a Cts Urn.
 """
