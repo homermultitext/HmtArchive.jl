@@ -1,15 +1,12 @@
 module HmtArchive
 
-using CitableObject
-using CitableTeiReaders
-using CitableText
-using EditionBuilders
-using EzXML
-
+using CitableObject, CitableText
+using CitableTeiReaders, EditionBuilders
+using EzXML, ZipFile, Downloads
 
 export Archive
 
-# Builds single corpus of all texts
+# Builds a single corpus of all texts
 # in the archive in all editions:
 export corpus
 
@@ -20,7 +17,6 @@ export iliaddipl, iliadnormed
 export scholiadipl, scholianormed
 
 
-
 diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
 normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
 
@@ -28,5 +24,6 @@ include("archive.jl")
 include("directories.jl")
 include("textbuilding.jl")
 include("TMEdition.jl")
+include("remote.jl")
 
 end # module
