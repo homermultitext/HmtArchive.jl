@@ -27,7 +27,18 @@ length(texts.corpus)
 
 ## Topic modelling
 
-Create an edition suitable for topic modelling.  Text is normalized, but `placeName` and `persName` entities are translated to `HmtAbbreviation` strings.
+
+
+Build an edition suitable for topic modelling from an XML corpus.  Text is normalized, but `placeName` and `persName` entities are translated to `HmtAbbreviation` strings.
+
 
 ```@example dl
-``
+scholiaxml = scholiaxmlcorpus(hmt)
+tmcorp = HmtArchive.tmcorpus(scholiaxml)
+length(tmcorp.corpus)
+```
+Look at text from an example node: `pers.pers1` is Aristarchus.
+
+```@example dl
+words = split(tmcorp.corpus[10].text, " ")
+```

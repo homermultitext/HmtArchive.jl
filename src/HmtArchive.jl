@@ -31,5 +31,6 @@ include("textbuilding.jl")
 include("namedentity.jl")
 include("TMEdition.jl")
 include("remote.jl")
+include("indexscholia.jl")
 
 end # module

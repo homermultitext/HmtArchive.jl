@@ -24,7 +24,12 @@ function editednode(builder::TMEditionBuilder, citablenode::CitableNode)
     CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
 end
 
+"""Construct a corpus for use in topic modelling.
 
+$(SIGNATURES)
+
+Named entities are lemmatized to ID values; other text content is normalized.
+"""
 function tmcorpus(xml::CitableCorpus)
     builder = tmbuilder()
     nodelist = map(n -> editednode(builder, n), xml.corpus)

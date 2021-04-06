@@ -53,7 +53,6 @@ function scholiadipl(archive::Archive)
 end
 
 
-
 """Compose a normalized edition of *scholia*.
 
 $(SIGNATURES)
@@ -155,4 +154,40 @@ function scholiaforbookdoc(docroot, bk)
         end
     end
     CitableCorpus(citableNodes)
+end
+
+# This is unusably slow.
+function collapsecorpus(c; levels = 1)
+    passageseq = map(n -> collapsePassageBy(n.urn, levels) |> dropversion, c.corpus) |> unique
+    combined = []
+
+    lastseen = ""
+    for cn in c.corpus
+        txt = ""
+        reducedurn = collapsePassageBy(cn.urn, levels)
+        if reducedurn == lastseen
+            txt = txt * cn.text
+        else
+            lastseen = reducedurn
+            txt = cn.text
+            if isempty(txt)
+                # skip it
+            else
+                newnode = CitableNode(reducedurn, txt)
+                push!(combined, newnode) 
+            end
+        end
+    end
+    #=
+    for psg in passageseq
+        
+        txt = ""
+        matches = filter(n -> urncontains(psg, n.urn), c.corpus)
+        for m in matches
+            txt = txt * m.text
+        end
+        push!(combined, CitableNode(psg, txt))        
+    end
+    =#
+    combined
 end
