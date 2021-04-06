@@ -1,6 +1,7 @@
 module HmtArchive
 
 using Documenter, DocStringExtensions
+using PolytonicGreek
 using CitableObject, CitableText
 using CitableTeiReaders, EditionBuilders, CitableParserBuilder
 using EzXML, ZipFile, Downloads

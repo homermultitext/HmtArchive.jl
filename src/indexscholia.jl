@@ -1,15 +1,31 @@
+"""Index a scholion node to an *Iliad* passage.
 
+($SIGNATURES)
+
+# Arguments
+
+- `cn` should be the citable node for the `ref` node of a scholion record.
+
+The function returns a pairing of the canonical reference for the scholion with the *Iliad*
+Urn in the `ref` node's text content.
+"""
 function indexrefnode(cn::CitableNode)
     nd = parsexml(cn.text) |> root 
     tidy = replace(nd.content, r"[\s]+" => "")
     try 
-        (cn.urn,CtsUrn(tidy))
+        (collapsePassageBy(cn.urn, 1),CtsUrn(tidy))
     catch e
         @warn "$e"
-        (cn.urn,nothing)
+        (collapsePassageBy(cn.urn, 1),nothing)
     end
 end
 
+
+"""Compose a list of Tuples pairing canonical CtsUrns for scholia with CtsUrns
+for the *Iliad* text.
+
+$(SIGNATURES)
+"""
 function indexscholia(archive)
     # XPaths for finding the parts of the document we need:
     bookxp = "/ns:TEI/ns:text/ns:group"
@@ -48,5 +64,4 @@ function indexscholia(archive)
     nonempty = filter(s -> ! isempty(s.text), composite.corpus)
     noreff = filter(cn -> occursin("ref", passagecomponent(cn.urn)), nonempty)
     map(cn -> indexrefnode(cn), noreff)
-    #CitableCorpus(noreff)
 end

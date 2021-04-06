@@ -20,7 +20,7 @@ $(SIGNATURES)
 """
 function editednode(builder::TMEditionBuilder, citablenode::CitableNode)
     nd  = root(parsexml(citablenode.text))
-    editiontext = editedTMtext(nd)
+    editiontext = editedTMtext(nd) |> rmaccents
     CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
 end
 
@@ -119,9 +119,11 @@ end
 
 
 
-"""Composes.
+"""Composes a string in format of `HmtAbbreviation` for a URN encoded with the `n` 
+attribute of an XML node.
 
 $(SIGNATURES)
+
 """
 function namedentityid(nd)
     try 
@@ -136,6 +138,11 @@ end
 """True if `elname` is the name of an element tagging a named entity.
 
 $(SIGNATURES)
+
+Currently only supports `persName` and `placeName`.  HMT usage of `rs`
+should be supported by consulting `type` attribute, since there are uses of
+TEI `rs` for both named entities and other annotations that are only distinguished
+by the `type` attribute
 """
 function isnamedentity(elname::AbstractString)::Bool
     namedentityels = ["persName", "placeName"]

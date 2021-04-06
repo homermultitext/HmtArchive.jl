@@ -48,6 +48,19 @@ scholiadir
 scholiaforbookdoc
 ```
 
+
+
+
+
+
+
+### Indexing
+
+```@docs
+indexscholia
+indexrefnode
+```
+
 ### Named entity management and topic modelling
 
 #### Exported types and functions
