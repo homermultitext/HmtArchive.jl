@@ -1,17 +1,14 @@
 module HmtArchive
 
-using CitableObject
-using CitableTeiReaders
-using CitableText
-using EditionBuilders
-using EzXML
-
+using Documenter, DocStringExtensions
+using PolytonicGreek
+using CitableObject, CitableText
+using CitableTeiReaders, EditionBuilders, CitableParserBuilder
+using EzXML, ZipFile, Downloads
 
 export Archive
 
-
-
-# Builds single corpus of all texts
+# Builds a single corpus of all texts
 # in the archive in all editions:
 export corpus
 
@@ -21,14 +18,20 @@ export iliadxmlcorpus, scholiaxmlcorpus
 export iliaddipl, iliadnormed
 export scholiadipl, scholianormed
 
-# Useful to make declaration of TEI namespace global
-export teins
-
 diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
 normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
+
+# Named entity management and text editions for topic modelling
+export HmtAbbreviation, expandabbr
+export TMEditionBuilder, editednode
+
 
 include("archive.jl")
 include("directories.jl")
 include("textbuilding.jl")
+include("namedentity.jl")
+include("TMEdition.jl")
+include("remote.jl")
+include("indexscholia.jl")
 
 end # module

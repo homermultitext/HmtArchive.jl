@@ -1,9 +1,11 @@
-
+# Functions building text corpora from the HMT archive.
 
 """
 Builds a single corpus comprising Venetus A Iliad and scholia in
 mulitvalent archival XML edition, and univocal diplomatic and
 normalized editions.
+
+$(SIGNATURES)
 """
 function corpus(archive::Archive)
     println("1. Compiling XML corpora ...")
@@ -24,22 +26,45 @@ function corpus(archive::Archive)
     rslt
 end
 
+"""Compose a diplomatic edition of *Iliad* texts.
+
+$(SIGNATURES)
+"""
 function iliaddipl(archive::Archive)
     edition(diplbuilder, iliadxmlcorpus(archive))
 end
+
+
+"""Compose a normalized edition of *Iliad* texts.
+
+$(SIGNATURES)
+"""
 function iliadnormed(archive::Archive)
     edition(normbuilder, iliadxmlcorpus(archive))
 end
 
+
+"""Compose a diplomatic edition of *scholia*.
+
+$(SIGNATURES)
+"""
 function scholiadipl(archive::Archive)
     edition(diplbuilder, scholiaxmlcorpus(archive))
 end
 
+
+"""Compose a normalized edition of *scholia*.
+
+$(SIGNATURES)
+"""
 function scholianormed(archive::Archive)
     edition(normbuilder, scholiaxmlcorpus(archive))
 end
 
-"Compile a single citable edition of Venetus A Iliad."
+"""Compile a single citable edition of Venetus A Iliad.
+
+$(SIGNATURES)
+"""
 function iliadxmlcorpus(archive::Archive)
     vailiad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:")
     iliadfiles = filter(f -> endswith(f, "xml"), readdir(iliaddir(archive)))
@@ -59,7 +84,10 @@ function iliadxmlcorpus(archive::Archive)
 end
 
 
-"Compile a single citable edition of all Venetus A schola."
+"""Compile a single citable edition of all Venetus A scholia.
+
+$(SIGNATURES)
+"""
 function scholiaxmlcorpus(archive::Archive)
     # XPaths for finding the parts of the document we need:
     bookxp = "/ns:TEI/ns:text/ns:group"
@@ -76,13 +104,13 @@ function scholiaxmlcorpus(archive::Archive)
             doc = readxml(f).root
             # One book per file: use the book-containing element
             # to save the book value we'll need for passage URNs.
-            booklevel = findall(bookxp, doc,["ns"=> teins]) 
+            booklevel = findall(bookxp, doc,["ns"=> EditionBuilders.teins]) 
             book = booklevel[1]["n"]
 
             # Scholia documents for the book in this file,
             # and their sigla, which we'll use for text ID 
             # in URNs
-            scholiadocs = findall(docxp, doc,["ns"=> teins]) 
+            scholiadocs = findall(docxp, doc,["ns"=> EditionBuilders.teins]) 
             sigla = map(root -> root["n"], scholiadocs)
 
             for sdoc in scholiadocs
@@ -102,7 +130,15 @@ function scholiaxmlcorpus(archive::Archive)
 end
 
 
-"Make a CitableCorpus for one scholia document in one book."
+"""Make a CitableCorpus for one scholia document in one book.
+
+$(SIGNATURES)
+
+# Arguments
+
+- `docroot` is the parsed XML root node for one scholia document such as "Venetus A main scholia"  or "Venetus A intermarginal scholia"
+- `bk` is the *Iliad* book number you want.
+"""
 function scholiaforbookdoc(docroot, bk)
     wrkcomponent = "tlg5026." *  docroot["n"] * ".hmt"
     baseurn = CtsUrn("urn:cts:greekLit:$(wrkcomponent):")
@@ -118,4 +154,40 @@ function scholiaforbookdoc(docroot, bk)
         end
     end
     CitableCorpus(citableNodes)
+end
+
+# This is unusably slow.
+function collapsecorpus(c; levels = 1)
+    passageseq = map(n -> collapsePassageBy(n.urn, levels) |> dropversion, c.corpus) |> unique
+    combined = []
+
+    lastseen = ""
+    for cn in c.corpus
+        txt = ""
+        reducedurn = collapsePassageBy(cn.urn, levels)
+        if reducedurn == lastseen
+            txt = txt * cn.text
+        else
+            lastseen = reducedurn
+            txt = cn.text
+            if isempty(txt)
+                # skip it
+            else
+                newnode = CitableNode(reducedurn, txt)
+                push!(combined, newnode) 
+            end
+        end
+    end
+    #=
+    for psg in passageseq
+        
+        txt = ""
+        matches = filter(n -> urncontains(psg, n.urn), c.corpus)
+        for m in matches
+            txt = txt * m.text
+        end
+        push!(combined, CitableNode(psg, txt))        
+    end
+    =#
+    combined
 end
