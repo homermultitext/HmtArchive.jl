@@ -14,6 +14,10 @@ Supports building a text corpus from archival source for the the Venetus A manus
 - a univocal diplomatic edition
 - a univocal normalized edition
 
+
+In addition, the package includes a function to build an edition optimized for topic modelling.
+
+
 ## Using the module
 
 The `hmt-archive` github repository (<https://github.com/homermultitext/hmt-archive>) includes pluto notebooks illustrating usage of the library.
