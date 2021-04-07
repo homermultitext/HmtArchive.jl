@@ -15,7 +15,9 @@ end
     txt = "<div n=\"comment\"><p><persName n=\"urn:cite2:hmt:pers:pers16\"><choice><abbr>Ἀρισταρχ</abbr><expan>Ἀρίσταρχος</expan></choice></persName> νεμεσσηθεῶμεν δια του <rs type=\"waw\">θε</rs>⁑</p></div>"
     urn = CtsUrn("urn:cts:greekLit:tlg5026.msAim.hmt:24.B3.comment")
     cn = CitableNode(urn, txt)
-    tmed = HmtArchive.editedTMnode(cn)
-    wordlist = split(tmed, " ")
+
+    bldr = HmtArchive.tmbuilder()
+    tmed = editednode(bldr, cn)
+    wordlist = split(tmed.text, " ")
     @test wordlist[1] == "abbr:pers.pers16"
 end
