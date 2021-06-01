@@ -45,3 +45,5 @@ bk9 = filter(cn -> urncontains(bk9urn, cn.urn), comments) |> CitableCorpus
 bk10 = filter(cn -> urncontains(bk10urn, cn.urn), comments) |> CitableCorpus
 
 bks = composite_array([bk8, bk9, bk10])
+
+bkstkns = map(cn -> tokenize(ortho, cn.text), bks.corpus) |> Iterators.flatten |> collect
