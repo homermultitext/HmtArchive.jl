@@ -13,19 +13,20 @@ md"""> ### Validating HMT-specific editorial features
 Define `archiveroot` to make this notebook function
 """
 
-# ╔═╡ a6c4e12e-603f-4ef3-b948-a528134e8545
+# ╔═╡ 85df246d-3b78-4f16-9199-ca770a9a25fc
 
+#archiveroot = ""
+archiveroot = string(pwd() |> dirname |> dirname, "/hmt-archive/archive")
+
+# ╔═╡ a6c4e12e-603f-4ef3-b948-a528134e8545
+pwd()
 
 # ╔═╡ 8257128b-0259-46f2-8e5f-ba2a3e2b5706
 md"""> Configuration
 """
 
-# ╔═╡ 85df246d-3b78-4f16-9199-ca770a9a25fc
-archiveroot = ""
-# string(pwd() |> dirname |> dirname, "/hmt-archive/archive")
-
 # ╔═╡ d620a25f-3e16-4fd5-bcf6-d26183576b33
-repo = isempty(archiveroot) ? "" : repository(archiveroot; dse="dse-data", config="textconfigs")
+repo = isempty(archiveroot) ? "" : repository(archiveroot; dse="dse-data", config="textconfigs", editions="tei-editions"	)
 
 # ╔═╡ 3c1a7e1c-35f9-4f22-8756-d54299122feb
 citation = isempty(repo) ? "" : citation_df(repo)
@@ -474,6 +475,6 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═a6c4e12e-603f-4ef3-b948-a528134e8545
 # ╟─8257128b-0259-46f2-8e5f-ba2a3e2b5706
 # ╟─d620a25f-3e16-4fd5-bcf6-d26183576b33
-# ╟─3c1a7e1c-35f9-4f22-8756-d54299122feb
+# ╠═3c1a7e1c-35f9-4f22-8756-d54299122feb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
