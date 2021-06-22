@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ ece5c9b3-b69f-460b-8864-bc809840d8b1
-using EditorsRepo, CitableText, CitableCorpus
+using EditorsRepo, CitableText, CitableCorpus, EzXML
 
 # ╔═╡ 6a8eb2aa-d1d1-11eb-1cef-1d4ae8085a66
 md"""> ### Validating HMT-specific editorial features
@@ -14,12 +14,51 @@ Define `archiveroot` to make this notebook function
 """
 
 # ╔═╡ 85df246d-3b78-4f16-9199-ca770a9a25fc
-
 #archiveroot = ""
 archiveroot = string(pwd() |> dirname |> dirname, "/hmt-archive/archive")
 
-# ╔═╡ a6c4e12e-603f-4ef3-b948-a528134e8545
-pwd()
+# ╔═╡ 35fd3ff6-c73b-4164-9fe5-ae3a96ea6c55
+md"> Corpora"
+
+# ╔═╡ 1bc7c645-5c8a-4d72-b27f-7e231c94a12a
+md"> Indices"
+
+# ╔═╡ 931d86ac-c815-40d4-bc0d-5c1e258fba05
+md"> Functions"
+
+# ╔═╡ 86b0b8f3-c3dc-4f79-964e-2c1594b56f0e
+# Compose a pairing if a scholia URN to an Iliad URN from a "ref" node
+function indexrefnode(cn::CitableNode)
+    nd = parsexml(cn.text) |> root 
+    tidy = replace(nd.content, r"[\s]+" => "")
+    try 
+        (collapsePassageBy(cn.urn, 1),CtsUrn(tidy))
+    catch e
+        @warn "$e"
+        (collapsePassageBy(cn.urn, 1),nothing)
+    end
+end
+
+# ╔═╡ a06367d6-3f93-48d8-a6d8-5159428abece
+# Compose a list of CtsUrn-PersName URN pairs for content
+# of a list of citable nodes
+function indexPersNames(nodelist)
+	entries = []
+	for cn in nodelist
+		doc = parsexml(cn.text)
+		pns = findall("//persName", doc)
+		for pn in pns
+			try 
+				push!(entries, (cn.urn,pn["n"] ))
+			catch e
+				oneliner = replace(string(pn), "[ \t\n]+" => " ")
+				push!(entries, (cn.urn, "BAD ENTRY $(oneliner)"))
+			end
+		end
+	end
+	entries
+end
+
 
 # ╔═╡ 8257128b-0259-46f2-8e5f-ba2a3e2b5706
 md"""> Configuration
@@ -28,8 +67,43 @@ md"""> Configuration
 # ╔═╡ d620a25f-3e16-4fd5-bcf6-d26183576b33
 repo = isempty(archiveroot) ? "" : repository(archiveroot; dse="dse-data", config="textconfigs", editions="tei-editions"	)
 
-# ╔═╡ 3c1a7e1c-35f9-4f22-8756-d54299122feb
-citation = isempty(repo) ? "" : citation_df(repo)
+# ╔═╡ 65b1ed54-2c2c-47a6-8b33-364f37642bc1
+# THIS REALLY BELONGS IN EditorsRepo
+# Create a single archival corpus for a repository
+function archivalcorpus(r::EditingRepository)
+	citesdf =  citation_df(repo)
+    urns = citesdf[:, :urn]
+
+    corpora = []
+    for u in urns
+        # 1. Read the source text (here, XML)
+        src = textsourceforurn(r, u)
+        if isnothing(src)
+            # skip it
+        else
+            # 2. get the EditionBuilder for the urn
+            reader = ohco2forurn(citesdf, u)
+            # 3. create citable corpus of the archival version
+            push!(corpora, reader(src, u))
+        end
+    end
+    CitableCorpus.composite_array(corpora)
+end
+
+# ╔═╡ 4dcbb043-cdb8-44f4-9942-a1f244c246ce
+archivaltexts = archivalcorpus(repo)
+
+# ╔═╡ 6c420b88-c1e7-4811-86d2-d19ed6d50dbb
+# Index of scholia URNs to Iliad passaage
+refidx = begin
+	# Kludgey but effetive: select CitableNodes with URN ending in "ref"
+	reff = filter(cn -> endswith(cn.urn.urn, "ref"), archivaltexts.corpus)
+	map(cn -> indexrefnode(cn), reff)
+end
+
+# ╔═╡ 4d64d3c2-0513-4f33-b947-2024b86fadf4
+# Index of CTS URN to URN for personal name
+pnidx = indexPersNames(archivaltexts.corpus)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -37,11 +111,13 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 CitableCorpus = "~0.2.1"
 CitableText = "~0.9.0"
 EditorsRepo = "~0.11.6"
+EzXML = "~1.1.0"
 
 [deps]
 CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
 CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
+EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -471,10 +547,17 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╔═╡ Cell order:
 # ╠═ece5c9b3-b69f-460b-8864-bc809840d8b1
 # ╟─6a8eb2aa-d1d1-11eb-1cef-1d4ae8085a66
-# ╠═85df246d-3b78-4f16-9199-ca770a9a25fc
-# ╠═a6c4e12e-603f-4ef3-b948-a528134e8545
+# ╟─85df246d-3b78-4f16-9199-ca770a9a25fc
+# ╟─35fd3ff6-c73b-4164-9fe5-ae3a96ea6c55
+# ╟─4dcbb043-cdb8-44f4-9942-a1f244c246ce
+# ╟─1bc7c645-5c8a-4d72-b27f-7e231c94a12a
+# ╟─6c420b88-c1e7-4811-86d2-d19ed6d50dbb
+# ╟─4d64d3c2-0513-4f33-b947-2024b86fadf4
+# ╟─931d86ac-c815-40d4-bc0d-5c1e258fba05
+# ╟─86b0b8f3-c3dc-4f79-964e-2c1594b56f0e
+# ╟─a06367d6-3f93-48d8-a6d8-5159428abece
+# ╠═65b1ed54-2c2c-47a6-8b33-364f37642bc1
 # ╟─8257128b-0259-46f2-8e5f-ba2a3e2b5706
 # ╟─d620a25f-3e16-4fd5-bcf6-d26183576b33
-# ╠═3c1a7e1c-35f9-4f22-8756-d54299122feb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
