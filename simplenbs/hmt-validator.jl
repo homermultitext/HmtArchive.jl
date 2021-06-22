@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ ece5c9b3-b69f-460b-8864-bc809840d8b1
-using EditorsRepo, CitableText, CitableCorpus, EzXML
+using EditorsRepo, CitableText, CitableCorpus, EzXML, PlutoUI
 
 # ╔═╡ 6a8eb2aa-d1d1-11eb-1cef-1d4ae8085a66
 md"""> ### Validating HMT-specific editorial features
@@ -22,6 +22,9 @@ md"> Corpora"
 
 # ╔═╡ 1bc7c645-5c8a-4d72-b27f-7e231c94a12a
 md"> Indices"
+
+# ╔═╡ b832d797-1730-424a-b0d8-8a1ad8fdd1c6
+dse = ""
 
 # ╔═╡ 931d86ac-c815-40d4-bc0d-5c1e258fba05
 md"> Functions"
@@ -112,12 +115,14 @@ CitableCorpus = "~0.2.1"
 CitableText = "~0.9.0"
 EditorsRepo = "~0.11.6"
 EzXML = "~1.1.0"
+PlutoUI = "~0.7.9"
 
 [deps]
 CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
 CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
 EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -415,6 +420,12 @@ version = "1.1.0"
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
+[[PlutoUI]]
+deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
+git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.9"
+
 [[PolytonicGreek]]
 deps = ["DocStringExtensions", "Documenter", "Orthography", "Test", "Unicode"]
 git-tree-sha1 = "db92251590915f8488ebb3ffa2f2b4376e0146b5"
@@ -489,6 +500,11 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
+[[Suppressor]]
+git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
+uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
+version = "0.2.0"
+
 [[TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
@@ -553,10 +569,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─1bc7c645-5c8a-4d72-b27f-7e231c94a12a
 # ╟─6c420b88-c1e7-4811-86d2-d19ed6d50dbb
 # ╟─4d64d3c2-0513-4f33-b947-2024b86fadf4
+# ╠═b832d797-1730-424a-b0d8-8a1ad8fdd1c6
 # ╟─931d86ac-c815-40d4-bc0d-5c1e258fba05
 # ╟─86b0b8f3-c3dc-4f79-964e-2c1594b56f0e
 # ╟─a06367d6-3f93-48d8-a6d8-5159428abece
-# ╠═65b1ed54-2c2c-47a6-8b33-364f37642bc1
+# ╟─65b1ed54-2c2c-47a6-8b33-364f37642bc1
 # ╟─8257128b-0259-46f2-8e5f-ba2a3e2b5706
 # ╟─d620a25f-3e16-4fd5-bcf6-d26183576b33
 # ╟─00000000-0000-0000-0000-000000000001
