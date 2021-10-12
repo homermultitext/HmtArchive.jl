@@ -1,4 +1,7 @@
 
+![build](https://github.com/homermultitext/HmtArchive.jl/actions/workflows/Documentation.yml/badge.svg)
+
+
 # HmtArchive.jl
 
 
