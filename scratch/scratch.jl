@@ -41,3 +41,7 @@ function textversions(c::CitableCorpus)
 end
 
 
+#=
+using StatsBase
+histo = countmap(t for t in tokenlist)
+=#
