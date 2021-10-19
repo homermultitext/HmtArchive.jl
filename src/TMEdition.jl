@@ -18,10 +18,10 @@ end
 
 $(SIGNATURES)
 """
-function editednode(builder::TMEditionBuilder, citablenode::CitableNode)
-    nd  = root(parsexml(citablenode.text))
+function editednode(builder::TMEditionBuilder, CitablePassage::CitablePassage)
+    nd  = root(parsexml(CitablePassage.text))
     editiontext = editedTMtext(nd) |> rmaccents
-    CitableNode(addversion(citablenode.urn, builder.versionid), editiontext)
+    CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)
 end
 
 """Construct a corpus for use in topic modelling.
@@ -30,10 +30,10 @@ $(SIGNATURES)
 
 Named entities are lemmatized to ID values; other text content is normalized.
 """
-function tmcorpus(xml::CitableCorpus)
+function tmcorpus(xml::CitableTextCorpus)
     builder = tmbuilder()
     nodelist = map(n -> editednode(builder, n), xml.corpus)
-    CitableCorpus(nodelist)
+    CitableTextCorpus(nodelist)
 end
 
 

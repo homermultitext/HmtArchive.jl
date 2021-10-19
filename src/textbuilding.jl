@@ -145,15 +145,15 @@ function scholiaforbookdoc(docroot, bk)
     body = elements(docroot)[1]
     scholiadivs = elements(body)
     #println("Found ", length(scholiadivs), " scholia for ", baseurn, " in book ", bk)
-    citableNodes =  Array{CitableNode}(undef, 0)
+    CitablePassages =  Array{CitablePassage}(undef, 0)
     for s in scholiadivs
         scholid = "$(bk)." * s["n"]
         for div in eachelement(s)
             cn = CitableTeiReaders.citeNAttr(div, baseurn, scholid)       
-            push!(citableNodes, cn)
+            push!(CitablePassages, cn)
         end
     end
-    CitableCorpus(citableNodes)
+    CitableCorpus(CitablePassages)
 end
 
 # This is unusably slow.
@@ -173,7 +173,7 @@ function collapsecorpus(c; levels = 1)
             if isempty(txt)
                 # skip it
             else
-                newnode = CitableNode(reducedurn, txt)
+                newnode = CitablePassage(reducedurn, txt)
                 push!(combined, newnode) 
             end
         end
@@ -186,7 +186,7 @@ function collapsecorpus(c; levels = 1)
         for m in matches
             txt = txt * m.text
         end
-        push!(combined, CitableNode(psg, txt))        
+        push!(combined, CitablePassage(psg, txt))        
     end
     =#
     combined

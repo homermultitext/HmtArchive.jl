@@ -31,7 +31,7 @@ md"> Functions"
 
 # ╔═╡ 86b0b8f3-c3dc-4f79-964e-2c1594b56f0e
 # Compose a pairing if a scholia URN to an Iliad URN from a "ref" node
-function indexrefnode(cn::CitableNode)
+function indexrefnode(cn::CitablePassage)
     nd = parsexml(cn.text) |> root 
     tidy = replace(nd.content, r"[\s]+" => "")
     try 
@@ -99,7 +99,7 @@ archivaltexts = archivalcorpus(repo)
 # ╔═╡ 6c420b88-c1e7-4811-86d2-d19ed6d50dbb
 # Index of scholia URNs to Iliad passaage
 refidx = begin
-	# Kludgey but effetive: select CitableNodes with URN ending in "ref"
+	# Kludgey but effetive: select CitablePassages with URN ending in "ref"
 	reff = filter(cn -> endswith(cn.urn.urn, "ref"), archivaltexts.corpus)
 	map(cn -> indexrefnode(cn), reff)
 end
