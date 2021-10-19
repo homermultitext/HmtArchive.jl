@@ -18,10 +18,10 @@ end
 
 $(SIGNATURES)
 """
-function editednode(builder::TMEditionBuilder, CitablePassage::CitablePassage)
-    nd  = root(parsexml(CitablePassage.text))
+function editednode(builder::TMEditionBuilder, passage::CitablePassage)
+    nd  = root(parsexml(passage.text))
     editiontext = editedTMtext(nd) |> rmaccents
-    CitablePassage(addversion(CitablePassage.urn, builder.versionid), editiontext)
+    CitablePassage(addversion(passage.urn, builder.versionid), editiontext)
 end
 
 """Construct a corpus for use in topic modelling.
