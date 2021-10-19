@@ -1,6 +1,7 @@
 using HmtArchive
 using Test
 using CitableText, CitableObject
+using CitableCorpus
 using CitableParserBuilder
 using EzXML
 

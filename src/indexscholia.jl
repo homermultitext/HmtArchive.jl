@@ -9,7 +9,7 @@
 The function returns a pairing of the canonical reference for the scholion with the *Iliad*
 Urn in the `ref` node's text content.
 """
-function indexrefnode(cn::CitableNode)
+function indexrefnode(cn::CitablePassage)
     nd = parsexml(cn.text) |> root 
     tidy = replace(nd.content, r"[\s]+" => "")
     try 
