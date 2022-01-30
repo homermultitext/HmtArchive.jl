@@ -6,7 +6,11 @@ using CitableTeiReaders, EditionBuilders
 
 using CitableObject
 using CitablePhysicalText
+
+
 using EditorsRepo
+import EditorsRepo: diplomaticcorpus
+import EditorsRepo: normalizedcorpus
 
 #using PolytonicGreek
 #using CitableObject, CitableText, CitableCorpus
@@ -16,6 +20,10 @@ using EditorsRepo
 export Archive
 export adjacent
 
+export dse
+
+
+include("constants.jl")
 include("archive.jl")
 
 #= Named entity management and text editions for topic modelling
