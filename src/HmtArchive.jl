@@ -3,6 +3,9 @@ using Documenter, DocStringExtensions
 
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
+
+using CitableObject
+using CitablePhysicalText
 using EditorsRepo
 
 #using PolytonicGreek
@@ -11,26 +14,15 @@ using EditorsRepo
 #using EzXML, ZipFile, Downloads
 
 export Archive
-
-# Builds a single corpus of all texts
-# in the archive in all editions:
-export corpus
-
-# These are available if you only want to
-# work with some pieces of the archive
-export iliadxmlcorpus, scholiaxmlcorpus
-export iliaddipl, iliadnormed
-export scholiadipl, scholianormed
-
-#diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-#normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
-
-# Named entity management and text editions for topic modelling
-export HmtAbbreviation, expandabbr
-export TMEditionBuilder, editednode
-
+export adjacent
 
 include("archive.jl")
+
+#= Named entity management and text editions for topic modelling
+export HmtAbbreviation, expandabbr
+export TMEditionBuilder, editednode
+=#
+
 
 #=
 include("directories.jl")
