@@ -1,4 +1,7 @@
-# Run this from repository root, e.g. with
+# To build these docs, you must have a copy of the hmt-archive repository
+# cloned to a directory adjacent to the HmtArchive.jl root directory.
+#
+# Then run this from repository root:
 # 
 #    julia --project=docs/ docs/make.jl
 #
