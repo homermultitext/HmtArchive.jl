@@ -1,18 +1,34 @@
-```@meta
-CurrentModule = HmtArchive
+# HMTArchive.jl
+
+```@setup archive
+root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive")
 ```
 
-# HmtArchive
+Create an `Archive` from a downloaded or cloned copy of the Homer Multitext project's github repository for archival data at https://github.com/homermultitext/hmt-archive.  Here, `root` is set to the `archive` subdirectory of the repository.
 
 
-`HmtArchive` is a julia package for working with the contents of the Homer Multitext project's archive at  (https://github.com/homermultitext/hmt-archive).  
+```@example archive
+using HmtArchive
+hmt = Archive(root)
+```
+
+Create a normalized corpus of all texts in the repository:
+
+```@example archive
+using EditorsRepo
+normedcorpus = normalizedcorpus(hmt)
+```
 
 
+Create a diplomatic corpus of all texts in the repository:
 
-The package supports building a text corpus from archival source for the the Venetus A manuscript.  For the *Iliad* text and each scholia document, the package can build:
+```@example archive
+diplcorpus = diplomaticcorpus(hmt)
+```
 
-- a citable corpus of multivalent, well-formed XML
-- a univocal diplomatic edition
-- a univocal normalized edition
+Collect all DSE records:
 
-It also provides functions to create an edition optimized for topic modelling, and to index scholia to the *Iliad* text.
+
+```@example archive
+dsecollection = dse(hmt)
+```

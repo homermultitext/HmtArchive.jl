@@ -1,6 +1,13 @@
-# Run this from repository root, e.g. with
+# To build these docs, you must have a copy of the hmt-archive repository
+# cloned to a directory adjacent to the HmtArchive.jl root directory.
+#
+# Then run this from repository root:
 # 
 #    julia --project=docs/ docs/make.jl
+#
+# Serve docs from repository root:
+#
+#   julia -e 'using LiveServer; serve(dir="docs/build")'julia -e 'using LiveServer; serve(dir="docs/build")' 
 #
 using Pkg
 Pkg.activate(".")
@@ -16,11 +23,7 @@ makedocs(
     sitename = "HmtArchive",
     pages = [
         "Home" => "index.md",
-        "Guide" => [
-            "validation.md",
-            "analysis.md"
-            
-        ],
+       
         "API documentation" => "apis.md"
     ]
     
