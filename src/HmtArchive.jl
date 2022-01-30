@@ -1,10 +1,14 @@
 module HmtArchive
-
 using Documenter, DocStringExtensions
-using PolytonicGreek
-using CitableObject, CitableText, CitableCorpus
-using CitableTeiReaders, EditionBuilders, CitableParserBuilder
-using EzXML, ZipFile, Downloads
+
+using CitableBase, CitableText, CitableCorpus
+using CitableTeiReaders, EditionBuilders
+using EditorsRepo
+
+#using PolytonicGreek
+#using CitableObject, CitableText, CitableCorpus
+#using CitableTeiReaders, EditionBuilders, CitableParserBuilder
+#using EzXML, ZipFile, Downloads
 
 export Archive
 
@@ -18,8 +22,8 @@ export iliadxmlcorpus, scholiaxmlcorpus
 export iliaddipl, iliadnormed
 export scholiadipl, scholianormed
 
-diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
-normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
+#diplbuilder = MidDiplomaticBuilder("Diplomatic edition", "dipl")
+#normbuilder = MidNormalizedBuilder("Normalized edition", "normed")
 
 # Named entity management and text editions for topic modelling
 export HmtAbbreviation, expandabbr
@@ -27,11 +31,13 @@ export TMEditionBuilder, editednode
 
 
 include("archive.jl")
+
+#=
 include("directories.jl")
 include("textbuilding.jl")
 include("namedentity.jl")
 include("TMEdition.jl")
 include("remote.jl")
 include("indexscholia.jl")
-
+=#
 end # module

@@ -4,7 +4,7 @@
 $(SIGNATURES)
 """
 function scholiadir(archive::Archive)
-    archive.root *  "/archive/scholia/"
+    joinpath(archive.root,  "archive", "scholia/")
 end
 
 """Directory with archival XML for *Iliad* editions.
@@ -12,5 +12,5 @@ end
 $(SIGNATURES)
 """
 function iliaddir(archive::Archive)
-    archive.root  *  "/archive/iliad/"
+    joinpath(archive.root,  "archive", "iliad/")
 end
