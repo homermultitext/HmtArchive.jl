@@ -31,3 +31,11 @@ Collect all DSE records:
 dsecollection = dse(hmt)
 ```
 
+
+## Indexing content of XML editions
+
+Index scholia commenting on *Iliad*:
+
+```@example components
+commentaryindex = commentpairs(hmt)
+```

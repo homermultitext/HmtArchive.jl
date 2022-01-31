@@ -23,7 +23,6 @@ end
 $(SIGNATURES)
 """
 function librarycex(hmt::Archive, releaseid::AbstractString)
-    @warn("Incomplete test CEX output, missing: data model declarations; index of scholia to Iliad not yet computed")
     @info("Building release of HMT archive with release ID $(releaseid)")
     @info("Building archival corpus...")
     archivaltexts = archivalcorpus(hmt |> edrepo, skipref = true)
@@ -36,7 +35,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
     @info("Assembling CEX...")
     join([
         cexheader(releaseid), 
-        datamodelcex(),  # TBD
+        datamodelcex(),
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
@@ -48,13 +47,24 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         ], "\n\n")
 end
 
-
+"""Format CEX index of scholia to Iliad.
+$(SIGNATURES)
+"""
 function indexescex(hmt::Archive)
-    @warn("CEX for indexes not yet implemented")
-    """//
-    // CEX FOR INDEXES NOT YET IMPLEMENTED
-    //
-    """
+    hdr = """#!citerelationset
+urn|urn:cite2:hmt:commentary.v1:all
+label|Index of scholia to *Iliad* passages they comment on
+scholion|iliad
+"""
+    rawpairs = commentpairs(hmt)
+    clean = filter(pr -> ! isnothing(pr[2]), rawpairs)
+    dirty = filter(pr -> isnothing(pr[2]), rawpairs)
+    @warn("Failed to map the following scholia to Iliad passages:")
+    msg = join(map(pr -> pr[1], dirty), "\n")
+    @warn(msg)
+    cexlines = map(pr -> string(pr[1]) * "|" * string(pr[2]),  clean)
+
+    hdr * "\n\n" * join(cexlines, "\n")
 end
 
 """Compose CEX for authority lists managed in a separate github repository.
@@ -150,11 +160,30 @@ This includes both data model declarations, and
 a CITE Collection cataloging the data models.
 """
 function datamodelcex()
-    @warn("CEX for data models not yet implemented")
-    """//
-    // CEX FOR DATA MODELS NOT YET IMPLEMENTED
-    //
-    """
+    """// CITE namespace definitions
+namespace|hmt|http://www.homermultitext.org/citens/hmt
+namespace|greekLit|http://chs.harvard.edu/ctsns/greekLit
+
+// Collection of data models used in this release:
+
+#!citecollections
+URN|Description|Labelling property|Ordering property|License
+urn:cite2:cite:datamodels.v1:|CITE data models|urn:cite2:cite:datamodels.v1.label:||Public domain
+
+#!citeproperties
+Property|Label|Type|Authority list
+urn:cite2:cite:datamodels.v1.urn:|Data model|Cite2Urn|
+urn:cite2:cite:datamodels.v1.label:|Label|String|
+urn:cite2:cite:datamodels.v1.description:|Description|String|
+
+#!citedata
+urn|label|description
+urn:cite2:cite:datamodels.v1:imagemodel|Citable Image|Model of a citable image.  See http://cite-architecture.github.io/imagemodel/.
+urn:cite2:cite:datamodels.v1:binaryimg|Binary image data|Model of a binary image data associated with a citable image.  See TBA.
+urn:cite2:cite:datamodels.v1:tbsmodel|Text Bearing Surface Model|Model of TextBearing Surfaces.  See http://cite-architecture.github.io/tbsmodel/.
+urn:cite2:cite:datamodels.v1:dsemodel|Diplomatic Scholarly Edition|Diplomatic Scholarly Edition.  See https://cite-architecture.github.io/dsemodel/.
+urn:cite2:cite:datamodels.v1:commentarymodel|Commentary|Model text passages commenting on text passages
+"""
 end
 
 

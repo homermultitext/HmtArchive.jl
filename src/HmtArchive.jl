@@ -23,6 +23,7 @@ export adjacent
 export librarycex, writerc, publish
 
 export dse
+export commentpairs
 
 include("constants.jl")
 include("archive.jl")
