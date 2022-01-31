@@ -50,3 +50,12 @@ function codexfiles(hmt::Archive)
     filenames = filter(f -> endswith(f, "cex"), fullpath)        
 	filenames
 end
+
+"""List *cex files in images directory.
+$(SIGNATURES)
+"""
+function imagefiles(hmt::Archive)
+    fullpath = joinpath(hmt.root, "images") |> readdir
+    filenames = filter(f -> endswith(f, "cex"), fullpath)        
+	filenames
+end
