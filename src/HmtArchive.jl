@@ -25,6 +25,7 @@ export dse
 
 include("constants.jl")
 include("archive.jl")
+include("publish.jl")
 
 #= Named entity management and text editions for topic modelling
 export HmtAbbreviation, expandabbr

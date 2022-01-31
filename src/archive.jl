@@ -21,21 +21,6 @@ function adjacent()
     Archive(joinpath(pwd() |> dirname, "hmt-archive", "archive"))
 end
 
-
-"""Format contents of `hmt` as delimited-text in CEX format.
-$(SIGNATURES)
-"""
-function publish(hmt::Archive, release::AbstractString)
-    @warn("Incomplete test output")
-    @warn("Release ID: ", release)
-    dipls = diplomaticcorpus(hmt)
-    normed = normalizedcorpus(hmt)
-    
-       
-    join([cex(dipls), cex(normed), cex(dse)], "\n\n")
-end
-
-
 """Instantiate a `DSECollection` with all DSE records in the archive.
 $(SIGNATURES)
 """
@@ -55,4 +40,13 @@ $(SIGNATURES)
 """
 function normalizedcorpus(hmt::Archive)
     normalizedcorpus(hmt |> edrepo)
+end
+
+"""List *cex files in codex directory.
+$(SIGNATURES)
+"""
+function codexfiles(hmt::Archive)
+    fullpath = joinpath(hmt.root, "codices") |> readdir
+    filenames = filter(f -> endswith(f, "cex"), fullpath)        
+	filenames
 end
