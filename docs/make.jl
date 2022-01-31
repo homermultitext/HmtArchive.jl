@@ -23,6 +23,7 @@ makedocs(
     sitename = "HmtArchive",
     pages = [
         "Home" => "index.md",
+        "Assembling parts of the archive" => "components.md",
        
         "API documentation" => "apis.md"
     ]

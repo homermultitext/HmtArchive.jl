@@ -1,5 +1,6 @@
 module HmtArchive
 using Documenter, DocStringExtensions
+using HTTP
 
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
@@ -7,21 +8,20 @@ using CitableTeiReaders, EditionBuilders
 using CitableObject
 using CitablePhysicalText
 
-
 using EditorsRepo
 import EditorsRepo: diplomaticcorpus
 import EditorsRepo: normalizedcorpus
 
 #using PolytonicGreek
-#using CitableObject, CitableText, CitableCorpus
-#using CitableTeiReaders, EditionBuilders, CitableParserBuilder
+#using CitableParserBuilder
 #using EzXML, ZipFile, Downloads
 
 export Archive
 export adjacent
-
+export librarycex
+export publish
+export writerc
 export dse
-
 
 include("constants.jl")
 include("archive.jl")
@@ -31,7 +31,6 @@ include("publish.jl")
 export HmtAbbreviation, expandabbr
 export TMEditionBuilder, editednode
 =#
-
 
 #=
 include("directories.jl")
