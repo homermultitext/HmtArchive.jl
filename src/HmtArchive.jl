@@ -1,6 +1,8 @@
 module HmtArchive
 using Documenter, DocStringExtensions
 using HTTP
+using EzXML
+
 
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
@@ -14,7 +16,7 @@ import EditorsRepo: normalizedcorpus
 
 #using PolytonicGreek
 #using CitableParserBuilder
-#using EzXML, ZipFile, Downloads
+#, ZipFile, Downloads
 
 export Archive
 export adjacent
@@ -25,6 +27,7 @@ export dse
 
 include("constants.jl")
 include("archive.jl")
+include("indexing.jl")
 include("publish.jl")
 
 #= Named entity management and text editions for topic modelling

@@ -1,18 +1,23 @@
+```@setup components
+root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive")
+using HmtArchive, EditorsRepo
+hmt = Archive(root)
+```
+
 # Assembling parts of the archive
 
-`HmtArchive` includes functions to instantiate parts of the archive as collections of citable content.
+`HmtArchive` includes functions to instantiate parts of the archive as collections of citable content. In the following examples, the `hmt` variable is an instance of an `Archive`.
 
 ## Text corpora
 
 Create a normalized corpus of all texts in the repository:
 
-```@example archive
-using EditorsRepo
+```@example components
 normedcorpus = normalizedcorpus(hmt)
 ```
 Create a diplomatic corpus of all texts in the repository:
 
-```@example archive
+```@example components
 diplcorpus = diplomaticcorpus(hmt)
 ```
 
@@ -22,7 +27,7 @@ diplcorpus = diplomaticcorpus(hmt)
 Collect all DSE records:
 
 
-```@example archive
+```@example components
 dsecollection = dse(hmt)
 ```
 
