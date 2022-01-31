@@ -21,21 +21,6 @@ function adjacent()
     Archive(joinpath(pwd() |> dirname, "hmt-archive", "archive"))
 end
 
-
-"""Format contents of `hmt` as delimited-text in CEX format.
-$(SIGNATURES)
-"""
-function publish(hmt::Archive, release::AbstractString)
-    @warn("Incomplete test output")
-    @warn("Release ID: ", release)
-    dipls = diplomaticcorpus(hmt)
-    normed = normalizedcorpus(hmt)
-    
-       
-    join([cex(dipls), cex(normed), cex(dse)], "\n\n")
-end
-
-
 """Instantiate a `DSECollection` with all DSE records in the archive.
 $(SIGNATURES)
 """
@@ -46,13 +31,31 @@ end
 """Compile a diplomatic edition of all texts in the archive.
 $(SIGNATURES)
 """
-function diplomaticcorpus(hmt::Archive)
-    diplomaticcorpus(hmt |> edrepo)
+function diplomaticcorpus(hmt::Archive; sourcecorpus = nothing)
+    diplomaticcorpus(hmt |> edrepo, sourcecorpus = sourcecorpus)
 end
 
 """Compile a normalized edition of all texts in the archive.
 $(SIGNATURES)
 """
-function normalizedcorpus(hmt::Archive)
-    normalizedcorpus(hmt |> edrepo)
+function normalizedcorpus(hmt::Archive; sourcecorpus = nothing)
+    normalizedcorpus(hmt |> edrepo, sourcecorpus = sourcecorpus)
+end
+
+"""List *cex files in codex directory.
+$(SIGNATURES)
+"""
+function codexfiles(hmt::Archive)
+    fullpath = joinpath(hmt.root, "codices") |> readdir
+    filenames = filter(f -> endswith(f, "cex"), fullpath)        
+	map(fname -> joinpath(hmt.root, "codices", fname), filenames)
+end
+
+"""List *cex files in images directory.
+$(SIGNATURES)
+"""
+function imagefiles(hmt::Archive)
+    fullpath = joinpath(hmt.root, "images") |> readdir
+    filenames = filter(f -> endswith(f, "cex"), fullpath)        
+	map(fname -> joinpath(hmt.root, "images", fname), filenames)
 end
