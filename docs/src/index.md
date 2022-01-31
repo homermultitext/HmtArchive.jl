@@ -11,6 +11,9 @@ root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive"
 
 ## Brief example
 
+
+### Creating an `Archive`
+
 You create an `Archive` object using the path in your local file system to the `archive` directory in a downloaded or cloned copy of the `hmt-archive` repository.  Here, we've defined a variable `root` with that full path.
 
 
@@ -18,6 +21,9 @@ You create an `Archive` object using the path in your local file system to the `
 using HmtArchive
 hmt = Archive(root)
 ```
+
+
+### Publishing an `Archive`
 
 Three exported functions compile a complete description of the archive in CEX format.  All three functions take the same parameters:  an `Archive`, and a string value identifying the release.
 
@@ -32,3 +38,16 @@ Three exported functions compile a complete description of the archive in CEX fo
 ```@example archive
 writerc(hmt, "2022alpha")
 ```
+
+In the current version of `HmtArchive`, the CEX accounts for the following components:
+
+- diplomatic editions of all texts
+- normalized editions of all texts
+- catalog of all texts
+- all DSE records
+- collection of all data models in the library
+- collection of all codices
+- collection of all images
+- collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant
+- indexes of scholia to *Iliad* passages
+
