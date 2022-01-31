@@ -3,7 +3,6 @@ using Documenter, DocStringExtensions
 using HTTP
 using EzXML
 
-
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
 
@@ -20,9 +19,9 @@ import EditorsRepo: normalizedcorpus
 
 export Archive
 export adjacent
-export librarycex
-export publish
-export writerc
+
+export librarycex, writerc, publish
+
 export dse
 
 include("constants.jl")

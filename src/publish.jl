@@ -23,7 +23,7 @@ end
 $(SIGNATURES)
 """
 function librarycex(hmt::Archive, releaseid::AbstractString)
-    @warn("Incomplete test CEX output, missing: data model declarations; scholia to Iliad index not yet computed")
+    @warn("Incomplete test CEX output, missing: data model declarations; index of scholia to Iliad not yet computed")
     @info("Building release of HMT archive with release ID $(releaseid)")
     @info("Building archival corpus...")
     archivaltexts = archivalcorpus(hmt |> edrepo, skipref = true)
@@ -43,8 +43,18 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         cex(dsecollection), 
         codexcex(hmt),
         imagecex(hmt),
-        authlistscex(hmt)
+        authlistscex(hmt),
+        indexescex(hmt)
         ], "\n\n")
+end
+
+
+function indexescex(hmt::Archive)
+    @warn("CEX for indexes not yet implemented")
+    """//
+    // CEX FOR INDEXES NOT YET IMPLEMENTED
+    //
+    """
 end
 
 """Compose CEX for authority lists managed in a separate github repository.
@@ -148,26 +158,11 @@ function datamodelcex()
 end
 
 
-function cexheader(releaseid::AbstractString)
-    hdrsource = """
-// Metadata for the current release
-
-#!cexversion
-3.0.1
-
-#!citelibrary
-// These values are inserted programmtacally when
-// the CITE library is built:
-name#Homer Multitext project, release RELEASE_ID
-urn#urn:cite2:hmt:publications.cex.RELEASE_ID:all
-license#Creative Commons Attribution, Non-Commercial 4.0 License <https://creat\
-ivecommons.org/licenses/by-nc/4.0/>.
-
-// CITE namespace definitions
-namespace#hmt#http://www.homermultitext.org/citens/hmt
-namespace#greekLit#http://chs.harvard.edu/ctsns/greekLit
+"""Interpolate `releaseid` into CEX library header.
+$(SIGNATURES)
 """
-    replace(hdrsource, "RELEASE_ID" => releaseid)
+function cexheader(releaseid::AbstractString)
+    replace(CEX_HEADER_SOURCE, "RELEASE_ID" => releaseid)
 end
 
 
