@@ -39,3 +39,20 @@ Index scholia commenting on *Iliad*:
 ```@example components
 commentaryindex = commentpairs(hmt)
 ```
+
+
+## Summary
+
+In the following summary lines, `hmt` is an instance of an `Archive`.  Assignment statements create collections that are then used in the example in the adjacent cell.
+
+| Component |  Instantiate from archive | Serialize to CEX | 
+| --- | --- | --- |
+| diplomatic editions of all texts | `d = diplomaticcorpus(hmt)` | `cex(d)` | 
+| normalized editions of all texts | `n = normalizedcorpus(hmt)`| `cex(n)` |
+| catalog of all texts | `fromcex(tcex, TextCatalogCollection)` | `tcex = textcatalogcex(hmt)` |
+| all DSE records| `d = dse(hmt)` | `cex(d)`|
+| collection of all codices | *TBD* | `codexcex(hmt)` |
+| collection of all images | *TBD* | `imagecex(hmt)` |
+| collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant | *TBD* | `authlistscex(hmt)` | 
+| indexes of scholia to *Iliad* passages | *TBD*  | `indexescex(hmt)` |
+| collection of all data models in the library| *TBD* | `datamodelcex()` |
