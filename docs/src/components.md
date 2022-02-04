@@ -53,6 +53,6 @@ In the following summary lines, `hmt` is an instance of an `Archive`.  Assignmen
 | all DSE records| `d = dse(hmt)` | `cex(d)`|
 | collection of all codices | *TBD* | `codexcex(hmt)` |
 | collection of all images | *TBD* | `imagecex(hmt)` |
-| collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant | *TBD* | `authlistscex(hmt)` | 
+| collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant | `fromcex(acex, CatalogedCollection)` | acex = `authlistscex(hmt)` | 
 | indexes of scholia to *Iliad* passages | *TBD*  | `indexescex(hmt)` |
 | collection of all data models in the library| *TBD* | `datamodelcex()` |
