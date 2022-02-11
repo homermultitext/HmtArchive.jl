@@ -4,9 +4,11 @@ authors = ["nsmith "]
 version = "0.5.3"
 
 [deps]
+CitableAnnotations = "63f90415-d3ea-41a7-8107-8cc186a9b888"
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
 CitableCollection = "7b95b006-44c5-4794-afff-00ccebff52d7"
 CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
+CitableImage = "17ccb2e5-db19-44b3-b354-4fd16d92c74e"
 CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
 CitableParserBuilder = "c834cb9d-35b9-419a-8ff8-ecaeea9e2a2a"
 CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
@@ -27,12 +29,14 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
+CitableAnnotations = "0.2"
 CitableBase = "10"
 CitableCollection = "0.4"
 CitableCorpus = "0.12"
+CitableImage = "0.5"
 CitableObject = "0.11"
 CitableParserBuilder = "0.21"
-CitablePhysicalText = "0.7"
+CitablePhysicalText = "0.8"
 CitableTeiReaders = "0.8"
 CitableText = "0.14"
 CiteEXchange = "0.9"
