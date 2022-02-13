@@ -40,12 +40,7 @@ Index scholia commenting on *Iliad*:
 commentaryindex = commentpairs(hmt)
 ```
 
-Manually compiled indexes (including indexes of *Iliad* lines to incompletely
-edited manuscripts):
 
-```@example components
-relationsets = relationsetscex(hmt)
-```
 
 ## Summary
 
