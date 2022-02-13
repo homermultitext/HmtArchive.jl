@@ -40,6 +40,12 @@ Index scholia commenting on *Iliad*:
 commentaryindex = commentpairs(hmt)
 ```
 
+Manually compiled indexes (including indexes of *Iliad* lines to incompletely
+edited manuscripts):
+
+```@example components
+relationsets = relationsetscex(hmt)
+```
 
 ## Summary
 
@@ -55,4 +61,5 @@ In the following summary lines, `hmt` is an instance of an `Archive`.  Assignmen
 | collection of all images | *TBD* | `imagecex(hmt)` |
 | collection of all data models in the library| *TBD: accounted for in `cex` methods for DSE records, codices and images* | `datamodelcex()` |
 | collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant | `fromcex(acex, CatalogedCollection)` |  `acex = authlistscex(hmt)` | 
-| indexes of scholia to *Iliad* passages | *TBD*  | `indexescex(hmt)` |
+| indexes of scholia to *Iliad* passages | *TBD*  | `scholiaindexcex(hmt)` |
+| other indexes (including *Iliad* passages to pages) | *TBD*  | `relationsetscex(hmt)` |

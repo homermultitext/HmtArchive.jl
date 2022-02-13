@@ -43,14 +43,28 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         codexcex(hmt),
         imagecex(hmt),
         authlistscex(hmt),
-        indexescex(hmt)
+        scholiaindexcex(hmt), 
+        relationsetscex(hmt)
         ], "\n\n")
+end
+
+
+"""Collect relation sets.
+$(SIGNATURES)
+"""
+function relationsetscex(hmt::Archive)
+
+    compositecex = []
+    for f in codexfiles(hmt)
+        push!(compositecex, read(f, String))
+    end
+    join(compositecex, "\n\n")
 end
 
 """Format CEX index of scholia to Iliad.
 $(SIGNATURES)
 """
-function indexescex(hmt::Archive)
+function scholiaindexcex(hmt::Archive)
     hdr = """#!citerelationset
 urn|urn:cite2:hmt:commentary.v1:all
 label|Index of scholia to *Iliad* passages they comment on
@@ -134,7 +148,7 @@ $(SIGNATURES)
 """
 function codexcex(hmt::Archive)
     composite = []
-    for f in codexfiles(hmt)
+    for f in relationfiles(hmt)
         push!(composite, read(f, String))
     end
     join(composite, "\n\n")
