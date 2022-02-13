@@ -59,3 +59,13 @@ function imagefiles(hmt::Archive)
     filenames = filter(f -> endswith(f, "cex"), fullpath)        
 	map(fname -> joinpath(hmt.root, "images", fname), filenames)
 end
+
+
+"""List *cex files in relations directory.
+$(SIGNATURES)
+"""
+function relationfiles(hmt::Archive)
+    fullpath = joinpath(hmt.root, "relations") |> readdir
+    filenames = filter(f -> endswith(f, "cex"), fullpath)        
+	map(fname -> joinpath(hmt.root, "relations", fname), filenames)
+end
