@@ -13,9 +13,7 @@ using EditorsRepo
 import EditorsRepo: diplomaticcorpus
 import EditorsRepo: normalizedcorpus
 
-#using PolytonicGreek
-#using CitableParserBuilder
-#, ZipFile, Downloads
+
 
 export Archive
 export adjacent
@@ -29,6 +27,12 @@ include("constants.jl")
 include("archive.jl")
 include("indexing.jl")
 include("publish.jl")
+
+
+#using PolytonicGreek
+#using CitableParserBuilder
+#, ZipFile, Downloads
+
 
 #= Named entity management and text editions for topic modelling
 export HmtAbbreviation, expandabbr
