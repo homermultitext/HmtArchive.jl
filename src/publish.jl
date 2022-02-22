@@ -34,7 +34,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
 
     @info("Assembling CEX...")
     join([
-        cexheader(releaseid), 
+        cexheader(hmt, releaseid), 
         datamodelcex(hmt),
         cex(diplomatictexts),  
         cex(normalizedtexts), 
@@ -178,12 +178,30 @@ function datamodelcex(hmt)
     read(f) |> String
 end
 
-
+"""Remove initial comment lines.
+$(SIGNATURES)
+"""
+function stripleadcomments(s::AbstractString)
+    lines = split(s, "\n")
+    foundit = false
+    keepers = []
+    for ln in lines
+        if foundit
+            push!(keepers, ln)
+        elseif ! startswith(ln, "//")
+            foundit = true
+            push!(keepers, ln)
+        end
+    end
+    join(keepers, "\n")
+end
 """Interpolate `releaseid` into CEX library header.
 $(SIGNATURES)
 """
-function cexheader(releaseid::AbstractString)
-    replace(CEX_HEADER_SOURCE, "RELEASE_ID" => releaseid)
+function cexheader(hmt, releaseid::AbstractString)
+    f = joinpath(hmt.root, "library", "header.cex")
+    template = read(f) |> String |> stripleadcomments
+    replace(template, "RELEASE_ID" => releaseid)
 end
 
 
