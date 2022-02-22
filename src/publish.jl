@@ -35,7 +35,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
     @info("Assembling CEX...")
     join([
         cexheader(releaseid), 
-        datamodelcex(),
+        datamodelcex(hmt),
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
@@ -173,31 +173,9 @@ $(SIGNATURES)
 This includes both data model declarations, and
 a CITE Collection cataloging the data models.
 """
-function datamodelcex()
-    """// CITE namespace definitions
-namespace|hmt|http://www.homermultitext.org/citens/hmt
-namespace|greekLit|http://chs.harvard.edu/ctsns/greekLit
-
-// Collection of data models used in this release:
-
-#!citecollections
-URN|Description|Labelling property|Ordering property|License
-urn:cite2:cite:datamodels.v1:|CITE data models|urn:cite2:cite:datamodels.v1.label:||Public domain
-
-#!citeproperties
-Property|Label|Type|Authority list
-urn:cite2:cite:datamodels.v1.urn:|Data model|Cite2Urn|
-urn:cite2:cite:datamodels.v1.label:|Label|String|
-urn:cite2:cite:datamodels.v1.description:|Description|String|
-
-#!citedata
-urn|label|description
-urn:cite2:cite:datamodels.v1:imagemodel|Citable Image|Model of a citable image.  See http://cite-architecture.github.io/imagemodel/.
-urn:cite2:cite:datamodels.v1:binaryimg|Binary image data|Model of a binary image data associated with a citable image.  See TBA.
-urn:cite2:cite:datamodels.v1:tbsmodel|Text Bearing Surface Model|Model of TextBearing Surfaces.  See http://cite-architecture.github.io/tbsmodel/.
-urn:cite2:cite:datamodels.v1:dsemodel|Diplomatic Scholarly Edition|Diplomatic Scholarly Edition.  See https://cite-architecture.github.io/dsemodel/.
-urn:cite2:cite:datamodels.v1:commentarymodel|Commentary|Model text passages commenting on text passages
-"""
+function datamodelcex(hmt)
+    f = joinpath(hmt.root, "datamodels", "datamodels.cex")
+    read(f) |> String
 end
 
 
@@ -209,26 +187,3 @@ function cexheader(releaseid::AbstractString)
 end
 
 
-
-
-#=
-
-Data models:
-
-CODEX:
-urn:cite2:citebl:burney86pages.v1:#urn:cite2:cite:datamodels.v1:tbsmodel#Model of Burney 86 codex#British Library, Burney 86, in the CITE model of a sequence of text-bearing surfaces
-
-CITABLE IMAGES:
-urn:cite2:citebl:burney86imgs.v1:#urn:cite2:cite:datamodels.v1:imagemodel#Model of citable images of the British Library, Burney 86 manuscript#Model of citable images of the British Library, Burney 86 manuscript
-
-
-BINARY IMAGE:
-urn:cite2:hmt:binaryimg.v1:#urn:cite2:cite:datamodels.v1:binaryimg#Image collections supporting binary image manipulation#Image collections supporting binary image manipulation int the CITE architecture model.  See <TBA>.
-
-DSE:
-urn:cite2:hmt:va_dse.v1:#urn:cite2:cite:datamodels.v1:dsemodel#DSE model of the Venetus A manuscript#Diplomatic Scholarly Edition (DSE) model.  See documentation at <https://github.com/cite-architecture/dse>.
-
-COMMENTARY AND ILLUSTRATION:
-urn:cite2:cite:verbs.v1:#urn:cite2:cite:datamodels.v1:commentarymodel#Commentary Model#URN comments on URN. See documentation at <https://github.com/cite-architecture/commentary>.
-urn:cite2:cite:verbs.v1:#urn:cite2:cite:datamodels.v1:illustrationmodel#Illustration Model#URN comments on URN. See documentation at <https://github.com/cite-architecture/illustration>.
-=#
