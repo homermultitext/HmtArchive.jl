@@ -9,7 +9,7 @@ CEX_HEADER_SOURCE = """
 // Metadata for the current release
 
 #!cexversion
-3.0.1
+3.0.2
 
 #!citelibrary
 // These values are inserted programmtacally when
