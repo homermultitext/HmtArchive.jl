@@ -24,7 +24,7 @@ function introcomment(releaseid::AbstractString)
         "// CEX representation of HMT archive.",
         "// - data release: $(releaseid) ",
         "// Automatically assembled by the `HmtArchive` module.",
-        "// - version: $(HmtArchive.currentversion())"
+        "// - module version: $(HmtArchive.currentversion())"
     ]
     join(lines,"\n")
 end
