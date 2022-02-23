@@ -4,6 +4,14 @@ struct Archive
 end
 
 
+"""Find current version of `HmtArchive` module.
+$(SIGNATURES)
+"""
+function currentversion()
+    config = Base.current_project() |> Pkg.TOML.parsefile
+    config["version"]
+end
+
 """Instantiate an `EditingRepository` from `archive`.
 $(SIGNATURES)
 """

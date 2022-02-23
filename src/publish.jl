@@ -19,11 +19,23 @@ function writerc(hmt::Archive, releaseid::AbstractString)
     end
 end
 
+function introcomment(releaseid::AbstractString) 
+    lines = [
+        "// CEX representation of HMT archive.",
+        "// - data release: $(releaseid) ",
+        "// Automatically assembled by the `HmtArchive` module.",
+        "// - version: $(HmtArchive.currentversion())"
+    ]
+    join(lines,"\n")
+end
+
 """Format contents of `hmt` as delimited-text in CEX format.
 $(SIGNATURES)
 """
 function librarycex(hmt::Archive, releaseid::AbstractString)
     @info("Building release of HMT archive with release ID $(releaseid)")
+    
+
     @info("Building archival corpus...")
     archivaltexts = archivalcorpus(hmt |> edrepo, skipref = true)
     @info("Building diplomatic corpus...")
@@ -34,6 +46,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
 
     @info("Assembling CEX...")
     join([
+        introcomment(releaseid),
         cexheader(hmt, releaseid), 
         datamodelcex(hmt),
         cex(diplomatictexts),  
@@ -66,11 +79,7 @@ end
 $(SIGNATURES)
 """
 function scholiaindexcex(hmt::Archive)
-    hdr = """#!citerelationset
-urn|urn:cite2:hmt:commentary.v1:all
-label|Index of scholia to *Iliad* passages they comment on
-scholion|iliad
-"""
+    
     rawpairs = commentpairs(hmt)
     clean = filter(pr -> ! isnothing(pr[2]), rawpairs)
     dirty = filter(pr -> isnothing(pr[2]), rawpairs)
@@ -79,7 +88,7 @@ scholion|iliad
     @warn(msg)
     cexlines = map(pr -> string(pr[1]) * "|" * string(pr[2]),  clean)
 
-    hdr * "\n\n" * join(cexlines, "\n")
+    HmtArchive.COMMENTARY_HEADER * join(cexlines, "\n")
 end
 
 """Compose CEX for authority lists managed in a separate github repository.
