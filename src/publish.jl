@@ -19,11 +19,23 @@ function writerc(hmt::Archive, releaseid::AbstractString)
     end
 end
 
+function introcomment(releaseid::AbstractString) 
+    lines = [
+        "// CEX representation of HMT archive.",
+        "// - data release: $(releaseid) ",
+        "// Automatically assembled by the `HmtArchive` module.",
+        "// - module version: $(HmtArchive.currentversion())"
+    ]
+    join(lines,"\n")
+end
+
 """Format contents of `hmt` as delimited-text in CEX format.
 $(SIGNATURES)
 """
 function librarycex(hmt::Archive, releaseid::AbstractString)
     @info("Building release of HMT archive with release ID $(releaseid)")
+    
+
     @info("Building archival corpus...")
     archivaltexts = archivalcorpus(hmt |> edrepo, skipref = true)
     @info("Building diplomatic corpus...")
@@ -34,11 +46,13 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
 
     @info("Assembling CEX...")
     join([
+        introcomment(releaseid),
         cexheader(hmt, releaseid), 
         datamodelcex(hmt),
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
+        DSE_HEADER,
         cex(dsecollection), 
         codexcex(hmt),
         imagecex(hmt),
@@ -55,7 +69,7 @@ $(SIGNATURES)
 function relationsetscex(hmt::Archive)
 
     compositecex = []
-    for f in codexfiles(hmt)
+    for f in relationfiles(hmt)
         push!(compositecex, read(f, String))
     end
     join(compositecex, "\n\n")
@@ -65,11 +79,7 @@ end
 $(SIGNATURES)
 """
 function scholiaindexcex(hmt::Archive)
-    hdr = """#!citerelationset
-urn|urn:cite2:hmt:commentary.v1:all
-label|Index of scholia to *Iliad* passages they comment on
-scholion|iliad
-"""
+    
     rawpairs = commentpairs(hmt)
     clean = filter(pr -> ! isnothing(pr[2]), rawpairs)
     dirty = filter(pr -> isnothing(pr[2]), rawpairs)
@@ -78,7 +88,7 @@ scholion|iliad
     @warn(msg)
     cexlines = map(pr -> string(pr[1]) * "|" * string(pr[2]),  clean)
 
-    hdr * "\n\n" * join(cexlines, "\n")
+    HmtArchive.COMMENTARY_HEADER * join(cexlines, "\n")
 end
 
 """Compose CEX for authority lists managed in a separate github repository.
@@ -148,7 +158,7 @@ $(SIGNATURES)
 """
 function codexcex(hmt::Archive)
     composite = []
-    for f in relationfiles(hmt)
+    for f in codexfiles(hmt)
         push!(composite, read(f, String))
     end
     join(composite, "\n\n")
@@ -179,6 +189,7 @@ function datamodelcex(hmt)
 end
 
 """Remove initial comment lines.
+Useful for stripping out instructions in CEX template file.
 $(SIGNATURES)
 """
 function stripleadcomments(s::AbstractString)

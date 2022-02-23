@@ -1,4 +1,5 @@
 module HmtArchive
+using Pkg
 using Documenter, DocStringExtensions
 using HTTP
 using EzXML
