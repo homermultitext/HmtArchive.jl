@@ -179,6 +179,7 @@ function datamodelcex(hmt)
 end
 
 """Remove initial comment lines.
+Useful for stripping out instructions in CEX template file.
 $(SIGNATURES)
 """
 function stripleadcomments(s::AbstractString)
