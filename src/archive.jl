@@ -21,11 +21,12 @@ function adjacent()
     Archive(joinpath(pwd() |> dirname, "hmt-archive", "archive"))
 end
 
+
 """Instantiate a `DSECollection` with all DSE records in the archive.
 $(SIGNATURES)
 """
 function dse(hmt::Archive)
-    dse = DSECollection(HmtArchive.DSE_URN, "Homer Multitext project indexing of digital scholarly editions", dsetriples(hmt |> edrepo))
+    DSECollection(HmtArchive.DSE_URN, "Homer Multitext project indexing of digital scholarly editions", dsetriples(hmt |> edrepo))
 end
 
 """Compile a diplomatic edition of all texts in the archive.

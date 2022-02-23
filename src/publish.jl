@@ -39,6 +39,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
+        DSE_HEADER,
         cex(dsecollection), 
         codexcex(hmt),
         imagecex(hmt),
