@@ -56,7 +56,7 @@ $(SIGNATURES)
 function relationsetscex(hmt::Archive)
 
     compositecex = []
-    for f in codexfiles(hmt)
+    for f in relationfiles(hmt)
         push!(compositecex, read(f, String))
     end
     join(compositecex, "\n\n")
@@ -149,7 +149,7 @@ $(SIGNATURES)
 """
 function codexcex(hmt::Archive)
     composite = []
-    for f in relationfiles(hmt)
+    for f in codexfiles(hmt)
         push!(composite, read(f, String))
     end
     join(composite, "\n\n")
