@@ -1,10 +1,12 @@
 using HmtArchive
+using HmtArchive.Analysis
 using Test
 using CitableText, CitableObject
 using CitableCorpus
 using CitableParserBuilder
 using EzXML
 
+include("analysis/test_scs.jl")
 
 # Rewrite all unit tests for >= v0.5
 # 

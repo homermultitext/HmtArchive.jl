@@ -29,7 +29,13 @@ include("archive.jl")
 include("indexing.jl")
 include("publish.jl")
 
-
+module Analysis
+    import ..HmtArchive
+    using Documenter, DocStringExtensions
+    using Memoize
+    export scs
+    include("analysis/scs.jl")
+end
 #using PolytonicGreek
 #using CitableParserBuilder
 #, ZipFile, Downloads
