@@ -33,6 +33,9 @@ include("publish.jl")
 module Analysis
     import ..HmtArchive
     using Documenter, DocStringExtensions
+    using CitableBase
+    using CitableText
+    using CitableCorpus
     #using Memoize
 
     export lcs
