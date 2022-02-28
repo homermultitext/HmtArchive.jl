@@ -19,16 +19,6 @@ function writerc(hmt::Archive, releaseid::AbstractString)
     end
 end
 
-function introcomment(releaseid::AbstractString) 
-    lines = [
-        "// CEX representation of HMT archive.",
-        "// - data release: $(releaseid) ",
-        "// Automatically assembled by the `HmtArchive` module.",
-        "// - module version: $(HmtArchive.currentversion())"
-    ]
-    join(lines,"\n")
-end
-
 """Format contents of `hmt` as delimited-text in CEX format.
 $(SIGNATURES)
 """
@@ -52,7 +42,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
-        DSE_HEADER,
+        DSE_HEADER, # this will be part of regular output from DSE in a future release of CitablePhysicalText
         cex(dsecollection), 
         codexcex(hmt),
         imagecex(hmt),
@@ -63,11 +53,24 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
 end
 
 
+"""Comment lines to introduce CEX release.
+$(SIGNATURES)
+"""
+function introcomment(releaseid::AbstractString) 
+    lines = [
+        "// CEX representation of HMT archive.",
+        "// - data release: $(releaseid) ",
+        "// Automatically assembled by the `HmtArchive` module.",
+        "// - module version: $(HmtArchive.currentversion())"
+    ]
+    join(lines,"\n")
+end
+
+
 """Collect relation sets.
 $(SIGNATURES)
 """
 function relationsetscex(hmt::Archive)
-
     compositecex = []
     for f in relationfiles(hmt)
         push!(compositecex, read(f, String))
