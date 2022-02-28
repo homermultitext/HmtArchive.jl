@@ -30,19 +30,16 @@ include("indexing.jl")
 include("publish.jl")
 
 
-
-#=
 module Analysis
     import ..HmtArchive
     using Documenter, DocStringExtensions
-    using Memoize
+    #using Memoize
 
-    export scs
+    export lcs
     
     include("analysis/scs.jl")
 end
 
-=#
 
 #using PolytonicGreek
 #using CitableParserBuilder
