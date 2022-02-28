@@ -1,25 +1,7 @@
-#=
-using Memoize
+# Document these.
+# Based on my scala lcs-scs package.
+#
 
-"""Find shortest common supersequence of `x` and `y`.
-$(SIGNATURES)
-Taken from Rosetta Code solution to SCS at https://rosettacode.org/wiki/Shortest_common_supersequence#Julia but generalized to work 
-with Vectors of any `eltype` rather than just Strings.
-"""
-@memoize function scs(x, y)
-    if isempty(x)
-        return y
-    elseif isempty(y)
-        return x
-    elseif x[1] == y[1]
-        return append!([x[1]], scs(x[2:end], y[2:end]))
-    elseif length(scs(x, y[2:end])) <= length(scs(x[2:end], y))
-        return append!([y[1]], scs(x, y[2:end]))
-    else
-        return append!([x[1]], scs(x[2:end], y))
-    end
-end
-=#
 function memoize(a,b) 
     lengths = zeros(Int, length(a) + 1, length(b) + 1)
  
@@ -40,9 +22,9 @@ function lcs(a,b)
     idx1 = 1
     idx2 = 1
     while idx1 <= length(a) && idx2 <= length(b)
-        @info("Compare a/b", a[idx1], b[idx2])
+        @debug("Compare a/b", a[idx1], b[idx2])
         if a[idx1] == b[idx2] 
-            @info("Push", a[idx1])
+            @debug("Push", a[idx1])
             push!(common, a[idx1])
             idx1 = idx1 + 1
             idx2 = idx2 + 1
@@ -61,7 +43,7 @@ end
 function scs(a,b)
     overlap = lcs(a,b)
     max = length(overlap) + (length(a) - length(overlap)) + (length(b) - length(overlap))
-    println("Build SCS length $(max) from scs $(overlap)")
+    @debug("Build SCS length $(max) from scs $(overlap)")
 
     mashup = []
     scsidx  = 1
@@ -76,7 +58,7 @@ function scs(a,b)
             push!(mashup, a[aidx])
             aidx = aidx + 1
         elseif a[aidx] == b[bidx]
-            @info("Pushing $(a[aidx]) with a/b/scs", aidx, bidx, scsidx)
+            @debug("Pushing $(a[aidx]) with a/b/scs", aidx, bidx, scsidx)
             push!(mashup, a[aidx])
             aidx = aidx + 1
             bidx = bidx + 1
@@ -84,15 +66,61 @@ function scs(a,b)
         else
             # Otherwise, add missing element
             if a[aidx] == overlap[scsidx]
-                @info("Pushing $(b[bidx]) with a/b/scs", aidx, bidx, scsidx)
+                @debug("Pushing $(b[bidx]) with a/b/scs", aidx, bidx, scsidx)
                 push!(mashup, b[bidx])
                 bidx = bidx + 1
             else
-                @info("Pushing $(a[aidx]) with a/b/scs", aidx, bidx, scsidx)
+                @debug("Pushing $(a[aidx]) with a/b/scs", aidx, bidx, scsidx)
                 push!(mashup, a[aidx])
                 aidx = aidx + 1
             end
         end
     end
     mashup
+end
+
+
+function scsindex(v, superv)
+    indices = []
+    vidx = 1
+    for idx in 1:length(superv)
+        @debug("Cf v/scs", v[vidx], superv[idx])
+        if vidx > length(v)
+            push!(indices, 0)
+        elseif superv[idx] == v[vidx]
+            push!(indices, vidx)
+            vidx = vidx + 1
+        else
+            push!(indices, 0)
+        end
+    end
+    indices
+end
+
+function plusminus(v1, v2)
+    v1scores = []
+    v2scores = []
+    for i in 1:length(v1)
+        if v1[i] == 0 
+            push!(v1scores, :minus)
+            push!(v2scores, :plus)
+        else
+            push!(v1scores, :same)
+            if (v2[i] == 0)
+                push!(v2scores, :minus)
+            else
+                push!(v2scores, :same)
+            end
+        end
+    end
+    (v1scores, v2scores)
+end
+
+
+# DEBUG THIS
+function cf(v1, v2)
+    mashup = scs(v1, v2)
+    v1index = scsindex(v1, mashup)
+    v2index = scsindex(v2, mashup) # Indexing error here!
+    plusminus(v1index, v2index)
 end
