@@ -36,9 +36,9 @@ module Analysis
     using CitableBase
     using CitableText
     using CitableCorpus
-    #using Memoize
 
-    export lcs
+    export lcs, scs
+    export vertical
     
     include("analysis/scs.jl")
 
