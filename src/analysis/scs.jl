@@ -19,36 +19,41 @@ function memoize(a,b)
     lengths
 end
 
-"""Longest common subsequence.
-"""
-function lcs(a,b)
-    memo = memoize(a,b)
-    common = []
-    idx1 = 1
-    idx2 = 1
-    while idx1 <= length(a) && idx2 <= length(b)
-        @info("Compare a/b", a[idx1], b[idx2])
-        @info("at a/b", idx1, idx2)
-        if a[idx1] == b[idx2] 
-            @debug("Push", a[idx1])
-            push!(common, a[idx1])
-            idx1 = idx1 + 1
-            idx2 = idx2 + 1
+
+
+function lcs(a, b)
+    lengths = memoize(a,b)
+    result = []
+    x, y = length(a) + 1, length(b) + 1
+ 
+    a_start, a_end = 0, 0
+    b_start, b_end = 0, 0
+
+    while x != 1 && y != 1
+        if lengths[x, y] == lengths[x-1, y]
+            x -= 1
+        elseif lengths[x, y] == lengths[x, y-1]
+            y -= 1
         else
-            @info("a,b differed at a/b", idx1, idx2)
-            @info("a/b", a[idx1], b[idx2])
-            @info("with lengths",length(a), length(b))
-            if memo[idx2 + 1, idx2] >= memo[idx1, idx2 + 1] 
-                @info("Advancing a to $(idx1 + 1)")
-                idx1 = idx1 + 1
-            else
-                @info("Advancing b to $(idx + 1)") 
-                idx2 = idx2 + 1
+            #result = join_fn(a[x-1], result)
+            push!(result, a[x-1])
+
+            a_start = x - 1
+            b_start = y - 1
+
+            if (a_end == 0)
+                a_end = x - 1
+                b_end = y - 1
             end
+
+            x -= 1
+            y -= 1
         end
     end
-    common
+
+    reverse(result)#, a_start:a_end, b_start:b_end
 end
+
 
 
 
@@ -78,7 +83,7 @@ function scs(a,b)
             bidx = bidx + 1
             scsidx = scsidx + 1
         else
-            @info("Check common at a/b/scs", join(mashup,":"), aidx, bidx, scsidx)
+            @debug("Check common at a/b/scs", join(mashup,":"), aidx, bidx, scsidx)
             # Otherwise, add missing element
             if a[aidx] == overlap[scsidx]
                 @debug("Pushing $(b[bidx]) with a/b/scs", aidx, bidx, scsidx)

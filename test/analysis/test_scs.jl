@@ -1,15 +1,18 @@
 
 @testset "Test LCS function" begin
-    @test HAA.lcs([1,2,3], [2,3,4]) = [2,3]
+ 
+    @test HmtArchive.Analysis.lcs([1,2,3], [2,3,4]) == [2,3]
   
-    @test_broken HAA.lcs([1,2,3,5], [1,2,3,4,5]) ==  [1,2,3,5]
+    @test HAA.lcs([1,2,3,5], [1,2,3,4,5]) ==  [1,2,3,5]
 end
 
 
 
 
 @testset "Test SCS function" begin
-    @test HAA.scs([1,2,3], [2,3,4]) = [1,2,3,4]
+    v1 = [1,2,3]
+    v2 = [2,3,4]
+    #@test HAA.scs(v1,v2) = [1,2,3,4]
     
 
 
