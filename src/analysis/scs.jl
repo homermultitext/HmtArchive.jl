@@ -179,9 +179,15 @@ function vertical(u::CtsUrn, corpus::CitableTextCorpus; exemplar = "normalized")
 
     refversion = psgreff[1]
     mashup = scsall(refversion, psgreff[2:end])
-    plusminusscores = []
+    refindexing = []
     for psg in psgreff
-        push!(plusminusscores, scsindex(psg, mashup))
+        push!(refindexing, scsindex(psg, mashup))
+    end
+    plusminusscores = []
+    for idx in refindexing
+        push!(plusminusscores, plusminus(refindexing[1], idx))
     end
     plusminusscores
+
+    # Now join plusminusscores with reference
 end
