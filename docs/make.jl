@@ -24,7 +24,9 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Assembling parts of the archive" => "components.md",
-       
+        "Analyzing the archive" => Any[
+            "Comparing texts" => "comparison.md"
+        ],
         "API documentation" => "apis.md"
     ]
     

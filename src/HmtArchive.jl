@@ -38,10 +38,11 @@ module Analysis
     using CitableCorpus
 
     export lcs, scs
-    export vertical
+    export vertical, horizontal
     
     include("analysis/scs.jl")
     include("analysis/vertical.jl")
+    include("analysis/horizontal.jl")
 end
 
 
