@@ -41,6 +41,7 @@ module Analysis
     export lcs
     
     include("analysis/scs.jl")
+    include("analysis/hack.jl")
 end
 
 

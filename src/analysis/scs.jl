@@ -27,18 +27,24 @@ function lcs(a,b)
     idx1 = 1
     idx2 = 1
     while idx1 <= length(a) && idx2 <= length(b)
-        @debug("Compare a/b", a[idx1], b[idx2])
+        @info("Compare a/b", a[idx1], b[idx2])
+        @info("at a/b", idx1, idx2)
         if a[idx1] == b[idx2] 
             @debug("Push", a[idx1])
             push!(common, a[idx1])
             idx1 = idx1 + 1
             idx2 = idx2 + 1
-        else 
-          if memo[idx2 + 1, idx2] >= memo[idx1, idx2 + 1] 
-            idx1 = idx1 + 1
-          else 
-            idx2 = idx2 + 1
-          end
+        else
+            @info("a,b differed at a/b", idx1, idx2)
+            @info("a/b", a[idx1], b[idx2])
+            @info("with lengths",length(a), length(b))
+            if memo[idx2 + 1, idx2] >= memo[idx1, idx2 + 1] 
+                @info("Advancing a to $(idx1 + 1)")
+                idx1 = idx1 + 1
+            else
+                @info("Advancing b to $(idx + 1)") 
+                idx2 = idx2 + 1
+            end
         end
     end
     common
@@ -72,6 +78,7 @@ function scs(a,b)
             bidx = bidx + 1
             scsidx = scsidx + 1
         else
+            @info("Check common at a/b/scs", join(mashup,":"), aidx, bidx, scsidx)
             # Otherwise, add missing element
             if a[aidx] == overlap[scsidx]
                 @debug("Pushing $(b[bidx]) with a/b/scs", aidx, bidx, scsidx)
@@ -129,6 +136,11 @@ function plusminus(v1, v2)
     (v1scores, v2scores)
 end
 
+
+
+"""Translate a pair of SCS indexes as plus/minus/same scores.
+`v1` is the reference vector: plus will be scored relative to `v1`
+"""
 function cf(v1, v2)
     mashup = scs(v1, v2)
     v1index = scsindex(v1, mashup)
