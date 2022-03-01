@@ -41,7 +41,7 @@ module Analysis
     export vertical
     
     include("analysis/scs.jl")
-
+    include("analysis/vertical.jl")
 end
 
 
