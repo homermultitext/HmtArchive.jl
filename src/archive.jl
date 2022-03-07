@@ -34,7 +34,8 @@ end
 $(SIGNATURES)
 """
 function dse(hmt::Archive)
-    DSECollection(HmtArchive.DSE_URN, "Homer Multitext project indexing of digital scholarly editions", dsetriples(hmt |> edrepo))
+    trips = dsetriples(hmt |> edrepo, strict = false)
+    DSECollection(HmtArchive.DSE_URN, "Homer Multitext project indexing of digital scholarly editions", trips)
 end
 
 """Compile a diplomatic edition of all texts in the archive.
