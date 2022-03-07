@@ -1,0 +1,13 @@
+# Comparing texts
+
+- use `HmtArchive.Analysis`
+
+Exported functions:
+
+- `scs`
+- `lcs`
+- `vertical`
+
+TBA:
+
+- `horizontal`

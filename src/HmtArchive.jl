@@ -30,6 +30,22 @@ include("indexing.jl")
 include("publish.jl")
 
 
+module Analysis
+    import ..HmtArchive
+    using Documenter, DocStringExtensions
+    using CitableBase
+    using CitableText
+    using CitableCorpus
+
+    export lcs, scs
+    export vertical, horizontal
+    
+    include("analysis/scs.jl")
+    include("analysis/vertical.jl")
+    include("analysis/horizontal.jl")
+end
+
+
 #using PolytonicGreek
 #using CitableParserBuilder
 #, ZipFile, Downloads
