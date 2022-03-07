@@ -42,7 +42,6 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         cex(diplomatictexts),  
         cex(normalizedtexts), 
         textcatalogcex(hmt), 
-        DSE_HEADER, # this will be part of regular output from DSE in a future release of CitablePhysicalText
         cex(dsecollection), 
         codexcex(hmt),
         imagecex(hmt),
