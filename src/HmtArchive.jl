@@ -36,10 +36,17 @@ module Analysis
     using CitableBase
     using CitableText
     using CitableCorpus
+    using Downloads
 
+    export hmt_cex
+    export hmt_releaseinfo
+
+
+    # analysis functions:
     export lcs, scs
     export vertical, horizontal
     
+    include("cex/load.jl")
     include("analysis/scs.jl")
     include("analysis/vertical.jl")
     include("analysis/horizontal.jl")
