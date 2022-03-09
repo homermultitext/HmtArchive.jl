@@ -2,6 +2,8 @@
     f = joinpath(pwd(), "data", "hmt-2022l.cex")
     src = read(f) |> String
 
+    @test hmt_releaseinfo(src) == "Homer Multitext project, release 2022l"
+
     imgcolls = hmt_images(src)
-    @test length(imgs) == 10
+    @test length(imgcolls) == 10
 end
