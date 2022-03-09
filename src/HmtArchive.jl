@@ -37,6 +37,7 @@ module Analysis
     using CitableText
     using CitableCorpus
     using CitableImage
+    using CitablePhysicalText
     using CiteEXchange
     using Downloads
 

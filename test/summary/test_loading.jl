@@ -6,4 +6,10 @@
 
     imgcolls = hmt_images(src)
     @test length(imgcolls) == 10
+
+    codices = hmt_codices(src)
+    @test length(codices) == 7
+    
+    textcat = hmt_textcatalog(src)
+    @test length(codices) == 15
 end
