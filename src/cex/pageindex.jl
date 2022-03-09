@@ -1,2 +1,2 @@
-function pageindex()
+function hmt_pageindex()
 end

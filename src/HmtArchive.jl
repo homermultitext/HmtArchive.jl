@@ -31,11 +31,13 @@ include("publish.jl")
 
 
 module Analysis
-    import ..HmtArchive
     using Documenter, DocStringExtensions
+
+    import ..HmtArchive
+    
     using CitableBase
-    using CitableText
-    using CitableCorpus
+    using CitableText, CitableCorpus
+    using CitableObject, CitableCollection
     using CitableImage
     using CitablePhysicalText
     using CiteEXchange
@@ -52,6 +54,7 @@ module Analysis
     export hmt_commentary
     export hmt_pageindex
     export hmt_authlists
+    export hmt_paragraphs
 
     # analysis functions:
     export lcs, scs
@@ -66,6 +69,7 @@ module Analysis
     include("cex/commentary.jl")
     include("cex/pageindex.jl")
     include("cex/authlists.jl")
+    include("cex/paragraphs.jl")
 
     include("analysis/scs.jl")
     include("analysis/vertical.jl")
