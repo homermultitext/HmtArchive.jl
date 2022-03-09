@@ -3,4 +3,5 @@
 
 ```@docs
 hmt_cex
+hmt_releaseinfo
 ```

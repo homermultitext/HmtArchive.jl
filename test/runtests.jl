@@ -8,6 +8,7 @@ using EzXML
 
 const HAA = HmtArchive.Analysis
 
+include("summary/test_loading.jl")
 include("analysis/test_scs.jl")
 
 # Rewrite all unit tests for >= v0.5
