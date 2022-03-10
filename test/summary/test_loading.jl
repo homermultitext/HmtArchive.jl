@@ -11,7 +11,7 @@
     @test length(codices) == 7
     
     textcat = hmt_textcatalog(src)
-    @test length(codices) == 15
+    @test length(textcat) == 15
 
     dsesets = hmt_dse(src)
     @test length(dsesets[1]) == 25388
