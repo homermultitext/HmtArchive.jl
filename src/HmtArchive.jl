@@ -17,12 +17,12 @@ import EditorsRepo: normalizedcorpus
 
 
 export Archive
+# Instantiate an archive and publish to CEX:
 export adjacent
-
-export librarycex, writerc, publish
-
-export dse
-export commentpairs
+export writerc, publish
+# export librarycex
+#export dse
+#export commentpairs
 
 include("constants.jl")
 include("archive.jl")
