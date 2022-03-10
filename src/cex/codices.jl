@@ -12,3 +12,21 @@ function hmt_codices()
     hmt_cex() |> hmt_codices
 end
 
+
+"""Load current release and compose a table of page counts per codex.
+$(SIGNATURES)
+"""
+function hmt_pagecounts()
+    hmt_codices() |> hmt_pagecounts
+end
+
+"""Compose a table of page counts per codex in `codd`.
+$(SIGNATURES)
+"""
+function hmt_pagecounts(codd::Vector{Codex})
+    dataseries = []
+    for c in codd
+        push!(dataseries, (ms = label(c), pages = length(c)))
+    end
+    Tables.columntable(dataseries)
+end

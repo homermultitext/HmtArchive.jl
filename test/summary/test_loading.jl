@@ -21,4 +21,7 @@
 
     normed = hmt_normalized(src)
     @test length(normed) == 39746
+
+    iliadindices = hmt_pageindex(src)
+    @test length(iliadindices) == 3
 end

@@ -40,9 +40,12 @@ module Analysis
     using CitableObject, CitableCollection
     using CitableImage
     using CitablePhysicalText
+    using CitableAnnotations
     using CiteEXchange
     using Downloads
+    using Tables
 
+    # Functions to instantiate parts of a published release:
     export hmt_cex
     export hmt_releaseinfo
     export hmt_images
@@ -55,6 +58,10 @@ module Analysis
     export hmt_pageindex
     export hmt_authlists
     export hmt_paragraphs
+
+    # Summarizing tables:
+    export hmt_pagecounts
+    export hmt_imagecounts
 
     # analysis functions:
     export lcs, scs
