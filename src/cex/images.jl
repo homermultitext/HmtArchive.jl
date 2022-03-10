@@ -9,6 +9,6 @@ end
 $(SIGNATURES)
 """
 function hmt_images()
-    hmt_cex |> hmt_images
+    hmt_cex() |> hmt_images
 end
 

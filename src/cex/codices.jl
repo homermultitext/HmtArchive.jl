@@ -9,6 +9,6 @@ end
 $(SIGNATURES)
 """
 function hmt_codices()
-    hmt_cex |> hmt_codices
+    hmt_cex() |> hmt_codices
 end
 

@@ -12,4 +12,13 @@
     
     textcat = hmt_textcatalog(src)
     @test length(codices) == 15
+
+    dsesets = hmt_dse(src)
+    @test length(dsesets[1]) == 25388
+
+    dipl = hmt_diplomatic(src)
+    @test length(dipl) == 39746
+
+    normed = hmt_normalized(src)
+    @test length(normed) == 39746
 end
