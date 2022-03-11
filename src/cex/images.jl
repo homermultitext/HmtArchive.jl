@@ -31,3 +31,4 @@ $(SIGNATURES)
 function coltbl_imagecounts()
     hmt_codices() |> coltbl_imagecounts
 end
+

@@ -19,6 +19,8 @@ hmt_dse
 hmt_commentary
 hmt_pageindex
 hmt_paragraphs
+hmt_persnames
+hmt_placenames
 ```
 
 ## Tables summarizing parts of the release

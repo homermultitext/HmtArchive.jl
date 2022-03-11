@@ -64,6 +64,7 @@ module Analysis
     # Summarizing tables:
     export coltbl_pagecounts
     export coltbl_imagecounts
+    export coltbl_paragraphs
 
     # analysis functions:
     export lcs, scs
