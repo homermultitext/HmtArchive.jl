@@ -16,7 +16,7 @@ end
 """Compose a table of image counts per image collection in `codd`.
 $(SIGNATURES)
 """
-function hmt_imagecounts(imgs::Vector{ImageCollection})
+function coltbl_imagecounts(imgs::Vector{ImageCollection})
     dataseries = []
     for imgc in imgs
         push!(dataseries, (collection = label(imgc), count = length(imgc)))
@@ -28,6 +28,6 @@ end
 """Load current release and compose a table of image counts per image collection.
 $(SIGNATURES)
 """
-function hmt_imagecounts()
-    hmt_codices() |> hmt_imagecounts
+function coltbl_imagecounts()
+    hmt_codices() |> coltbl_imagecounts
 end

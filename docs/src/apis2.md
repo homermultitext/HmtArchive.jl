@@ -24,6 +24,6 @@ hmt_paragraphs
 ## Tables summarizing parts of the release
 
 ```@docs
-hmt_pagecounts
-hmt_imagecounts
+coltbl_pagecounts
+coltbl_imagecounts
 ```

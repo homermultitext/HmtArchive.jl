@@ -37,7 +37,8 @@ module Analysis
     
     using CitableBase
     using CitableText, CitableCorpus
-    using CitableObject, CitableCollection
+    using CitableObject, CitableObject.CexUtils
+    using CitableCollection
     using CitableImage
     using CitablePhysicalText
     using CitableAnnotations
@@ -60,8 +61,8 @@ module Analysis
     export hmt_paragraphs
 
     # Summarizing tables:
-    export hmt_pagecounts
-    export hmt_imagecounts
+    export coltbl_pagecounts
+    export coltbl_imagecounts
 
     # analysis functions:
     export lcs, scs

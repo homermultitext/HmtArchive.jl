@@ -16,14 +16,14 @@ end
 """Load current release and compose a table of page counts per codex.
 $(SIGNATURES)
 """
-function hmt_pagecounts()
-    hmt_codices() |> hmt_pagecounts
+function coltbl_pagecounts()
+    hmt_codices() |> coltbl_pagecounts
 end
 
 """Compose a table of page counts per codex in `codd`.
 $(SIGNATURES)
 """
-function hmt_pagecounts(codd::Vector{Codex})
+function coltbl_pagecounts(codd::Vector{Codex})
     dataseries = []
     for c in codd
         push!(dataseries, (ms = label(c), pages = length(c)))
