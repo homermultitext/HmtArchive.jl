@@ -57,7 +57,8 @@ module Analysis
     export hmt_dse
     export hmt_commentary
     export hmt_pageindex
-    export hmt_authlists
+    export hmt_persnames
+    export hmt_placenames
     export hmt_paragraphs
 
     # Summarizing tables:
@@ -76,7 +77,8 @@ module Analysis
     include("cex/dse.jl")
     include("cex/commentary.jl")
     include("cex/pageindex.jl")
-    include("cex/authlists.jl")
+    include("cex/persnames.jl")
+    include("cex/placenames.jl")
     include("cex/paragraphs.jl")
 
     include("analysis/scs.jl")
