@@ -43,7 +43,7 @@ module Analysis
     using CitablePhysicalText
     using CitableAnnotations
     using CiteEXchange
-    using Downloads
+    using Downloads, FileIO
     using Tables
 
     # Functions to instantiate parts of a published release:
@@ -65,11 +65,15 @@ module Analysis
     export coltbl_pagecounts
     export coltbl_imagecounts
     export coltbl_paragraphs
+    export coltbl_imagesbyms
+    export coltbl_vbbifolios
+    export coltbl_e3bifolios
 
     # analysis functions:
     export lcs, scs
     export vertical, horizontal
     
+    include("cex/imageservice.jl")
     include("cex/load.jl")
     include("cex/images.jl")
     include("cex/codices.jl")

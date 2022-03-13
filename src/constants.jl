@@ -31,4 +31,3 @@ label|Index of scholia to *Iliad* passages they comment on
 
 scholion|iliad
 """
-
