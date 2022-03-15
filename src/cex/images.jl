@@ -32,18 +32,12 @@ function coltbl_imagecounts()
     hmt_codices() |> coltbl_imagecounts
 end
 
-#=
-groupby(f, list::Array) = begin
-  foldl(list; init = Dict()) do dict, v
-    push!(get!(dict, f(v), []), v)
-    dict
-  end
-end
 
-=#
-
+"""Compose a column table from `pairlist` with a title
+looked u in `cat`.  `pairlist` contains pairs of strings giving cooccurrences of Iliad book number and page number.
+$(SIGNATURES)
+"""
 function coltbl_indexedimagesbybook(pairlist, cat::CiteCollectionCatalog)
-    
     collid = pairlist[1][2] |> Cite2Urn |> dropobject
     @info("Filter catalog for $(collid)")
     catentry = filter(entry -> collid == entry.urn, cat)[1]
@@ -56,10 +50,10 @@ function coltbl_indexedimagesbybook(pairlist, cat::CiteCollectionCatalog)
     (label(catentry), t)
 end
 
-function coltblv_indexedimagesbybook(src::AbstractString)
-    
- 
- 
+"""For each indexed image collection in `src`, create a list of titles and a table of counts of images per Iliad book.
+$(SIGNATURES)
+"""
+function coltblv_indexedimagesbybook(src::AbstractString) 
     tables = []
     titles = []
     cat = fromcex(src,CiteCollectionCatalog)
@@ -71,7 +65,6 @@ function coltblv_indexedimagesbybook(src::AbstractString)
         push!(tables, tab)
     end
 
-  
     dse = hmt_dse(src)[1]
     va = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:")
     vadse = filter(rec -> CitableText.urncontains(va, rec.passage),dse)
@@ -83,6 +76,10 @@ function coltblv_indexedimagesbybook(src::AbstractString)
     (titles, tables)
 end
 
+
+"""For each indexed image collection in the current release of HMT, create a list of titles and a table of counts of images per Iliad book.
+$(SIGNATURES)
+"""
 function coltbl_indexedimagesbybook()
     hmt_cex() |> coltbl_indexedimagesbybook
 end
