@@ -44,7 +44,7 @@ module Analysis
     using CitableAnnotations
     using CiteEXchange
     using Downloads, FileIO
-    using Tables
+    using Tables, Query
 
     # Functions to instantiate parts of a published release:
     export hmt_cex
@@ -68,6 +68,8 @@ module Analysis
     export coltbl_imagesbyms
     export coltbl_vbbifolios
     export coltbl_e3bifolios
+
+    export coltblv_indexedimagesbybook
 
     # analysis functions:
     export lcs, scs

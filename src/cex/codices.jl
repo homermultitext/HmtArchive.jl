@@ -12,7 +12,6 @@ function hmt_codices()
     hmt_cex() |> hmt_codices
 end
 
-
 """Load current release and compose a table of page counts per codex.
 $(SIGNATURES)
 """
@@ -38,7 +37,6 @@ function coltbl_pagecounts(codd::Vector{Codex})
     end
     Tables.columntable(dataseries)
 end
-
 
 """Compose a table of image counts per codex in `codd`.
 $(SIGNATURES)
