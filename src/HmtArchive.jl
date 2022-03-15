@@ -70,6 +70,7 @@ module Analysis
     export coltbl_e3bifolios
 
     export coltblv_indexedimagesbybook
+    export coltblv_editedpagesbybook
 
     # analysis functions:
     export lcs, scs

@@ -124,3 +124,8 @@ function bifolios(ms::Codex)
     end
     Tables.columntable(results)
 end
+
+
+
+function coltblv_editedpagesbybook()
+end
