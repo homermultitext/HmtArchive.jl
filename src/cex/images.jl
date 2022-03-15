@@ -75,7 +75,7 @@ function coltblv_indexedimagesbybook(src::AbstractString)
     dse = hmt_dse(src)[1]
     va = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:")
     vadse = filter(rec -> CitableText.urncontains(va, rec.passage),dse)
-    vaprs = map(dserec ->  (collapsePassageTo(dserec.passage, 1) |> passagecomponent, string(dserec.surface)), vadse)
+    vaprs = map(dserec ->  (collapsePassageTo(dserec.passage, 1) |> passagecomponent, string(dserec.surface)), vadse) |> unique
     (vatitle, vatab) = coltbl_indexedimagesbybook(vaprs, cat)
     push!(titles, vatitle)
     push!(tables, vatab)
