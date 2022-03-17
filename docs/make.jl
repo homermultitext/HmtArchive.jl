@@ -18,16 +18,21 @@ using Documenter, DocStringExtensions
 using CitableText
 using EditionBuilders
 using HmtArchive
+using HmtArchive.Analysis
 
 makedocs(
     sitename = "HmtArchive",
     pages = [
         "Home" => "index.md",
         "Assembling parts of the archive" => "components.md",
-        "Analyzing the archive" => Any[
-            "Comparing texts" => "comparison.md"
+        "Summarizing a release" => Any[
+            "Loading a release" => "summary/cex.md"
         ],
-        "API documentation" => "apis.md"
+        "Analyzing a release" => Any[
+            "Comparing texts" => "analysis/comparison.md"
+        ],
+        "Archive: API documentation" => "apis.md",
+        "Published releases: API documentation" => "apis2.md"
     ]
     
 )

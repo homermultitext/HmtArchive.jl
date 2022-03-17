@@ -28,7 +28,7 @@ Collect all DSE records:
 
 
 ```@example components
-dsecollection = dse(hmt)
+dsecollection = HmtArchive.dse(hmt)
 ```
 
 
@@ -37,7 +37,7 @@ dsecollection = dse(hmt)
 Index scholia commenting on *Iliad*:
 
 ```@example components
-commentaryindex = commentpairs(hmt)
+commentaryindex = HmtArchive.commentpairs(hmt)
 ```
 
 
