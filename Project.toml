@@ -31,11 +31,13 @@ SplitApplyCombine = "03a91e81-4c3e-53e1-a0a4-9c0c8f19dd66"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9"
 ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
 CitableAnnotations = "0.3"
 CitableBase = "10"
+CitableCollection = "0.4"
 CitableCorpus = "0.12"
 CitableImage = "0.6"
 CitableObject = "0.15"

@@ -44,6 +44,8 @@ module Analysis
     using CitableAnnotations
     using CiteEXchange
     using Downloads, FileIO
+    using TypedTables, SplitApplyCombine
+    # Replace these:
     using Tables, Query
 
     # Functions to instantiate parts of a published release:

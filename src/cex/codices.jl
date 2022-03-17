@@ -127,5 +127,33 @@ end
 
 
 
+"""For each MS represented in DSE records, create a list of titles and a table of counts of pages per Iliad book.
+$(SIGNATURES)
+"""
+function coltblv_editedpagesbybook(src::AbstractString)
+    books = []
+    pages = []
+    titles = []
+    cat = fromcex(src,CiteCollectionCatalog)
+    # All DSE records are in a single collection:
+    dse = hmt_dse(src)[1]
+    booksurftable = map(trip -> (book = collapsePassageTo(passage(trip),1)  |> passagecomponent, page = surface(trip) |> objectcomponent, ms = surface(trip) |> dropobject |> string), dse) |> unique |> Table 
+
+    byms = group(booksurftable.ms, booksurftable)
+    bksperms = group(getproperty(:ms), getproperty(:book), booksurftable)
+    pagesperms = group(getproperty(:ms), getproperty(:page), booksurftable)
+    for ms in keys(byms)
+        collid = Cite2Urn(ms)
+        @info("Look for $(collid)")
+        catentry = filter(entry -> collid == entry.urn, cat)[1]
+        push!(titles, label(catentry))
+        push!(books, bksperms[ms])
+        push!(pages, pagesperms[ms])
+    end
+
+    (titles, books, pages)
+end
+
 function coltblv_editedpagesbybook()
+    hmt_cex() |> coltblv_editedpagesbybook
 end
