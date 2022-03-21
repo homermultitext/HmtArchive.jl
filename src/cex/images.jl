@@ -56,6 +56,7 @@ $(SIGNATURES)
 function coltblv_indexedimagesbybook(src::AbstractString) 
     tables = []
     titles = []
+    sigla = []
     cat = fromcex(src,CiteCollectionCatalog)
     pgs = hmt_pageindex(src)
     for idx in pgs
@@ -63,6 +64,8 @@ function coltblv_indexedimagesbybook(src::AbstractString)
         (title, tab) = coltbl_indexedimagesbybook(prs, cat)
         push!(titles, title)
         push!(tables, tab)
+        siglum = idx.data[1][2] |> collectionid
+        push!(sigla, siglum)
     end
 
     dse = hmt_dse(src)[1]
@@ -73,7 +76,7 @@ function coltblv_indexedimagesbybook(src::AbstractString)
     push!(titles, vatitle)
     push!(tables, vatab)
   
-    (titles, tables)
+    (titles, tables, sigla)
 end
 
 
