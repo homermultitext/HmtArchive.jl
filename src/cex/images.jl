@@ -18,10 +18,23 @@ $(SIGNATURES)
 """
 function coltbl_imagecounts(imgs::Vector{ImageCollection})
     dataseries = []
+    
     for imgc in imgs
-        push!(dataseries, (collection = label(imgc), count = length(imgc)))
+        @info("Work on ", imgc)
+        if isempty(imgc.images)
+            @warn("No data: ", imgc)
+        else
+            push!(dataseries, (collection = label(imgc), count = length(imgc), siglum = collectionid(urn(imgc))))
+        end
     end
     Tables.columntable(dataseries)
+end
+
+"""Compose a table of image counts per image collection in `src`.
+$(SIGNATURES)
+"""
+function coltbl_imagecounts(src::AbstractString)
+    hmt_images(src) |> coltbl_imagecounts
 end
 
 
@@ -29,7 +42,7 @@ end
 $(SIGNATURES)
 """
 function coltbl_imagecounts()
-    hmt_codices() |> coltbl_imagecounts
+    hmt_images() |> coltbl_imagecounts
 end
 
 
