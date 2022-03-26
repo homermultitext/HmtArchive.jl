@@ -75,11 +75,45 @@ function missingtexts(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}, pg::
 end
 
 
+
+"""Find indexed text references in DSE for `pg` that do not appear in `psgs`.
+$(SIGNATURES)
+"""
 function missingtexts(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}, pg::Cite2Urn)
     missingtexts(
         map(p -> p.urn, psgs),
         filter(tr -> tr.surface == pg, triples)
     )
+end
+
+
+"""Find indexed text references in DSE for `pglist` that do not appear in `c`.
+Report results as Tuples pairing a page reference with list of missing passages,
+only including references to pages with missing passages.
+$(SIGNATURES)
+"""
+function missingtexts(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{Cite2Urn} )
+    @info("Analyzing DSE indexing for $(length(pglist)) pages")
+    reports = Tuple{Cite2Urn, Vector{CtsUrn}}[]
+    for pg in pglist
+        @info("Checking $(pg)")
+        missinglist = missingtexts(c.passages, dsec.data, pg)
+        if ! isempty(missinglist)
+            push!(reports,(pg, missinglist))
+        end
+    end
+    reports
+end
+
+
+"""Find indexed text references in `dsec` that appear in `codex` but do not appear in `c`.
+Report results as Tuples pairing a page reference with list of missing passages,
+only including references to pages with missing passages.
+$(SIGNATURES)
+"""
+function missingtexts(c::CitableTextCorpus, dsec::DSECollection, codex::Codex)
+    @info("Analyzing DSE indexing in $(label(codex))")
+    missingtexts(c, dsec, map(p -> p.urn, codex.pages))
 end
 
 
