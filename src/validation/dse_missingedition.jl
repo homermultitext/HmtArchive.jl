@@ -1,24 +1,4 @@
-"""Normalize URN values in `urnlist` for standardized comparison by
-dropping exemplar identifiers, and reducing citation of scholia to whole scholion
-level (rathern than citation by part of scholion).
-$(SIGNATURES)
-"""
-function hmtreff(urnlist::Vector{CtsUrn})
-    allurns = map(u -> dropexemplar(u), urnlist)
-    comments = filter(u -> endswith(passagecomponent(u),"comment"), allurns)
-    scholia = map(u -> collapsePassageBy(u, 1), comments)
-    other = filter(u -> groupid(u) != "tlg5026", allurns)
-    vcat(scholia, other)
-end
 
-
-function hmtreff(psgs::Vector{CitablePassage})
-    hmtreff(map(p -> p.urn, psgs))
-end
-
-function hmtreff(c::CitableTextCorpus)
-    hmtreff(c.passages)
-end
 
 """In current published release of HMT, find indexed text references that do not appear in text corpus.
 $(SIGNATURES)
@@ -105,7 +85,6 @@ function missingtexts(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{
     reports
 end
 
-
 """Find indexed text references in `dsec` that appear in `codex` but do not appear in `c`.
 Report results as Tuples pairing a page reference with list of missing passages,
 only including references to pages with missing passages.
@@ -115,37 +94,3 @@ function missingtexts(c::CitableTextCorpus, dsec::DSECollection, codex::Codex)
     @info("Analyzing DSE indexing in $(label(codex))")
     missingtexts(c, dsec, map(p -> p.urn, codex.pages))
 end
-
-
-
-
-"""Find text passages not appearing in DSE records.
-$(SIGNATURES)
-"""
-function missingdse(c::CitableTextCorpus, dsec::DSECollection)
-    missingdse(c.passages, dsec.data)
-end
-
-"""Find text passages not appearing in DSE records.
-$(SIGNATURES)
-"""
-function missingdse(psgs::Vector{CitablePassage}, triples::Vector{DSETriple})
-    missingdse(map(p -> p.urn, psgs), triples)
-end
-
-"""Find text passages not appearing in DSE records.
-$(SIGNATURES)
-"""
-function missingdse(texturns::Vector{CtsUrn}, triples::Vector{DSETriple})
-    textreff = hmtreff(texturns)
-    tripletexts = map(tr -> tr.passage, triples)
-    mia = []
-    for txt in textreff
-        if txt in tripletexts
-        else
-            push!(mia, txt)
-        end
-    end
-    mia
-end
-
