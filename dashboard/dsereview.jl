@@ -36,16 +36,26 @@ end
 (dsec, corpus, release) = loaddata()
 
 
-function surfacemenu(triples)
+function surfacemenu(triples, mschoice)
     menupairs = []
-    for tr in triples
+    mstriples = filter(tr -> collectionid(tr.surface) == mschoice, triples)
+    for tr in mstriples
         surf = tr.surface
-        lbl = objectcomponent(surf) * " (" * collectionid(surf) * ")"
+        lbl = objectcomponent(surf)
         push!(menupairs, (label=lbl, value=string(surf)))
     end
     menupairs
 end
 
+
+function msmenu(triples)
+    menupairs = []
+    sigla = map(tr -> collectionid(tr.surface), triples)  |> unique
+    for siglum in sigla
+        push!(menupairs, (label=siglum, value=siglum))
+    end
+    menupairs
+end
 
 assetfolder = joinpath(pwd(), "dashboard", "assets")
 app = dash(assets_folder = assetfolder, include_assets_files=true)
@@ -54,19 +64,23 @@ app.layout = html_div(className = "w3-container") do
     html_div(className = "w3-container w3-light-gray w3-cell w3-mobile w3-border-left  w3-border-right w3-border-gray", children = [dcc_markdown("*Dashboard version*: **$(DASHBOARD_VERSION)** ([version notes](https://homermultitext.github.io/dashboards/alpha-search/))")]),
     
     html_h1("HMT project: DSE verification dashboard"),
-    dcc_markdown("Validate and verify content of **$(release)**"),
+    dcc_markdown("Validate and verify content of **$(release)**."),
    
     html_div(className = "w3-container",
         children = [
        
-
+            html_div(className = "w3-col l4 m4 s12",
+                children = [
+                dcc_markdown("*Choose a manuscript*:"),
+                dcc_dropdown(id = "mschoice",
+                    options=msmenu(dsec.data))
+                ]
+                ),             
 
         html_div(className = "w3-col l4 m4 s12",
         children = [
-            dcc_markdown("*Choose a surface*:")
-            dcc_dropdown(id = "surfacepicker",
-                options=surfacemenu(dsec.data)
-            )
+            dcc_markdown("*Choose a surface*:"),
+            dcc_dropdown(id = "surfacepicker")
         ]),
       
         html_div(className = "w3-col l4 m4 s12",
@@ -91,6 +105,15 @@ app.layout = html_div(className = "w3-container") do
     html_div(id="dseaccuracy", className="w3-container")#,
 
 end
+
+callback!(app,
+    Output("surfacepicker", "options"),
+    Input("mschoice", "value"),
+    prevent_initial_call=true
+) do siglum
+    surfacemenu(dsec.data, siglum)
+end
+
 #=
 "Update surfaces menu and set user message about number of times data loaded."
 function updaterepodata(n_clicks)
