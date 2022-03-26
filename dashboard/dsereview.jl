@@ -39,8 +39,9 @@ end
 function surfacemenu(triples, mschoice)
     menupairs = []
     mstriples = filter(tr -> collectionid(tr.surface) == mschoice, triples)
-    for tr in mstriples
-        surf = tr.surface
+    mssurfaces = map(tr -> tr.surface, mstriples)
+    uniquesurfs =  mssurfaces .|> string |> unique .|> Cite2Urn
+    for surf in uniquesurfs
         lbl = objectcomponent(surf)
         push!(menupairs, (label=lbl, value=string(surf)))
     end
@@ -114,32 +115,17 @@ callback!(app,
     surfacemenu(dsec.data, siglum)
 end
 
-#=
-"Update surfaces menu and set user message about number of times data loaded."
-function updaterepodata(n_clicks)
-    msg = if isnothing(n_clicks)
-        dcc_markdown("*No data loaded yet*")
-    elseif n_clicks ==  1
-        dcc_markdown("*Data loaded*.")
-    else
-        dcc_markdown("""*Data loaded **$(n_clicks)** times*.""")
-    end
 
 
-    menupairs = [(label="", value="")]
-    for s in surfaces(r, strict = false)
-		push!(menupairs, (label=string(s), value=string(s)))
-	end
-    (msg, menupairs )
- 
-end
+function hmtdse(triples, surf, ht, textfilter)
+    baseurl = "https://www.homermultitext.org/iipsrv"
+	root = "/project/homer/pyramidal/deepzoom"
+	
+    iiif =  IIIFservice(baseurl, root)
+    ict =  "https://www.homermultitext.org/ict2/?"
 
 
-function hmtdse(edrep, surf, ht, textfilter)
-    iiif = EditorsRepo.DEFAULT_IIIF
-    ict = EditorsRepo.DEFAULT_ICT
-
-    triples = dsetriples(edrep, strict = false)
+    #triples = dsetriples(edrep, strict = false)
     surfacetriples = filter(row -> urncontains(surf, row.surface), triples)
     textsurfacetriples = surfacetriples
     if textfilter == "Iliad"
@@ -159,6 +145,8 @@ function hmtdse(edrep, surf, ht, textfilter)
     
 
 end
+
+#=
 
 function hmtdseaccuracy(edrep, surf, height, textfilter)
     iiif = EditorsRepo.DEFAULT_IIIF
@@ -209,7 +197,7 @@ callback!(
     Input("load_button", "n_clicks"),
     prevent_initial_call=true
 )
-
+=#
 
 # Update validation/verification sections of page when surface is selected:
 callback!(
@@ -223,20 +211,18 @@ callback!(
         (dcc_markdown(""), dcc_markdown(""))#, dcc_markdown(""))
     else
         surfurn = Cite2Urn(newsurface)
-        completeness = dcc_markdown(hmtdse(r, surfurn, THUMBHEIGHT, txt_choice))
+        completeness = dcc_markdown(hmtdse(dsec.data, surfurn, THUMBHEIGHT, txt_choice))
        
        
    
 
         accuracyhdr = "### Verify accuracy of indexing\n*Check that the diplomatic reading and the indexed image correspond.*\n\n"
-        #accuracypassages = indexingaccuracy_html(r, surfurn, height=TEXTHEIGHT, strict = false)
-        #accuracy = dcc_markdown(accuracyhdr * accuracypassages)
-
-        accuracy = hmtdseaccuracy(r,surfurn, TEXTHEIGHT, txt_choice) |> dcc_markdown
+       
+        accuracy = "" #hmtdseaccuracy(r,surfurn, TEXTHEIGHT, txt_choice) |> dcc_markdown
       
         (completeness, accuracy)
     end
 end
-=#
+
 
 run_server(app, "0.0.0.0", 8051, debug=true)
