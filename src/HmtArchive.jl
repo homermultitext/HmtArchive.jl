@@ -78,6 +78,11 @@ module Analysis
     export lcs, scs
     export vertical, horizontal
     
+
+    # validation functions:
+    export missingtexts
+    export missingdse
+    
     include("cex/imageservice.jl")
     include("cex/load.jl")
     include("cex/images.jl")
@@ -94,6 +99,8 @@ module Analysis
     include("analysis/scs.jl")
     include("analysis/vertical.jl")
     include("analysis/horizontal.jl")
+
+    include("validation/dse.jl")
 end
 
 
