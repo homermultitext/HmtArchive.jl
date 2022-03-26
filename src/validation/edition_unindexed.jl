@@ -61,10 +61,13 @@ function missingbybook(texturns::Vector{CtsUrn}, triples::Vector{DSETriple})
     for bk in bookreff
         @info("Checking indexing of $(bk)")
         checklist = filter(u -> urncontains(bk, u), textreff)
-        @info(typeof(checklist), typeof(triples))
+        #@info(typeof(checklist), typeof(triples))
         missinglist = missingdse(checklist, triples)
         if ! isempty(missinglist)
             push!(report,(bk, missinglist))
+            @info("> $(length(missinglist)) missing passages.")
+        else
+            @info("All indexed in $(bk) - $(length(checklist)) passages.")
         end
     end
     report

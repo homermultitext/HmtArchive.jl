@@ -78,8 +78,11 @@ function missingtexts(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{
     for pg in pglist
         @info("Checking $(pg)")
         missinglist = missingtexts(c.passages, dsec.data, pg)
-        if ! isempty(missinglist)
+        if isempty(missinglist)
+            @info("All edited.")
+        else
             push!(reports,(pg, missinglist))
+            @info("> $(length(missinglist)) missing.")
         end
     end
     reports
