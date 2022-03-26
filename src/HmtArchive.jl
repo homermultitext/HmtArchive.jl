@@ -20,15 +20,11 @@ export Archive
 # Instantiate an archive and publish to CEX:
 export adjacent
 export writerc, publish
-# export librarycex
-#export dse
-#export commentpairs
 
 include("constants.jl")
 include("archive.jl")
 include("indexing.jl")
 include("publish.jl")
-
 
 module Analysis
     using Documenter, DocStringExtensions
@@ -77,11 +73,11 @@ module Analysis
     # analysis functions:
     export lcs, scs
     export vertical, horizontal
-    
+
 
     # validation functions:
     export missingtexts
-    export missingdse
+    export missingdse, missingbybook
     
     include("cex/imageservice.jl")
     include("cex/load.jl")
@@ -100,10 +96,15 @@ module Analysis
     include("analysis/vertical.jl")
     include("analysis/horizontal.jl")
 
-    include("validation/dse.jl")
+    include("validation/dse_missingedition.jl")
+    include("validation/edition_unindexed.jl")
+    include("validation/textreff.jl")
 end
 
+end # module
 
+
+#
 #using PolytonicGreek
 #using CitableParserBuilder
 #, ZipFile, Downloads
@@ -122,4 +123,4 @@ include("TMEdition.jl")
 include("remote.jl")
 include("indexscholia.jl")
 =#
-end # module
+
