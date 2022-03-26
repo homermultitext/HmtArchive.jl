@@ -147,10 +147,13 @@ function hmtdse(triples, surf, ht, textfilter)
 end
 
 #=
-
-function hmtdseaccuracy(edrep, surf, height, textfilter)
-    iiif = EditorsRepo.DEFAULT_IIIF
-    ict = EditorsRepo.DEFAULT_ICT
+function hmtdseaccuracy(triples, surf, height, textfilter)
+    baseurl = "https://www.homermultitext.org/iipsrv"
+	root = "/project/homer/pyramidal/deepzoom"
+	
+    iiif =  IIIFservice(baseurl, root)
+    ict =  "https://www.homermultitext.org/ict2/?"
+    
     surfprs = surfacevizpairs(edrep, surf, strict = false)
     corpus = diplomaticcorpus(edrep)
     #psgs = filter(psg -> urncontains(pr[1], psg.urn), corpus.passages)
@@ -186,17 +189,6 @@ function hmtdseaccuracy(edrep, surf, height, textfilter)
     join(textlines, "\n")
     #"Hi. Filter texts for accuracy, too, just like completeness."
 end
-
-# Update surfaces menu and user message when "Load/update data" button
-# is clicked:
-callback!(
-    updaterepodata,
-    app,
-    Output("datastate", "children"),
-    Output("surfacepicker", "options"),
-    Input("load_button", "n_clicks"),
-    prevent_initial_call=true
-)
 =#
 
 # Update validation/verification sections of page when surface is selected:
@@ -218,7 +210,7 @@ callback!(
 
         accuracyhdr = "### Verify accuracy of indexing\n*Check that the diplomatic reading and the indexed image correspond.*\n\n"
        
-        accuracy = "" #hmtdseaccuracy(r,surfurn, TEXTHEIGHT, txt_choice) |> dcc_markdown
+        accuracy = ""#hmtdseaccuracy(dsec.data,surfurn, TEXTHEIGHT, txt_choice) |> dcc_markdown
       
         (completeness, accuracy)
     end
