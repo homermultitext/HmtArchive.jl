@@ -76,6 +76,7 @@ module Analysis
 
 
     # validation functions:
+    export isiliad, isscholion
     export missingtexts
     export missingdse, missingbybook
     
