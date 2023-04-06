@@ -1,5 +1,3 @@
-function hmt_dse()
-end
 
 
 """Load DSE records from `src`.
