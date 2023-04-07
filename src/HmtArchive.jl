@@ -4,6 +4,8 @@ using Documenter, DocStringExtensions
 using HTTP
 using EzXML
 
+using TestSetExtensions
+
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
 
