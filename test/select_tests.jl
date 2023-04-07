@@ -3,7 +3,7 @@ Pkg.activate("..")
 
 
 using HmtArchive
-using Compat.Test
+using Test
 using TestSetExtensions
 
 @testset "All the tests" begin
