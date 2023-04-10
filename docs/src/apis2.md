@@ -1,4 +1,4 @@
-# Published releases: API documentation
+# Working with published releases: API documentation
 
 ## Loading and identifing a CEX release
 

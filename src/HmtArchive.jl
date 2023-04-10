@@ -4,11 +4,17 @@ using Documenter, DocStringExtensions
 using HTTP
 using EzXML
 
+#using TestSetExtensions
+#using Compat.Test
+#using Test
+
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
 
 using CitableObject
 using CitablePhysicalText
+
+using CitableAnnotations
 
 using EditorsRepo
 import EditorsRepo: diplomaticcorpus
@@ -20,6 +26,7 @@ export Archive
 # Instantiate an archive and publish to CEX:
 export adjacent
 export writerc, publish
+export librarycex
 
 include("constants.jl")
 include("archive.jl")
@@ -111,11 +118,11 @@ end # module
 #, ZipFile, Downloads
 
 
-#= Named entity management and text editions for topic modelling
+#= Named entity management and text editions for topic modelling 
 export HmtAbbreviation, expandabbr
 export TMEditionBuilder, editednode
-=#
 
+=#
 #=
 include("directories.jl")
 include("textbuilding.jl")

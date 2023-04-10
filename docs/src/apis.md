@@ -8,10 +8,3 @@ librarycex
 publish
 writerc
 ```
-
-
-## Building pieces of the archive
-
-```@docs
-dse
-```
