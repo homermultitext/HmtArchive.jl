@@ -138,10 +138,10 @@ md""">A couple of collections are placeholders with fewer than 2 images: for pra
  imgs = filter(c -> length(c) > 2, allimgs)
 
 # ╔═╡ ff745deb-125c-4dd1-ba36-c7b9a47f4aaa
-md"""### Named entities"""
+md"""### Collections of named entities"""
 
 # ╔═╡ b3d417d5-44f7-45ba-b1b1-b0a413a814b0
-md"""> These functions are **not fully tested and implemented**."""
+md"""> These functions are **not yet fully tested and implemented**."""
 
 # ╔═╡ 488ed8c9-a46f-4810-9dbc-ba81478aabd0
 # hmt_persnames(src)
@@ -187,7 +187,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "c405916e84a5a8a222bb8cdaa9bab298f547a99b"
+project_hash = "fb62e340f5b5bb44a9dbaebbf18c16a9cca7cf91"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
