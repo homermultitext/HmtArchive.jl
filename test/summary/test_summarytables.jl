@@ -1,5 +1,5 @@
 @testset "Test composition of summary tables" begin
-    f = joinpath(pwd(), "data", "hmt-2022l.cex")
+    f = joinpath(pwd(), "data", "hmt-2022l-modified.cex")
     src = read(f) |> String
 
     codd = hmt_codices(src)
