@@ -13,7 +13,7 @@ COMMENTARY_HEADER = """
 
 #!datamodels
 Collection|Model|Label|Description
-$(CitableAnnotations.COMMENTARY_MODEL)|urn:cite2:hmt:commentary.v1:all|Relation of commentary to text passages commented on.
+urn:cite2:hmt:commentary.v1:all|$(CitableAnnotations.COMMENTARY_MODEL)|Relation of commentary to text passages commented on.
 
 #!citerelationset
 urn|urn:cite2:hmt:commentary.v1:all
