@@ -7,7 +7,8 @@
 root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive")
 ```
 
-`HmtArchive` is a Julia package for working with the citable content freely available from the Homer Multitext project's github repository for archival data at https://github.com/homermultitext/hmt-archive. In its current early version, its primary focus is on generating a complete serialization of all material in the archive in delimited-text format following the CEX specification.
+`HmtArchive` is a Julia package for working with the citable content freely available from the Homer Multitext project's github repository for archival data at https://github.com/homermultitext/hmt-archive. In its current early version, its primary focus is on generating a complete serialization of all material in the archive in delimited-text format following the CEX specification, and instantiating all content in the serialized release as Julia objects.
+
 
 ## Brief example
 
