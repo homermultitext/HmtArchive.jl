@@ -33,7 +33,7 @@ end
 begin
 	msg = info ? """
 	
-- **0.1.0**:  initial version, illustrating currently implemented loading functions in `HMTArchive` 0.11.0.
+- **0.1.0**:  initial version, illustrating currently implemented loading functions in `HMTArchive` 0.11.1.
 """ : ""
 
 	Markdown.parse(msg)
@@ -81,11 +81,12 @@ diplomatictexts = hmt_diplomatic(src)
 md"""### Commentary relations"""
 
 # ╔═╡ 1eeb7653-8ead-4bab-804c-38a2d092e993
-md"""> **NB**: *This is **not yet implemented** in the HMTArchive package.* It depends on an update to the `CitableAnnotations` that has not yet been integrated into `HmtArchive`.
+md"""> All commentary indexing in the HMT archive is organized in a single collection, so we can confidently take the first (and only) of the set of commentaries retrieved by the `hmt_commentary` function.
 """
 
 # ╔═╡ 930e399f-e57f-42a3-8d98-51f7a6e0ffdb
-hmt_commentary(src)
+# ╠═╡ show_logs = false
+commentary = hmt_commentary(src)[1]
 
 # ╔═╡ e7479923-c72a-48e8-84eb-7b0119fb322d
 md"""### Manuscripts"""
@@ -153,7 +154,7 @@ md"""> These functions are **not yet fully tested and implemented**."""
 md""" ### Indexing"""
 
 # ╔═╡ b210af78-cddc-4989-9f1a-1aa812ba0f16
-md"""> Chunking of Iliad text in individual manuscsripts, represented as a sequence of range URNs."""
+md"""> Chunking of Iliad text in different manuscsripts into "paragraph" or "section" units, represented as a sequence of range URNs."""
 
 # ╔═╡ 9b5c1612-4c1b-411f-8870-20564768d1e5
 hmt_paragraphs(src)
@@ -177,7 +178,7 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 CitableObject = "~0.15.1"
 CitablePhysicalText = "~0.9.5"
 CitableText = "~0.15.2"
-HmtArchive = "~0.11.0"
+HmtArchive = "~0.11.1"
 PlutoUI = "~0.7.50"
 """
 
@@ -187,7 +188,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.5"
 manifest_format = "2.0"
-project_hash = "fb62e340f5b5bb44a9dbaebbf18c16a9cca7cf91"
+project_hash = "c405916e84a5a8a222bb8cdaa9bab298f547a99b"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -282,9 +283,9 @@ version = "0.1.6"
 
 [[deps.CitableAnnotations]]
 deps = ["CitableBase", "CitableObject", "CitableText", "CiteEXchange", "DocStringExtensions", "Documenter", "Test"]
-git-tree-sha1 = "040e3efe087af484462b403ee6a5e308980cd4a1"
+git-tree-sha1 = "b3d6eddca64b57ce9479ff88136ed6a63a9ea975"
 uuid = "63f90415-d3ea-41a7-8107-8cc186a9b888"
-version = "0.4.2"
+version = "0.4.3"
 
 [[deps.CitableBase]]
 deps = ["DocStringExtensions", "Documenter", "HTTP", "Test"]
@@ -575,9 +576,9 @@ version = "1.7.4"
 
 [[deps.HmtArchive]]
 deps = ["CitableAnnotations", "CitableBase", "CitableCollection", "CitableCorpus", "CitableImage", "CitableObject", "CitableParserBuilder", "CitablePhysicalText", "CitableTeiReaders", "CitableText", "CiteEXchange", "Compat", "DocStringExtensions", "Documenter", "Downloads", "EditionBuilders", "EditorsRepo", "EzXML", "FileIO", "FreqTables", "HTTP", "Pkg", "PolytonicGreek", "Query", "SplitApplyCombine", "StatsBase", "Tables", "Test", "TestSetExtensions", "TypedTables", "ZipFile"]
-git-tree-sha1 = "ce1bc05c063b18518ea4980ada1abbdfe10de028"
+git-tree-sha1 = "4d80f91c6540468c603a01762fa5da8b2152e0fb"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
-version = "0.11.0"
+version = "0.11.1"
 
 [[deps.Hyperscript]]
 deps = ["Test"]

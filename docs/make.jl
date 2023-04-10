@@ -32,7 +32,8 @@ makedocs(
             "Comparing texts" => "analysis/comparison.md"
         ],
         "Archive: API documentation" => "apis.md",
-        "Published releases: API documentation" => "apis2.md"
+        "Published releases: API documentation" => "apis2.md",
+        "Tutorials" => "tutorials.md"
     ]
     
 )
