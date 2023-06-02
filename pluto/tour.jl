@@ -7,13 +7,39 @@ using InteractiveUtils
 # ╔═╡ b0f8006e-0130-11ee-3603-9b61ee416011
 begin
 	using HmtArchive
+	using HmtArchive.Analysis
 end
 
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-md"""# Tour the HMT archive with Julia"""
+md"""# Tour the HMT archive with Julia
 
-# ╔═╡ b35570fe-f902-46b8-ab24-2c8f898725d0
+- tour of `HmtArchive.Analysis1` module
+- examples draw from dynamically downloaded current release
+"""
 
+# ╔═╡ fe8ac218-2ad8-4a26-adb9-178cde31264f
+#hmt_releaseinfo()
+
+# ╔═╡ a0200cfd-0666-4c47-841f-d9f111449e7b
+imgs = hmt_images()
+
+# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+mss = hmt_codices()
+
+# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
+#textcat = hmt_textcatalog()
+
+# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+dserecords = hmt_dse()
+
+# ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
+dipltext = hmt_diplomatic()
+
+# ╔═╡ 8af40eab-8f5e-4c33-87f6-67581e92de51
+normtext = hmt_normalized()
+
+# ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
+# iliadindices()
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1314,6 +1340,13 @@ version = "17.4.0+0"
 # ╔═╡ Cell order:
 # ╠═b0f8006e-0130-11ee-3603-9b61ee416011
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-# ╠═b35570fe-f902-46b8-ab24-2c8f898725d0
+# ╠═fe8ac218-2ad8-4a26-adb9-178cde31264f
+# ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
+# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╠═8e9a057e-c43b-402e-a051-1523185f58ac
+# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╠═d8d0482f-4646-42ec-b1cf-c23693396721
+# ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
+# ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

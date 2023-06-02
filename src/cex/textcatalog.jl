@@ -9,6 +9,6 @@ end
 $(SIGNATURES)
 """
 function hmt_textcatalog()
-    hmt_cex |> hmt_textcatalog
+    hmt_cex() |> hmt_textcatalog
 end
 
