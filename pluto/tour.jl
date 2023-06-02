@@ -13,6 +13,9 @@ end
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Tour the HMT archive with Julia
 
+
+## Read this first
+
 You can use the `HmtArchive` module to build citable objects from the archival content in the `hmtarchive` github repository, and publish delimited-text editions of the archive.
 
 This notebook illustrates how you can use the `HmtArchive.Analysis` module to read a delimited-text edition of the HMT archive.  All of the functions for loading data have two methods: one that takes a string argument with delimited-text content, and one (used here) with no arguments. The second method downloads the most release published release of the HMT archive and uses it as the data source.
@@ -45,7 +48,7 @@ imgs = hmt_images()
 imgs |> typeof
 
 # ╔═╡ 6a85c326-9c44-40d3-b7ca-f341d277eff3
-md"""In the HMT archive, each images from each archive or library are organized in a distinct image collection."""
+md"""In the HMT archive, images for individual manuscripts are organized in  distinct image collections."""
 
 
 # ╔═╡ 4fe03539-36de-4810-9d4c-5aad403e8586
@@ -73,34 +76,72 @@ mss = hmt_codices()
 # ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
 mss |> typeof
 
+# ╔═╡ 15937351-5202-47f0-a85e-362a589ef53f
+md"""Each codex object includes an ordered list of pages you can use to navigate the codex in page order."""
+
 # ╔═╡ f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
 burney86 = mss[1]
 
 # ╔═╡ d601946d-1e52-4813-9aff-0eb798f42a1c
 burney86.pages
 
-# ╔═╡ 3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
-# https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/
-
 # ╔═╡ 6c880640-2023-47b9-bc5b-5f5398848813
-md""" ## Working with texts"""
+md""" ## Working with texts
+
+The `htm_textcatalog`, `hmt_diplomatic` and `hmt_normalized` functions return structures defined in the  `CitableTextCorpus` package
+
+`htm_textcatalog` returns a `TextCatalogCollection`. Each entry in the catalog has metadata about one text edition.
+"""
 
 # ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
 textcat = hmt_textcatalog()
 
+# ╔═╡ 3011ea53-1570-4f37-ab82-11ae2d260aaf
+textcat |> typeof
+
+# ╔═╡ 4245d983-865f-4afa-89ad-337176414455
+md"""
+The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
+"""
+
 # ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
 dipltext = hmt_diplomatic()
+
+# ╔═╡ 4abb3b03-5f1f-4ed7-b006-cba12713387c
+dipltext |> typeof
 
 # ╔═╡ 8af40eab-8f5e-4c33-87f6-67581e92de51
 normtext = hmt_normalized()
 
+# ╔═╡ c68c8937-2cda-41c8-932b-d935466324a0
+md"""> To learn more about the `CitableCorpus` package, see [its documentation](https://cite-architecture.github.io/CitableCorpus.jl/stable/).
+"""
+
 # ╔═╡ 368806bc-17a5-4f68-b2f2-a9a1ea486be1
 md""" ## Relating texts, manuscripts and images
 
+The `hmt_dse` function returns a vector of `DSECollection`s (from the `CitablePhysicalText` package). DSE stands for "Digital Scholarly Edition."  Each DSE record in the collection relates a single citable passage of text to a physical surface (such as a manuscript page), and a citable region of a documentary image.
 """
 
 # ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
 dserecords = hmt_dse()
+
+# ╔═╡ cda5bf43-a877-4ea3-bb99-7ae83e55ce53
+dserecords |> typeof
+
+# ╔═╡ 199b05cb-57bf-4a45-a72a-5b29b3dc04a7
+md"""The HMT archive groups all DSE records in a single collection.
+"""
+
+# ╔═╡ e937c13b-47fc-457a-9be0-520765ebdc0f
+alldse = dserecords[1]
+
+# ╔═╡ ee49a9e5-2b7e-40be-bca4-85c2ec524d56
+alldse |> typeof
+
+# ╔═╡ 3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
+md"""> The `CitablePhysicalText` package includes functions to query and retrieve a DSE collection for records by text passage, page, or image.   To learn more about how to work with DSE records, see [this page](https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/) of the online documentation.
+"""
 
 # ╔═╡ c04e2ba5-eac5-4193-8fc7-fc0297720667
 html"""<br/><br/><br/><br/><br/>"""
@@ -1431,15 +1472,24 @@ version = "17.4.0+0"
 # ╟─834c7038-8001-436d-87d5-12fa1ce4d329
 # ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 # ╠═a75962b2-a93c-47b5-98f7-132ad2640565
+# ╟─15937351-5202-47f0-a85e-362a589ef53f
 # ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
 # ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
-# ╠═3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
-# ╠═6c880640-2023-47b9-bc5b-5f5398848813
+# ╟─6c880640-2023-47b9-bc5b-5f5398848813
 # ╠═8e9a057e-c43b-402e-a051-1523185f58ac
+# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
+# ╟─4245d983-865f-4afa-89ad-337176414455
 # ╠═d8d0482f-4646-42ec-b1cf-c23693396721
+# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
 # ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
-# ╠═368806bc-17a5-4f68-b2f2-a9a1ea486be1
+# ╟─c68c8937-2cda-41c8-932b-d935466324a0
+# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
 # ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
+# ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
+# ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
+# ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
+# ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
 # ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
 # ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
 # ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
