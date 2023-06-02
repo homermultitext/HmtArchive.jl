@@ -9,6 +9,9 @@ function hmt_cex()
 end
 
 
+function hmt_releaseinfo()
+    hmt_cex() |> hmt_releaseinfo
+end
 
 """Extract release info from library header of `cexsrc`.
 $(SIGNATURES)
