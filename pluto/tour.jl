@@ -13,24 +13,80 @@ end
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Tour the HMT archive with Julia
 
-- tour of `HmtArchive.Analysis1` module
-- examples draw from dynamically downloaded current release
+You can use the `HmtArchive` module to build citable objects from the archival content in the `hmtarchive` github repository, and publish delimited-text editions of the archive.
+
+This notebook illustrates how you can use the `HmtArchive.Analysis` module to read a delimited-text edition of the HMT archive.  All of the functions for loading data have two methods: one that takes a string argument with delimited-text content, and one (used here) with no arguments. The second method downloads the most release published release of the HMT archive and uses it as the data source.
+
 """
 
+# ╔═╡ a6c80726-e36b-4313-bfda-be5bc8399700
+md"""## Using the package
+
+Be sure to use the `HmtArchive.Analysis` module to load data from a published edition.
+"""
+
+# ╔═╡ 79373a39-0793-49b9-a7f0-c471ae58744f
+md""" ## Metadata about the edition"""
+
 # ╔═╡ fe8ac218-2ad8-4a26-adb9-178cde31264f
-#hmt_releaseinfo()
+hmt_releaseinfo()
+
+# ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
+md"""## Working with images
+
+The `hmt_images` function returns a vector of `ImageCollection`s (from the `CitableImage` package).
+"""
 
 # ╔═╡ a0200cfd-0666-4c47-841f-d9f111449e7b
+# ╠═╡ show_logs = false
 imgs = hmt_images()
+
+# ╔═╡ 54c6e609-8af2-4e10-9f87-8855bb84a7fb
+imgs |> typeof
+
+# ╔═╡ 6a85c326-9c44-40d3-b7ca-f341d277eff3
+md"""In the HMT archive, each images from each archive or library are organized in a distinct image collection."""
+
+
+# ╔═╡ 4fe03539-36de-4810-9d4c-5aad403e8586
+burneyimgs = imgs[1]
+
+# ╔═╡ 37c44af6-9057-471f-a085-9a71486357a3
+md"""Each image collection incliudes a vector of `ImageRecord`s."""
+
+# ╔═╡ a3e592f3-35cf-4311-b405-174596a39245
+burneyimgs.images |> typeof
+
+# ╔═╡ 429b97a7-f02b-4e3b-bf79-01e00ca8747e
+md"""> To learn more about how you can use the URNs in an `ImageRecord` to retrieve and format binary image data from a Citable Image Service, see [documentation for the `CitableImage` package](https://cite-architecture.github.io/CitableImage.jl/stable/binarydata/).
+"""
+
+# ╔═╡ 834c7038-8001-436d-87d5-12fa1ce4d329
+md""" ## Working with manuscripts
+
+The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
+"""
 
 # ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 mss = hmt_codices()
 
-# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
-#textcat = hmt_textcatalog()
+# ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
+mss |> typeof
 
-# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-dserecords = hmt_dse()
+# ╔═╡ f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
+burney86 = mss[1]
+
+# ╔═╡ d601946d-1e52-4813-9aff-0eb798f42a1c
+burney86.pages
+
+# ╔═╡ 3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
+# https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/
+
+# ╔═╡ 6c880640-2023-47b9-bc5b-5f5398848813
+md""" ## Working with texts"""
+
+# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
+textcat = hmt_textcatalog()
 
 # ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
 dipltext = hmt_diplomatic()
@@ -38,8 +94,29 @@ dipltext = hmt_diplomatic()
 # ╔═╡ 8af40eab-8f5e-4c33-87f6-67581e92de51
 normtext = hmt_normalized()
 
+# ╔═╡ 368806bc-17a5-4f68-b2f2-a9a1ea486be1
+md""" ## Relating texts, manuscripts and images
+
+"""
+
+# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+dserecords = hmt_dse()
+
+# ╔═╡ c04e2ba5-eac5-4193-8fc7-fc0297720667
+html"""<br/><br/><br/><br/><br/>"""
+
+# ╔═╡ fccfa86d-11d0-4395-b342-3d49d9c1d561
+md"""---
+
+
+
+## TBA
+
+In development: indexing of manuscripts by *Iliad* reference.
+"""
+
 # ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
-# iliadindices()
+#iliadindices()
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -47,7 +124,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 
 [compat]
-HmtArchive = "~0.11.2"
+HmtArchive = "~0.11.3"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -56,7 +133,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "52f00303d4d60cc68c56a51929b4381ec0868ed9"
+project_hash = "8008f0b7f68f3df3a3e76ac71900f6c6da3d2fb3"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -464,9 +541,9 @@ version = "1.9.6"
 
 [[deps.HmtArchive]]
 deps = ["CitableAnnotations", "CitableBase", "CitableCollection", "CitableCorpus", "CitableImage", "CitableObject", "CitableParserBuilder", "CitablePhysicalText", "CitableTeiReaders", "CitableText", "CiteEXchange", "Compat", "DocStringExtensions", "Documenter", "Downloads", "EditionBuilders", "EditorsRepo", "EzXML", "FileIO", "FreqTables", "HTTP", "Pkg", "PolytonicGreek", "Query", "SplitApplyCombine", "StatsBase", "Tables", "Test", "TestSetExtensions", "TypedTables", "ZipFile"]
-git-tree-sha1 = "ebce993c6fbafde1c61d86a2b79d02a86d4813cf"
+git-tree-sha1 = "0c393303629b65e094ad4b257c5e0dc4567a83bf"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
-version = "0.11.2"
+version = "0.11.3"
 
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
@@ -1338,15 +1415,33 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
+# ╟─a6c80726-e36b-4313-bfda-be5bc8399700
+# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
+# ╟─79373a39-0793-49b9-a7f0-c471ae58744f
 # ╠═fe8ac218-2ad8-4a26-adb9-178cde31264f
+# ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
 # ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
+# ╠═54c6e609-8af2-4e10-9f87-8855bb84a7fb
+# ╟─6a85c326-9c44-40d3-b7ca-f341d277eff3
+# ╠═4fe03539-36de-4810-9d4c-5aad403e8586
+# ╟─37c44af6-9057-471f-a085-9a71486357a3
+# ╠═a3e592f3-35cf-4311-b405-174596a39245
+# ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
+# ╟─834c7038-8001-436d-87d5-12fa1ce4d329
 # ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
+# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
+# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
+# ╠═3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
+# ╠═6c880640-2023-47b9-bc5b-5f5398848813
 # ╠═8e9a057e-c43b-402e-a051-1523185f58ac
-# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
 # ╠═d8d0482f-4646-42ec-b1cf-c23693396721
 # ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
+# ╠═368806bc-17a5-4f68-b2f2-a9a1ea486be1
+# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
+# ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
 # ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
