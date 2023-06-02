@@ -13,33 +13,151 @@ end
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Tour the HMT archive with Julia
 
-- tour of `HmtArchive.Analysis1` module
-- examples draw from dynamically downloaded current release
+
+## Read this first
+
+You can use the `HmtArchive` module to build citable objects from the archival content in the `hmtarchive` github repository, and publish delimited-text editions of the archive.
+
+This notebook illustrates how you can use the `HmtArchive.Analysis` module to read a delimited-text edition of the HMT archive.  All of the functions for loading data have two methods: one that takes a string argument with delimited-text content, and one (used here) with no arguments. The second method downloads the most release published release of the HMT archive and uses it as the data source.
+
 """
 
+# ╔═╡ a6c80726-e36b-4313-bfda-be5bc8399700
+md"""## Using the package
+
+Be sure to use the `HmtArchive.Analysis` module to load data from a published edition.
+"""
+
+# ╔═╡ 79373a39-0793-49b9-a7f0-c471ae58744f
+md""" ## Metadata about the edition"""
+
 # ╔═╡ fe8ac218-2ad8-4a26-adb9-178cde31264f
-#hmt_releaseinfo()
+hmt_releaseinfo()
+
+# ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
+md"""## Working with images
+
+The `hmt_images` function returns a vector of `ImageCollection`s (from the `CitableImage` package).
+"""
 
 # ╔═╡ a0200cfd-0666-4c47-841f-d9f111449e7b
+# ╠═╡ show_logs = false
 imgs = hmt_images()
+
+# ╔═╡ 54c6e609-8af2-4e10-9f87-8855bb84a7fb
+imgs |> typeof
+
+# ╔═╡ 6a85c326-9c44-40d3-b7ca-f341d277eff3
+md"""In the HMT archive, images for individual manuscripts are organized in  distinct image collections."""
+
+
+# ╔═╡ 4fe03539-36de-4810-9d4c-5aad403e8586
+burneyimgs = imgs[1]
+
+# ╔═╡ 37c44af6-9057-471f-a085-9a71486357a3
+md"""Each image collection incliudes a vector of `ImageRecord`s."""
+
+# ╔═╡ a3e592f3-35cf-4311-b405-174596a39245
+burneyimgs.images |> typeof
+
+# ╔═╡ 429b97a7-f02b-4e3b-bf79-01e00ca8747e
+md"""> To learn more about how you can use the URNs in an `ImageRecord` to retrieve and format binary image data from a Citable Image Service, see [documentation for the `CitableImage` package](https://cite-architecture.github.io/CitableImage.jl/stable/binarydata/).
+"""
+
+# ╔═╡ 834c7038-8001-436d-87d5-12fa1ce4d329
+md""" ## Working with manuscripts
+
+The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
+"""
 
 # ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 mss = hmt_codices()
 
-# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
-#textcat = hmt_textcatalog()
+# ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
+mss |> typeof
 
-# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-dserecords = hmt_dse()
+# ╔═╡ 15937351-5202-47f0-a85e-362a589ef53f
+md"""Each codex object includes an ordered list of pages you can use to navigate the codex in page order."""
+
+# ╔═╡ f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
+burney86 = mss[1]
+
+# ╔═╡ d601946d-1e52-4813-9aff-0eb798f42a1c
+burney86.pages
+
+# ╔═╡ 6c880640-2023-47b9-bc5b-5f5398848813
+md""" ## Working with texts
+
+The `htm_textcatalog`, `hmt_diplomatic` and `hmt_normalized` functions return structures defined in the  `CitableTextCorpus` package
+
+`htm_textcatalog` returns a `TextCatalogCollection`. Each entry in the catalog has metadata about one text edition.
+"""
+
+# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
+textcat = hmt_textcatalog()
+
+# ╔═╡ 3011ea53-1570-4f37-ab82-11ae2d260aaf
+textcat |> typeof
+
+# ╔═╡ 4245d983-865f-4afa-89ad-337176414455
+md"""
+The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
+"""
 
 # ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
 dipltext = hmt_diplomatic()
 
+# ╔═╡ 4abb3b03-5f1f-4ed7-b006-cba12713387c
+dipltext |> typeof
+
 # ╔═╡ 8af40eab-8f5e-4c33-87f6-67581e92de51
 normtext = hmt_normalized()
 
+# ╔═╡ c68c8937-2cda-41c8-932b-d935466324a0
+md"""> To learn more about the `CitableCorpus` package, see [its documentation](https://cite-architecture.github.io/CitableCorpus.jl/stable/).
+"""
+
+# ╔═╡ 368806bc-17a5-4f68-b2f2-a9a1ea486be1
+md""" ## Relating texts, manuscripts and images
+
+The `hmt_dse` function returns a vector of `DSECollection`s (from the `CitablePhysicalText` package). DSE stands for "Digital Scholarly Edition."  Each DSE record in the collection relates a single citable passage of text to a physical surface (such as a manuscript page), and a citable region of a documentary image.
+"""
+
+# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+dserecords = hmt_dse()
+
+# ╔═╡ cda5bf43-a877-4ea3-bb99-7ae83e55ce53
+dserecords |> typeof
+
+# ╔═╡ 199b05cb-57bf-4a45-a72a-5b29b3dc04a7
+md"""The HMT archive groups all DSE records in a single collection.
+"""
+
+# ╔═╡ e937c13b-47fc-457a-9be0-520765ebdc0f
+alldse = dserecords[1]
+
+# ╔═╡ ee49a9e5-2b7e-40be-bca4-85c2ec524d56
+alldse |> typeof
+
+# ╔═╡ 3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
+md"""> The `CitablePhysicalText` package includes functions to query and retrieve a DSE collection for records by text passage, page, or image.   To learn more about how to work with DSE records, see [this page](https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/) of the online documentation.
+"""
+
+# ╔═╡ c04e2ba5-eac5-4193-8fc7-fc0297720667
+html"""<br/><br/><br/><br/><br/>"""
+
+# ╔═╡ fccfa86d-11d0-4395-b342-3d49d9c1d561
+md"""---
+
+
+
+## TBA
+
+In development: indexing of manuscripts by *Iliad* reference.
+"""
+
 # ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
-# iliadindices()
+#iliadindices()
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -47,7 +165,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 
 [compat]
-HmtArchive = "~0.11.2"
+HmtArchive = "~0.11.3"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -56,7 +174,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "52f00303d4d60cc68c56a51929b4381ec0868ed9"
+project_hash = "8008f0b7f68f3df3a3e76ac71900f6c6da3d2fb3"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -464,9 +582,9 @@ version = "1.9.6"
 
 [[deps.HmtArchive]]
 deps = ["CitableAnnotations", "CitableBase", "CitableCollection", "CitableCorpus", "CitableImage", "CitableObject", "CitableParserBuilder", "CitablePhysicalText", "CitableTeiReaders", "CitableText", "CiteEXchange", "Compat", "DocStringExtensions", "Documenter", "Downloads", "EditionBuilders", "EditorsRepo", "EzXML", "FileIO", "FreqTables", "HTTP", "Pkg", "PolytonicGreek", "Query", "SplitApplyCombine", "StatsBase", "Tables", "Test", "TestSetExtensions", "TypedTables", "ZipFile"]
-git-tree-sha1 = "ebce993c6fbafde1c61d86a2b79d02a86d4813cf"
+git-tree-sha1 = "0c393303629b65e094ad4b257c5e0dc4567a83bf"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
-version = "0.11.2"
+version = "0.11.3"
 
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
@@ -1338,15 +1456,42 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
+# ╟─a6c80726-e36b-4313-bfda-be5bc8399700
+# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
+# ╟─79373a39-0793-49b9-a7f0-c471ae58744f
 # ╠═fe8ac218-2ad8-4a26-adb9-178cde31264f
+# ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
 # ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
+# ╠═54c6e609-8af2-4e10-9f87-8855bb84a7fb
+# ╟─6a85c326-9c44-40d3-b7ca-f341d277eff3
+# ╠═4fe03539-36de-4810-9d4c-5aad403e8586
+# ╟─37c44af6-9057-471f-a085-9a71486357a3
+# ╠═a3e592f3-35cf-4311-b405-174596a39245
+# ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
+# ╟─834c7038-8001-436d-87d5-12fa1ce4d329
 # ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
+# ╟─15937351-5202-47f0-a85e-362a589ef53f
+# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
+# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
+# ╟─6c880640-2023-47b9-bc5b-5f5398848813
 # ╠═8e9a057e-c43b-402e-a051-1523185f58ac
-# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
+# ╟─4245d983-865f-4afa-89ad-337176414455
 # ╠═d8d0482f-4646-42ec-b1cf-c23693396721
+# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
 # ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
+# ╟─c68c8937-2cda-41c8-932b-d935466324a0
+# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
+# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
+# ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
+# ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
+# ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
+# ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
+# ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
+# ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
 # ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
