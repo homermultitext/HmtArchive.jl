@@ -18,11 +18,15 @@ end
 begin
 	using HmtArchive
 	using HmtArchive.Analysis
-	using CitableBase, CitableObject
-	using CitablePhysicalText
+	using CitableBase, CitableObject, CitableText
+	using CitablePhysicalText, CitableImage
 	using EditorsRepo
 	using PlutoUI
 end
+
+# ╔═╡ f5672f84-c90a-4dcd-a299-4d17ac218e19
+md"""> *Warning to users*: this notebook is a quick, mostly untested hack.
+"""
 
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Validate content in the HMT archive
@@ -34,13 +38,12 @@ md"""# Validate content in the HMT archive
 # ╔═╡ 13fc6e30-225f-4c18-a4d5-4b7a37ed029d
 md"""### Verify coverage of indexing"""
 
-# ╔═╡ 39f736b6-56a8-46b8-942a-3a3839c17af2
-"Compute URL for ICT view of page"
-function indexcoverage(pg, dserecords)
-	imgs = imagesforsurface(pg, dserecords)
-	ictbase = "https://www.homermultitext.org/ict2/?"
-	ictbase * join(map(i -> "urn=" * string(i), imgs), "&")
-end
+# ╔═╡ 214b6095-f3d8-49da-8954-f33ec807f0fc
+md"""### Verify indexing scholia to Iliad"""
+
+# ╔═╡ bf1246bd-d984-49a4-affb-377f1d45e815
+md"""### Verify editing
+"""
 
 # ╔═╡ 52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 html"""<br/><br/><br/><br/><br/><br/>"""
@@ -54,8 +57,41 @@ mslist = hmt_codices()
 # ╔═╡ d0192283-38d3-4cbf-a4f5-f2bdabf16339
 dse = hmt_dse()[1]
 
+# ╔═╡ 890e9255-ab3e-4274-b944-cbf64384f012
+dipltext = hmt_diplomatic()
+
+# ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
+# ╠═╡ show_logs = false
+commentary = hmt_commentary()[1]
+
+# ╔═╡ 170a5a6b-279a-4893-a4b9-dbee97371646
+md"> Image service"
+
+# ╔═╡ afbabc76-8a2f-48c3-aca5-f0d73b485ffb
+baseimgurl = "http://www.homermultitext.org/iipsrv"
+
+
+# ╔═╡ f84be9d4-ea0d-4ef3-8457-df242c8c0b97
+imgserviceroot = "/project/homer/pyramidal/deepzoom"
+
+
+# ╔═╡ daebeef0-f187-4126-a64b-4ded18542c48
+imgservice = IIIFservice(baseimgurl, imgserviceroot)
+
+# ╔═╡ e3f35ce0-04ce-4eca-a52c-445223fbb633
+md"""> User selections"""
+
+# ╔═╡ 5a36d532-e8e0-4d37-9149-765ad9d0272a
+"""Find image documenting passage of text identifed by CTS URN."""
+function imgfortext(psg)
+	imgs = imagesfortext(psg, dse)
+	ict = "http://www.homermultitext.org/ict2/?"
+
+	isempty(imgs) ? "" : linkedMarkdownImage(ict, imgs[1], imgservice)
+end
+
 # ╔═╡ ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
-md"""> Under the hood: UI"""
+md"""> UI"""
 
 # ╔═╡ 3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
 menu = map(ms -> (urn(ms) => label(ms)), mslist)
@@ -67,6 +103,7 @@ md"""*Choose a manuscript*  $(@bind ms Select(menu))"""
 chosenms = filter(manus -> urn(manus) == ms, mslist)[1]
 
 # ╔═╡ 38d2fc3b-e65b-4200-9882-9388242bbf98
+"""Format menu of pages for a given MS."""
 function pgmenu(ms)
 	map(pg -> urn(pg) => objectcomponent(urn(pg)), ms.pages)
 end
@@ -74,173 +111,122 @@ end
 # ╔═╡ c26c53a6-68c4-451b-95b7-9a23f4d7e832
 md"""*Choose a page* $(@bind chosenpg Select(pgmenu(chosenms)))"""
 
-# ╔═╡ f075605b-5e9a-4b00-9a9c-95244d8b445f
-chosenpg
+# ╔═╡ a8e94767-f562-455d-ab16-59d5a4144edd
+txts = textsforsurface(chosenpg, dse)
+
+# ╔═╡ 27eeebaa-cac9-4ffe-afee-1ce16eec6555
+function scholiaindexing()
+	iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
+	scholiadse = filter(u -> startswith(workcomponent(u), "tlg5026"), txts)
+	indexed = []
+	for ln in iliadlines
+		scholia = filter(pr -> pr[2] == ln, commentary.commentary)
+		if isempty(scholia)
+		else
+			push!(indexed, scholia)
+		end
+	end
+	
+
+	mdlines = ["$(length(indexed)) scholia indexed to *Iliad* lines on this page.",
+	"$(length(scholiadse)) scholia have DSE records for this page"
+	]
+
+	join(mdlines, "\n") |> Markdown.parse
+	
+end
+
+
+# ╔═╡ de2be041-337d-411a-a06f-b9e073b18152
+scholiaindexing()
+
+# ╔═╡ 409e93a9-97f0-428f-a916-b1cd683b50da
+iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
+
+# ╔═╡ cbadd8ab-54f5-4641-b2f8-59188e0d85cb
+iliadlines[1]
+
+# ╔═╡ be4fdaa4-34c7-45a7-9a3f-7a34cbda7b89
+filter(pr -> pr[2] == iliadlines[1], commentary.commentary)
+
+# ╔═╡ 39f736b6-56a8-46b8-942a-3a3839c17af2
+"Compute URL for ICT view of page"
+function indexcoverage(pg, dserecords)
+	imgs = imagesforsurface(pg, dserecords)
+	ictbase = "https://www.homermultitext.org/ict2/?"
+	ictbase * join(map(i -> "urn=" * string(i), imgs), "&")
+end
 
 # ╔═╡ 32f50dd1-c411-4e6c-ba19-2c707744ac80
 begin
 	 coverageurl = indexcoverage(chosenpg, dse)
-	msg = "See this page in the [HMT Image Citation Tool]($(coverageurl))"
+	msg =  ">   --> **See this page** in the [HMT Image Citation Tool]($(coverageurl))"
 	Markdown.parse(msg)
 end
 
-# ╔═╡ b3ad8d79-bb40-418b-86b9-d725b138878e
-html"""
-<br/>
-<br/><br/><br/><br/><br/><br/><br/><br/>
-"""
+# ╔═╡ f17619d0-690a-44fe-ae2d-6d1a774010dd
+labelworks = Dict(
+"tlg0012.tlg001.msA" => "Iliad",
+"tlg5026.msA.hmt" => "Main scholia",
+"tlg5026.msAim.hmt" => "Intermarginal scholia",
+"tlg5026.msAint.hmt" => "Interior scholia",
+"tlg5026.msAil.hmt" => "Interlinear scholia",
+"tlg5026.msAext.hmt" => "Exterior scholia")
 
-# ╔═╡ 3416b53f-75c4-4465-8726-a4bc629faf76
-md"""---
+# ╔═╡ b960ac90-2615-40cb-a5df-93af8e904a19
+"Compose Markdown for illustrated text passages on page."
+function composetext(grp)
+	
+	contents = haskey(labelworks, grp) ?  ["#### $(labelworks[grp])"] : "#### $(grp)"
 
-> Quarry from stuff below here
-"""
+	urns = filter(psg -> workcomponent(psg) == grp, txts)
+	for u in urns
+		pgtext = filter(psg -> urncontains(u, psg.urn), dipltext.passages)
+		txtcontents = map(psg -> psg.text, pgtext)
+		label = string("`", passagecomponent(u), "` ")
+		push!(contents, label * join(txtcontents, " "))
 
-# ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
-md"""## Working with images
-
-The `hmt_images` function returns a vector of `ImageCollection`s (from the `CitableImage` package).
-"""
-
-# ╔═╡ a0200cfd-0666-4c47-841f-d9f111449e7b
-# ╠═╡ show_logs = false
-imgs = hmt_images()
-
-# ╔═╡ 54c6e609-8af2-4e10-9f87-8855bb84a7fb
-imgs |> typeof
-
-# ╔═╡ 6a85c326-9c44-40d3-b7ca-f341d277eff3
-md"""In the HMT archive, images for individual manuscripts are organized in  distinct image collections."""
+		
+		img = imgfortext(u)
+		
+		push!(contents, string(img))
+	end
 
 
-# ╔═╡ 4fe03539-36de-4810-9d4c-5aad403e8586
-burneyimgs = imgs[1]
+	join(contents, "\n\n")
+end
 
-# ╔═╡ 37c44af6-9057-471f-a085-9a71486357a3
-md"""Each image collection incliudes a vector of `ImageRecord`s."""
-
-# ╔═╡ a3e592f3-35cf-4311-b405-174596a39245
-burneyimgs.images |> typeof
-
-# ╔═╡ 429b97a7-f02b-4e3b-bf79-01e00ca8747e
-md"""> To learn more about how you can use the URNs in an `ImageRecord` to retrieve and format binary image data from a Citable Image Service, see [documentation for the `CitableImage` package](https://cite-architecture.github.io/CitableImage.jl/stable/binarydata/).
-"""
-
-# ╔═╡ 834c7038-8001-436d-87d5-12fa1ce4d329
-md""" ## Working with manuscripts
-
-The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
-"""
-
-# ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
-mss |> typeof
-
-# ╔═╡ 15937351-5202-47f0-a85e-362a589ef53f
-md"""Each codex object includes an ordered list of pages you can use to navigate the codex in page order."""
-
-# ╔═╡ f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
-burney86 = mss[1]
-
-# ╔═╡ d601946d-1e52-4813-9aff-0eb798f42a1c
-burney86.pages
-
-# ╔═╡ 6c880640-2023-47b9-bc5b-5f5398848813
-md""" ## Working with texts
-
-The `htm_textcatalog`, `hmt_diplomatic` and `hmt_normalized` functions return structures defined in the  `CitableTextCorpus` package
-
-`htm_textcatalog` returns a `TextCatalogCollection`. Each entry in the catalog has metadata about one text edition.
-"""
-
-# ╔═╡ 8e9a057e-c43b-402e-a051-1523185f58ac
-textcat = hmt_textcatalog()
-
-# ╔═╡ 3011ea53-1570-4f37-ab82-11ae2d260aaf
-textcat |> typeof
-
-# ╔═╡ 4245d983-865f-4afa-89ad-337176414455
-md"""
-The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
-"""
-
-# ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
-dipltext = hmt_diplomatic()
-
-# ╔═╡ 4abb3b03-5f1f-4ed7-b006-cba12713387c
-dipltext |> typeof
-
-# ╔═╡ 8af40eab-8f5e-4c33-87f6-67581e92de51
-normtext = hmt_normalized()
-
-# ╔═╡ c68c8937-2cda-41c8-932b-d935466324a0
-md"""> To learn more about the `CitableCorpus` package, see [its documentation](https://cite-architecture.github.io/CitableCorpus.jl/stable/).
-"""
-
-# ╔═╡ 368806bc-17a5-4f68-b2f2-a9a1ea486be1
-md""" ## Relating texts, manuscripts and images
-
-The `hmt_dse` function returns a vector of `DSECollection`s (from the `CitablePhysicalText` package). DSE stands for "Digital Scholarly Edition."  Each DSE record in the collection relates a single citable passage of text to a physical surface (such as a manuscript page), and a citable region of a documentary image.
-"""
-
-# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-dserecords = hmt_dse()
-
-# ╔═╡ cda5bf43-a877-4ea3-bb99-7ae83e55ce53
-dserecords |> typeof
-
-# ╔═╡ 199b05cb-57bf-4a45-a72a-5b29b3dc04a7
-md"""The HMT archive groups all DSE records in a single collection.
-"""
-
-# ╔═╡ e937c13b-47fc-457a-9be0-520765ebdc0f
-alldse = dserecords[1]
-
-# ╔═╡ ee49a9e5-2b7e-40be-bca4-85c2ec524d56
-alldse |> typeof
-
-# ╔═╡ 3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
-md"""> The `CitablePhysicalText` package includes functions to query and retrieve a DSE collection for records by text passage, page, or image.   To learn more about how to work with DSE records, see [this page](https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/) of the online documentation.
-"""
-
-# ╔═╡ fccfa86d-11d0-4395-b342-3d49d9c1d561
-md""" ## Index of commentary on text
-
-The `hmt_commentary` function returns a vector of vectors of `CitableCommentary` objects (from the `CitableAnnotations` package).
-
-"""
-
-# ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
-# ╠═╡ show_logs = false
-commcollections = hmt_cex() |> hmt_commentary
-
-# ╔═╡ e7a9a7e1-d27b-4f97-8b48-f5185bdb8a5d
-md"""The HMT project groups all commentary records in a single collection."""
-
-# ╔═╡ a689500e-c583-4db3-a648-b688bfc86648
-commentscollection = commcollections[1]
-
-# ╔═╡ 6e87d4a4-ab03-4e39-8fc4-2f00ce7d3ce9
-commentscollection |> typeof
-
-# ╔═╡ 18eafa6a-1349-4ee2-a2db-f20f79aa7b12
-md"""> To learn more about how to work with a `CitableCommentary`, see [the documentation](https://cite-architecture.github.io/CitableAnnotations.jl/stable/commentary/#Working-with-a-commentary) for the `CitableAnnotations` package."""
+# ╔═╡ e0350c1d-7aa4-4600-b97b-9233c179e5fa
+begin
+	mdtext = []
+	groups = map(u -> workcomponent(u), txts) |> unique
+	
+	for g in groups
+		push!(mdtext, composetext(g))
+	end
+	join(mdtext, "\n\n") |> Markdown.parse
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableImage = "17ccb2e5-db19-44b3-b354-4fd16d92c74e"
 CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
 CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
+CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
 CitableBase = "~10.2.4"
+CitableImage = "~0.6.5"
 CitableObject = "~0.15.1"
 CitablePhysicalText = "~0.9.7"
+CitableText = "~0.15.2"
 EditorsRepo = "~0.18.5"
-HmtArchive = "~0.11.3"
+HmtArchive = "~0.11.5"
 PlutoUI = "~0.7.51"
 """
 
@@ -250,7 +236,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "2435b598c02157520ab5b625d1ee3daffb2c2a9e"
+project_hash = "a730e3c266db685fdf292519f2f0c185c19ca9ea"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -323,9 +309,9 @@ version = "0.4.2"
 
 [[deps.CSV]]
 deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "PrecompileTools", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings", "WorkerUtilities"]
-git-tree-sha1 = "ed28c86cbde3dc3f53cf76643c2e9bc11d56acc7"
+git-tree-sha1 = "44dbf560808d49041989b8a96cae4cffbeb7966a"
 uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.10.10"
+version = "0.10.11"
 
 [[deps.CatIndices]]
 deps = ["CustomUnitRanges", "OffsetArrays"]
@@ -664,9 +650,9 @@ version = "1.9.6"
 
 [[deps.HmtArchive]]
 deps = ["CitableAnnotations", "CitableBase", "CitableCollection", "CitableCorpus", "CitableImage", "CitableObject", "CitableParserBuilder", "CitablePhysicalText", "CitableTeiReaders", "CitableText", "CiteEXchange", "Compat", "DocStringExtensions", "Documenter", "Downloads", "EditionBuilders", "EditorsRepo", "EzXML", "FileIO", "FreqTables", "HTTP", "Pkg", "PolytonicGreek", "Query", "SplitApplyCombine", "StatsBase", "Tables", "Test", "TestSetExtensions", "TypedTables", "ZipFile"]
-git-tree-sha1 = "0c393303629b65e094ad4b257c5e0dc4567a83bf"
+git-tree-sha1 = "b80ad558e2732a524b51a76bd3ce54d6ad21d6ee"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
-version = "0.11.3"
+version = "0.11.5"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
@@ -848,9 +834,9 @@ uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 version = "0.2.2"
 
 [[deps.IterTools]]
-git-tree-sha1 = "fa6287a4469f5e048d763df38279ee729fbd44e5"
+git-tree-sha1 = "4ced6667f9974fc5c5943fa5e2ef1ca43ea9e450"
 uuid = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
-version = "1.4.0"
+version = "1.8.0"
 
 [[deps.IterableTables]]
 deps = ["DataValues", "IteratorInterfaceExtensions", "Requires", "TableTraits", "TableTraitsUtils"]
@@ -1167,9 +1153,9 @@ version = "0.7.51"
 
 [[deps.PolytonicGreek]]
 deps = ["Compat", "DocStringExtensions", "Documenter", "Orthography", "Test", "TestSetExtensions", "Unicode"]
-git-tree-sha1 = "074c271af405e0885031efe0622b78c36840ad4a"
+git-tree-sha1 = "0915606f601128264489dc23c7a35605774bcf7d"
 uuid = "72b824a7-2b4a-40fa-944c-ac4f345dc63a"
-version = "0.18.2"
+version = "0.18.3"
 
 [[deps.PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -1179,9 +1165,9 @@ version = "1.4.2"
 
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
-git-tree-sha1 = "259e206946c293698122f63e2b513a7c99a244e8"
+git-tree-sha1 = "9673d39decc5feece56ef3940e5dafba15ba0f81"
 uuid = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
-version = "1.1.1"
+version = "1.1.2"
 
 [[deps.Preferences]]
 deps = ["TOML"]
@@ -1567,56 +1553,39 @@ version = "17.4.0+0"
 
 # ╔═╡ Cell order:
 # ╟─b0f8006e-0130-11ee-3603-9b61ee416011
+# ╟─f5672f84-c90a-4dcd-a299-4d17ac218e19
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 # ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
 # ╟─c26c53a6-68c4-451b-95b7-9a23f4d7e832
-# ╟─f075605b-5e9a-4b00-9a9c-95244d8b445f
 # ╟─13fc6e30-225f-4c18-a4d5-4b7a37ed029d
 # ╟─32f50dd1-c411-4e6c-ba19-2c707744ac80
+# ╟─214b6095-f3d8-49da-8954-f33ec807f0fc
+# ╠═de2be041-337d-411a-a06f-b9e073b18152
+# ╟─27eeebaa-cac9-4ffe-afee-1ce16eec6555
+# ╠═409e93a9-97f0-428f-a916-b1cd683b50da
+# ╠═cbadd8ab-54f5-4641-b2f8-59188e0d85cb
+# ╠═be4fdaa4-34c7-45a7-9a3f-7a34cbda7b89
+# ╟─bf1246bd-d984-49a4-affb-377f1d45e815
+# ╟─e0350c1d-7aa4-4600-b97b-9233c179e5fa
 # ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 # ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
 # ╟─bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-# ╟─15a76a12-91ab-4290-a5de-c687ef9f980b
 # ╟─d0192283-38d3-4cbf-a4f5-f2bdabf16339
+# ╟─890e9255-ab3e-4274-b944-cbf64384f012
+# ╟─cb907ec0-b615-4cea-9122-09aa10f30c10
+# ╟─170a5a6b-279a-4893-a4b9-dbee97371646
+# ╟─afbabc76-8a2f-48c3-aca5-f0d73b485ffb
+# ╟─f84be9d4-ea0d-4ef3-8457-df242c8c0b97
+# ╟─daebeef0-f187-4126-a64b-4ded18542c48
+# ╟─e3f35ce0-04ce-4eca-a52c-445223fbb633
+# ╟─15a76a12-91ab-4290-a5de-c687ef9f980b
+# ╟─a8e94767-f562-455d-ab16-59d5a4144edd
+# ╟─5a36d532-e8e0-4d37-9149-765ad9d0272a
+# ╟─b960ac90-2615-40cb-a5df-93af8e904a19
 # ╟─ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
-# ╟─39f736b6-56a8-46b8-942a-3a3839c17af2
 # ╟─3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
-# ╠═38d2fc3b-e65b-4200-9882-9388242bbf98
-# ╟─b3ad8d79-bb40-418b-86b9-d725b138878e
-# ╟─3416b53f-75c4-4465-8726-a4bc629faf76
-# ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
-# ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
-# ╠═54c6e609-8af2-4e10-9f87-8855bb84a7fb
-# ╟─6a85c326-9c44-40d3-b7ca-f341d277eff3
-# ╠═4fe03539-36de-4810-9d4c-5aad403e8586
-# ╟─37c44af6-9057-471f-a085-9a71486357a3
-# ╠═a3e592f3-35cf-4311-b405-174596a39245
-# ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
-# ╟─834c7038-8001-436d-87d5-12fa1ce4d329
-# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
-# ╟─15937351-5202-47f0-a85e-362a589ef53f
-# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
-# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
-# ╟─6c880640-2023-47b9-bc5b-5f5398848813
-# ╠═8e9a057e-c43b-402e-a051-1523185f58ac
-# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
-# ╟─4245d983-865f-4afa-89ad-337176414455
-# ╠═d8d0482f-4646-42ec-b1cf-c23693396721
-# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
-# ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
-# ╟─c68c8937-2cda-41c8-932b-d935466324a0
-# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
-# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-# ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
-# ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
-# ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
-# ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
-# ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
-# ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
-# ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
-# ╟─e7a9a7e1-d27b-4f97-8b48-f5185bdb8a5d
-# ╠═a689500e-c583-4db3-a648-b688bfc86648
-# ╠═6e87d4a4-ab03-4e39-8fc4-2f00ce7d3ce9
-# ╟─18eafa6a-1349-4ee2-a2db-f20f79aa7b12
+# ╟─38d2fc3b-e65b-4200-9882-9388242bbf98
+# ╟─39f736b6-56a8-46b8-942a-3a3839c17af2
+# ╟─f17619d0-690a-44fe-ae2d-6d1a774010dd
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
