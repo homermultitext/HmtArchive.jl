@@ -4,12 +4,23 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ b0f8006e-0130-11ee-3603-9b61ee416011
 begin
 	using HmtArchive
 	using HmtArchive.Analysis
+	using CitableBase, CitableObject
 	using CitablePhysicalText
-
+	using EditorsRepo
 	using PlutoUI
 end
 
@@ -20,14 +31,58 @@ md"""# Validate content in the HMT archive
 - validation is by MS page
 """
 
+# ╔═╡ 13fc6e30-225f-4c18-a4d5-4b7a37ed029d
+md"""### Verify coverage of indexing"""
+
+# ╔═╡ 39f736b6-56a8-46b8-942a-3a3839c17af2
+"Compute URL for ICT view of page"
+function indexcoverage(pg, dserecords)
+	imgs = imagesforsurface(pg, dserecords)
+	ictbase = "https://www.homermultitext.org/ict2/?"
+	ictbase * join(map(i -> "urn=" * string(i), imgs), "&")
+end
+
+# ╔═╡ 52bf2819-4006-46ad-b2c4-f882b1b3f9f7
+html"""<br/><br/><br/><br/><br/><br/>"""
+
+# ╔═╡ 34e8535b-d6d6-4a13-b97a-9fdc39f2a986
+md"""> Data"""
+
 # ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-mss = hmt_codices()
+mslist = hmt_codices()
 
-# ╔═╡ 60bc4fc6-a54a-4baa-a953-d60c9e8d09cd
-t = mss[1]
+# ╔═╡ d0192283-38d3-4cbf-a4f5-f2bdabf16339
+dse = hmt_dse()[1]
 
-# ╔═╡ 383b3632-17f9-411d-b70f-53c5f7cc5a54
-t |> urn
+# ╔═╡ ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
+md"""> Under the hood: UI"""
+
+# ╔═╡ 3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
+menu = map(ms -> (urn(ms) => label(ms)), mslist)
+
+# ╔═╡ c339ab95-e781-446a-b4b9-b8134c4a4be7
+md"""*Choose a manuscript*  $(@bind ms Select(menu))"""
+
+# ╔═╡ 15a76a12-91ab-4290-a5de-c687ef9f980b
+chosenms = filter(manus -> urn(manus) == ms, mslist)[1]
+
+# ╔═╡ 38d2fc3b-e65b-4200-9882-9388242bbf98
+function pgmenu(ms)
+	map(pg -> urn(pg) => objectcomponent(urn(pg)), ms.pages)
+end
+
+# ╔═╡ c26c53a6-68c4-451b-95b7-9a23f4d7e832
+md"""*Choose a page* $(@bind chosenpg Select(pgmenu(chosenms)))"""
+
+# ╔═╡ f075605b-5e9a-4b00-9a9c-95244d8b445f
+chosenpg
+
+# ╔═╡ 32f50dd1-c411-4e6c-ba19-2c707744ac80
+begin
+	 coverageurl = indexcoverage(chosenpg, dse)
+	msg = "See this page in the [HMT Image Citation Tool]($(coverageurl))"
+	Markdown.parse(msg)
+end
 
 # ╔═╡ b3ad8d79-bb40-418b-86b9-d725b138878e
 html"""
@@ -173,12 +228,18 @@ md"""> To learn more about how to work with a `CitableCommentary`, see [the docu
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
 CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
+EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
+CitableBase = "~10.2.4"
+CitableObject = "~0.15.1"
 CitablePhysicalText = "~0.9.7"
+EditorsRepo = "~0.18.5"
 HmtArchive = "~0.11.3"
 PlutoUI = "~0.7.51"
 """
@@ -189,7 +250,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "47ff3bc8991a1a12ac7157f4566ccd66e535e003"
+project_hash = "2435b598c02157520ab5b625d1ee3daffb2c2a9e"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -1505,11 +1566,22 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
+# ╟─b0f8006e-0130-11ee-3603-9b61ee416011
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-# ╠═60bc4fc6-a54a-4baa-a953-d60c9e8d09cd
-# ╠═383b3632-17f9-411d-b70f-53c5f7cc5a54
+# ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
+# ╟─c26c53a6-68c4-451b-95b7-9a23f4d7e832
+# ╟─f075605b-5e9a-4b00-9a9c-95244d8b445f
+# ╟─13fc6e30-225f-4c18-a4d5-4b7a37ed029d
+# ╟─32f50dd1-c411-4e6c-ba19-2c707744ac80
+# ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
+# ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
+# ╟─bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╟─15a76a12-91ab-4290-a5de-c687ef9f980b
+# ╟─d0192283-38d3-4cbf-a4f5-f2bdabf16339
+# ╟─ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
+# ╟─39f736b6-56a8-46b8-942a-3a3839c17af2
+# ╟─3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
+# ╠═38d2fc3b-e65b-4200-9882-9388242bbf98
 # ╟─b3ad8d79-bb40-418b-86b9-d725b138878e
 # ╟─3416b53f-75c4-4465-8726-a4bc629faf76
 # ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
