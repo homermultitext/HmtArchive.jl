@@ -80,6 +80,7 @@ html"""
 <p>Previous stuff</p>
 """
 
+
 # ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
 md"""## Working with images
 
@@ -116,6 +117,9 @@ md""" ## Working with manuscripts
 The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
 """
 
+# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+mss = hmt_codices()
+
 # ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
 mss |> typeof
 
@@ -147,6 +151,10 @@ md"""
 The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
 """
 
+
+# ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
+dipltext = hmt_diplomatic()
+
 # ╔═╡ 4abb3b03-5f1f-4ed7-b006-cba12713387c
 dipltext |> typeof
 
@@ -162,6 +170,9 @@ md""" ## Relating texts, manuscripts and images
 
 The `hmt_dse` function returns a vector of `DSECollection`s (from the `CitablePhysicalText` package). DSE stands for "Digital Scholarly Edition."  Each DSE record in the collection relates a single citable passage of text to a physical surface (such as a manuscript page), and a citable region of a documentary image.
 """
+
+# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+dserecords = hmt_dse()
 
 # ╔═╡ cda5bf43-a877-4ea3-bb99-7ae83e55ce53
 dserecords |> typeof
@@ -209,6 +220,8 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 julia_version = "1.9.0"
 manifest_format = "2.0"
 project_hash = "c2477a0c22de1dbf28b1894ed3e4c750bc5583f0"
+
+
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -1515,23 +1528,15 @@ version = "17.4.0+0"
 # ╠═a3e592f3-35cf-4311-b405-174596a39245
 # ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
 # ╟─834c7038-8001-436d-87d5-12fa1ce4d329
-# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
-# ╟─15937351-5202-47f0-a85e-362a589ef53f
-# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
-# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
-# ╟─6c880640-2023-47b9-bc5b-5f5398848813
-# ╠═8e9a057e-c43b-402e-a051-1523185f58ac
-# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
-# ╟─4245d983-865f-4afa-89ad-337176414455
-# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
-# ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
-# ╟─c68c8937-2cda-41c8-932b-d935466324a0
-# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
+# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╠═d8d0482f-4646-42ec-b1cf-c23693396721
 # ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
 # ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
 # ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
 # ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
 # ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
 # ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
+# ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
+# ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
