@@ -143,21 +143,28 @@ alldse |> typeof
 md"""> The `CitablePhysicalText` package includes functions to query and retrieve a DSE collection for records by text passage, page, or image.   To learn more about how to work with DSE records, see [this page](https://cite-architecture.github.io/CitablePhysicalText.jl/stable/retrieval/) of the online documentation.
 """
 
-# ╔═╡ c04e2ba5-eac5-4193-8fc7-fc0297720667
-html"""<br/><br/><br/><br/><br/>"""
-
 # ╔═╡ fccfa86d-11d0-4395-b342-3d49d9c1d561
-md"""---
+md""" ## Index of commentary on text
 
+The `hmt_commentary` function returns a vector of vectors of `CitableCommentary` objects (from the `CitableAnnotations` package).
 
-
-## TBA
-
-In development: indexing of manuscripts by *Iliad* reference.
 """
 
 # ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
-#iliadindices()
+# ╠═╡ show_logs = false
+commcollections = hmt_cex() |> hmt_commentary
+
+# ╔═╡ e7a9a7e1-d27b-4f97-8b48-f5185bdb8a5d
+md"""The HMT project groups all commentary records in a single collection."""
+
+# ╔═╡ a689500e-c583-4db3-a648-b688bfc86648
+commentscollection = commcollections[1]
+
+# ╔═╡ 6e87d4a4-ab03-4e39-8fc4-2f00ce7d3ce9
+commentscollection |> typeof
+
+# ╔═╡ 18eafa6a-1349-4ee2-a2db-f20f79aa7b12
+md"""> To learn more about how to work with a `CitableCommentary`, see [the documentation](https://cite-architecture.github.io/CitableAnnotations.jl/stable/commentary/#Working-with-a-commentary) for the `CitableAnnotations` package."""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1490,8 +1497,11 @@ version = "17.4.0+0"
 # ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
 # ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
 # ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
-# ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
 # ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
 # ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
+# ╟─e7a9a7e1-d27b-4f97-8b48-f5185bdb8a5d
+# ╠═a689500e-c583-4db3-a648-b688bfc86648
+# ╠═6e87d4a4-ab03-4e39-8fc4-2f00ce7d3ce9
+# ╟─18eafa6a-1349-4ee2-a2db-f20f79aa7b12
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
