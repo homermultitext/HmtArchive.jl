@@ -4,35 +4,97 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
+
 # ╔═╡ b0f8006e-0130-11ee-3603-9b61ee416011
 begin
 	using HmtArchive
 	using HmtArchive.Analysis
+	using CitableBase, CitableObject
+	using CitablePhysicalText
+	using EditorsRepo
+	using PlutoUI
 end
 
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-md"""# Tour the HMT archive with Julia
+md"""# Validate content in the HMT archive
 
-
-## Read this first
-
-You can use the `HmtArchive` module to build citable objects from the archival content in the `hmtarchive` github repository, and publish delimited-text editions of the archive.
-
-This notebook illustrates how you can use the `HmtArchive.Analysis` module to read a delimited-text edition of the HMT archive.  All of the functions for loading data have two methods: one that takes a string argument with delimited-text content, and one (used here) with no arguments. The second method downloads the most release published release of the HMT archive and uses it as the data source.
-
+- uses current published release:  *$(hmt_releaseinfo())*
+- validation is by MS page
 """
 
-# ╔═╡ a6c80726-e36b-4313-bfda-be5bc8399700
-md"""## Using the package
+# ╔═╡ 13fc6e30-225f-4c18-a4d5-4b7a37ed029d
+md"""### Verify coverage of indexing"""
 
-Be sure to use the `HmtArchive.Analysis` module to load data from a published edition.
+# ╔═╡ 39f736b6-56a8-46b8-942a-3a3839c17af2
+"Compute URL for ICT view of page"
+function indexcoverage(pg, dserecords)
+	imgs = imagesforsurface(pg, dserecords)
+	ictbase = "https://www.homermultitext.org/ict2/?"
+	ictbase * join(map(i -> "urn=" * string(i), imgs), "&")
+end
+
+# ╔═╡ 52bf2819-4006-46ad-b2c4-f882b1b3f9f7
+html"""<br/><br/><br/><br/><br/><br/>"""
+
+# ╔═╡ 34e8535b-d6d6-4a13-b97a-9fdc39f2a986
+md"""> Data"""
+
+# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+mslist = hmt_codices()
+
+# ╔═╡ d0192283-38d3-4cbf-a4f5-f2bdabf16339
+dse = hmt_dse()[1]
+
+# ╔═╡ ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
+md"""> Under the hood: UI"""
+
+# ╔═╡ 3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
+menu = map(ms -> (urn(ms) => label(ms)), mslist)
+
+# ╔═╡ c339ab95-e781-446a-b4b9-b8134c4a4be7
+md"""*Choose a manuscript*  $(@bind ms Select(menu))"""
+
+# ╔═╡ 15a76a12-91ab-4290-a5de-c687ef9f980b
+chosenms = filter(manus -> urn(manus) == ms, mslist)[1]
+
+# ╔═╡ 38d2fc3b-e65b-4200-9882-9388242bbf98
+function pgmenu(ms)
+	map(pg -> urn(pg) => objectcomponent(urn(pg)), ms.pages)
+end
+
+# ╔═╡ c26c53a6-68c4-451b-95b7-9a23f4d7e832
+md"""*Choose a page* $(@bind chosenpg Select(pgmenu(chosenms)))"""
+
+# ╔═╡ f075605b-5e9a-4b00-9a9c-95244d8b445f
+chosenpg
+
+# ╔═╡ 32f50dd1-c411-4e6c-ba19-2c707744ac80
+begin
+	 coverageurl = indexcoverage(chosenpg, dse)
+	msg = "See this page in the [HMT Image Citation Tool]($(coverageurl))"
+	Markdown.parse(msg)
+end
+
+# ╔═╡ b3ad8d79-bb40-418b-86b9-d725b138878e
+html"""
+<br/>
+<br/><br/><br/><br/><br/><br/><br/><br/>
 """
 
-# ╔═╡ 79373a39-0793-49b9-a7f0-c471ae58744f
-md""" ## Metadata about the edition"""
+# ╔═╡ 3416b53f-75c4-4465-8726-a4bc629faf76
+md"""---
 
-# ╔═╡ fe8ac218-2ad8-4a26-adb9-178cde31264f
-hmt_releaseinfo()
+> Quarry from stuff below here
+"""
 
 # ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
 md"""## Working with images
@@ -69,9 +131,6 @@ md""" ## Working with manuscripts
 
 The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
 """
-
-# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-mss = hmt_codices()
 
 # ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
 mss |> typeof
@@ -169,10 +228,20 @@ md"""> To learn more about how to work with a `CitableCommentary`, see [the docu
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
+CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
+EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
+CitableBase = "~10.2.4"
+CitableObject = "~0.15.1"
+CitablePhysicalText = "~0.9.7"
+EditorsRepo = "~0.18.5"
 HmtArchive = "~0.11.3"
+PlutoUI = "~0.7.51"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -181,7 +250,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "8008f0b7f68f3df3a3e76ac71900f6c6da3d2fb3"
+project_hash = "2435b598c02157520ab5b625d1ee3daffb2c2a9e"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -197,6 +266,12 @@ weakdeps = ["ChainRulesCore"]
 
     [deps.AbstractFFTs.extensions]
     AbstractFFTsChainRulesCoreExt = "ChainRulesCore"
+
+[[deps.AbstractPlutoDingetjes]]
+deps = ["Pkg"]
+git-tree-sha1 = "8eaf9f1b4921132a4cff3f36a1d9ba923b14a481"
+uuid = "6e696c72-6542-2067-7265-42206c756150"
+version = "1.1.4"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
@@ -593,6 +668,18 @@ git-tree-sha1 = "0c393303629b65e094ad4b257c5e0dc4567a83bf"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 version = "0.11.3"
 
+[[deps.Hyperscript]]
+deps = ["Test"]
+git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
+version = "0.0.4"
+
+[[deps.HypertextLiteral]]
+deps = ["Tricks"]
+git-tree-sha1 = "c47c5fa4c5308f27ccaac35504858d8914e102f9"
+uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
+version = "0.9.4"
+
 [[deps.IOCapture]]
 deps = ["Logging", "Random"]
 git-tree-sha1 = "d75853a0bdbfb1ac815478bacd89cd27b550ace6"
@@ -884,6 +971,11 @@ git-tree-sha1 = "cedb76b37bc5a6c702ade66be44f831fa23c681e"
 uuid = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 version = "1.0.0"
 
+[[deps.MIMEs]]
+git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
+uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
+version = "0.1.4"
+
 [[deps.MKL_jll]]
 deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "Pkg"]
 git-tree-sha1 = "2ce8695e1e699b68702c03402672a69f54b8aca9"
@@ -1066,6 +1158,12 @@ deps = ["Pkg"]
 git-tree-sha1 = "f6cf8e7944e50901594838951729a1861e668cb8"
 uuid = "eebad327-c553-4316-9ea0-9fa01ccd7688"
 version = "0.3.2"
+
+[[deps.PlutoUI]]
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
+git-tree-sha1 = "b478a748be27bd2f2c73a7690da219d0844db305"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.51"
 
 [[deps.PolytonicGreek]]
 deps = ["Compat", "DocStringExtensions", "Documenter", "Orthography", "Test", "TestSetExtensions", "Unicode"]
@@ -1371,6 +1469,11 @@ git-tree-sha1 = "9a6ae7ed916312b41236fcef7e0af564ef934769"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
 version = "0.9.13"
 
+[[deps.Tricks]]
+git-tree-sha1 = "aadb748be58b492045b4f56166b5188aa63ce549"
+uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
+version = "0.1.7"
+
 [[deps.TypedTables]]
 deps = ["Adapt", "Dictionaries", "Indexing", "SplitApplyCombine", "Tables", "Unicode"]
 git-tree-sha1 = "d911ae4e642cf7d56b1165d29ef0a96ba3444ca9"
@@ -1463,11 +1566,24 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
+# ╟─b0f8006e-0130-11ee-3603-9b61ee416011
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-# ╟─a6c80726-e36b-4313-bfda-be5bc8399700
-# ╠═b0f8006e-0130-11ee-3603-9b61ee416011
-# ╟─79373a39-0793-49b9-a7f0-c471ae58744f
-# ╠═fe8ac218-2ad8-4a26-adb9-178cde31264f
+# ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
+# ╟─c26c53a6-68c4-451b-95b7-9a23f4d7e832
+# ╟─f075605b-5e9a-4b00-9a9c-95244d8b445f
+# ╟─13fc6e30-225f-4c18-a4d5-4b7a37ed029d
+# ╟─32f50dd1-c411-4e6c-ba19-2c707744ac80
+# ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
+# ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
+# ╟─bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╟─15a76a12-91ab-4290-a5de-c687ef9f980b
+# ╟─d0192283-38d3-4cbf-a4f5-f2bdabf16339
+# ╟─ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
+# ╟─39f736b6-56a8-46b8-942a-3a3839c17af2
+# ╟─3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
+# ╠═38d2fc3b-e65b-4200-9882-9388242bbf98
+# ╟─b3ad8d79-bb40-418b-86b9-d725b138878e
+# ╟─3416b53f-75c4-4465-8726-a4bc629faf76
 # ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
 # ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
 # ╠═54c6e609-8af2-4e10-9f87-8855bb84a7fb
@@ -1477,7 +1593,6 @@ version = "17.4.0+0"
 # ╠═a3e592f3-35cf-4311-b405-174596a39245
 # ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
 # ╟─834c7038-8001-436d-87d5-12fa1ce4d329
-# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 # ╠═a75962b2-a93c-47b5-98f7-132ad2640565
 # ╟─15937351-5202-47f0-a85e-362a589ef53f
 # ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
