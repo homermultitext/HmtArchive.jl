@@ -31,7 +31,7 @@ basedir = joinpath(pwd() |> dirname, "obsidian-scratch")
 # ╔═╡ 2a38e1b1-ae89-4c5e-a08d-eafac79efadc
 """Generate markdown file name to use for page in Obsidian vault."""
 function pagename(u::Cite2Urn, dir)
-	joinpath(basedir, "iliad-va-" * objectcomponent(u) * ".md")
+	joinpath(basedir, objectcomponent(u) * ".md")
 end
 
 # ╔═╡ 831661cb-8f6d-43b1-a8b5-6ad846b19077
@@ -47,6 +47,42 @@ end
 # ╔═╡ 55b1a8ec-ff05-4283-8c11-fee6dd3950ce
 #pages = map(pg -> pagename(pg.urn), va.pages)
 
+# ╔═╡ 46708caf-ebeb-4f1e-9ce9-205fc18bfde6
+function mdline(psg)
+	"`$(passagecomponent(psg.urn))` $(psg.text)" 
+end
+
+# ╔═╡ 86d8b566-d103-4bd2-9aa5-0cb49f343a1a
+
+function formatiliad(psglist::Vector{CtsUrn}, corpus::CitableTextCorpus)
+    iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), psglist)
+    if isempty(iliadlines)
+        ""
+    else
+        hdg = "### *Iliad* $(passagecomponent(iliadlines[1]))-$(passagecomponent(iliadlines[end]))"
+
+        mdlines = []
+        for ln in iliadlines
+            psgs = filter(psg -> dropversion(psg.urn) == dropversion(ln), corpus.passages)
+			#push!(mdlines, psgs)
+           	length(psgs) == 1 ? push!(mdlines, mdline(psgs[1])) : push!(mdlines, "?($(passagecomponent(ln)))?")
+        end
+        hdg * "\n\n" * join(mdlines, "\n\n")
+		#hdg * "\n\n" * join(iliadlines, "\n\n")
+    end
+
+end
+
+# ╔═╡ f6c96d2e-4d61-465c-aca0-a704c04e437e
+function formatpage(pg, dse, corpus)
+
+    texts = textsforsurface(pg.urn, dse)
+    iliad = formatiliad(texts, corpus)
+    # add scholia
+    scholia = ""
+    join([iliad, scholia], "\n\n")
+end
+
 # ╔═╡ 85d1b7f2-06ec-41a7-ae84-c7e8d5013a6f
 md""">Gather data"""
 
@@ -54,7 +90,7 @@ md""">Gather data"""
 dipltext = hmt_diplomatic()
 
 # ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-dserecords = hmt_dse()
+dserecords = hmt_dse()[1]
 
 # ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 mss = hmt_codices()
@@ -72,6 +108,15 @@ Pages for the $(va)
 
 """
 
+# ╔═╡ 4dbb012a-fb6a-4a8e-b660-8a4bf0ecfdc1
+urn(va) |> collectionid
+
+# ╔═╡ 250a614b-8122-4c85-9165-e4feeb13b0cc
+formatpage(va.pages[30], dserecords, dipltext) |> Markdown.parse
+
+# ╔═╡ 5b4cdc0b-9cc2-4342-972d-cde304943088
+label(va)
+
 # ╔═╡ 6f4edf12-e239-41e6-859d-90639eb91207
 html"""
 
@@ -79,7 +124,6 @@ html"""
 <hr/>
 <p>Previous stuff</p>
 """
-
 
 # ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
 md"""## Working with images
@@ -117,9 +161,6 @@ md""" ## Working with manuscripts
 The `hmt_codices` functions returns a vector of `Codex` objects (from the `CitablePhysicalText` package.
 """
 
-# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-mss = hmt_codices()
-
 # ╔═╡ a75962b2-a93c-47b5-98f7-132ad2640565
 mss |> typeof
 
@@ -151,10 +192,6 @@ md"""
 The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
 """
 
-
-# ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
-dipltext = hmt_diplomatic()
-
 # ╔═╡ 4abb3b03-5f1f-4ed7-b006-cba12713387c
 dipltext |> typeof
 
@@ -170,9 +207,6 @@ md""" ## Relating texts, manuscripts and images
 
 The `hmt_dse` function returns a vector of `DSECollection`s (from the `CitablePhysicalText` package). DSE stands for "Digital Scholarly Edition."  Each DSE record in the collection relates a single citable passage of text to a physical surface (such as a manuscript page), and a citable region of a documentary image.
 """
-
-# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
-dserecords = hmt_dse()
 
 # ╔═╡ cda5bf43-a877-4ea3-bb99-7ae83e55ce53
 dserecords |> typeof
@@ -220,8 +254,6 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 julia_version = "1.9.0"
 manifest_format = "2.0"
 project_hash = "c2477a0c22de1dbf28b1894ed3e4c750bc5583f0"
-
-
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -1512,12 +1544,18 @@ version = "17.4.0+0"
 # ╠═949aad26-8d0c-4268-93de-f46a70053dce
 # ╠═2a38e1b1-ae89-4c5e-a08d-eafac79efadc
 # ╠═55b1a8ec-ff05-4283-8c11-fee6dd3950ce
+# ╠═46708caf-ebeb-4f1e-9ce9-205fc18bfde6
+# ╠═86d8b566-d103-4bd2-9aa5-0cb49f343a1a
+# ╠═4dbb012a-fb6a-4a8e-b660-8a4bf0ecfdc1
+# ╟─250a614b-8122-4c85-9165-e4feeb13b0cc
+# ╠═f6c96d2e-4d61-465c-aca0-a704c04e437e
 # ╟─85d1b7f2-06ec-41a7-ae84-c7e8d5013a6f
 # ╠═d8d0482f-4646-42ec-b1cf-c23693396721
 # ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
 # ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-# ╟─4775ab0e-4f72-40a2-8ebb-bfda45a092bb
+# ╠═4775ab0e-4f72-40a2-8ebb-bfda45a092bb
 # ╠═4691cb48-2fe3-4fc9-9b06-f46641e9470b
+# ╠═5b4cdc0b-9cc2-4342-972d-cde304943088
 # ╟─6f4edf12-e239-41e6-859d-90639eb91207
 # ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
 # ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
@@ -1528,15 +1566,23 @@ version = "17.4.0+0"
 # ╠═a3e592f3-35cf-4311-b405-174596a39245
 # ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
 # ╟─834c7038-8001-436d-87d5-12fa1ce4d329
-# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-# ╠═d8d0482f-4646-42ec-b1cf-c23693396721
+# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
+# ╟─15937351-5202-47f0-a85e-362a589ef53f
+# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
+# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
+# ╟─6c880640-2023-47b9-bc5b-5f5398848813
+# ╠═8e9a057e-c43b-402e-a051-1523185f58ac
+# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
+# ╟─4245d983-865f-4afa-89ad-337176414455
+# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
+# ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
+# ╟─c68c8937-2cda-41c8-932b-d935466324a0
+# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
 # ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
 # ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
 # ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
 # ╠═ee49a9e5-2b7e-40be-bca4-85c2ec524d56
 # ╟─3f47f0b3-6e78-4159-8fdd-44ba7a13c5fc
 # ╟─c04e2ba5-eac5-4193-8fc7-fc0297720667
-# ╟─fccfa86d-11d0-4395-b342-3d49d9c1d561
-# ╠═cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
