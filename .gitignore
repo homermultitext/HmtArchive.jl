@@ -5,3 +5,4 @@ docs/build/
 scratch/
 Manifest.toml
 *backup*.jl
+obsidian-scratch/

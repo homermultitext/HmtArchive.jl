@@ -8,31 +8,78 @@ using InteractiveUtils
 begin
 	using HmtArchive
 	using HmtArchive.Analysis
+
+	using CitableBase, CitableText, CitableCorpus
+	using CitableObject
+	using CitablePhysicalText
 end
 
+# ╔═╡ e9d1593a-7a5f-454c-95fe-f76d4af6a8a3
+md"""*To see the Julia environment, unhide the following cell.*"""
+
+# ╔═╡ 6e60c30f-cec5-4e70-ae4b-fd6f60ce4d20
+md"""> Generate pages"""
+
+# ╔═╡ 5c429cbe-9096-4c2e-b123-778673b6c56a
+begin
+	#obsidianize(va, basedir)
+end
+
+# ╔═╡ 949aad26-8d0c-4268-93de-f46a70053dce
+basedir = joinpath(pwd() |> dirname, "obsidian-scratch")
+
+# ╔═╡ 2a38e1b1-ae89-4c5e-a08d-eafac79efadc
+"""Generate markdown file name to use for page in Obsidian vault."""
+function pagename(u::Cite2Urn, dir)
+	joinpath(basedir, "iliad-va-" * objectcomponent(u) * ".md")
+end
+
+# ╔═╡ 831661cb-8f6d-43b1-a8b5-6ad846b19077
+function obsidianize(ms, dir)
+	for pg in ms.pages
+		fname = pagename(pg.urn, dir)
+		open(fname, "w") do io
+			write(io, "VA, page $(pg.urn)")
+		end
+	end
+end
+
+# ╔═╡ 55b1a8ec-ff05-4283-8c11-fee6dd3950ce
+#pages = map(pg -> pagename(pg.urn), va.pages)
+
+# ╔═╡ 85d1b7f2-06ec-41a7-ae84-c7e8d5013a6f
+md""">Gather data"""
+
+# ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
+dipltext = hmt_diplomatic()
+
+# ╔═╡ 5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+dserecords = hmt_dse()
+
+# ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+mss = hmt_codices()
+
+# ╔═╡ 4775ab0e-4f72-40a2-8ebb-bfda45a092bb
+vaurn = Cite2Urn("urn:cite2:hmt:msA.v1:")
+
+# ╔═╡ 4691cb48-2fe3-4fc9-9b06-f46641e9470b
+va = filter(ms -> urn(ms) == vaurn, mss)[1]
+
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-md"""# Tour the HMT archive with Julia
+md"""# Build an Obsidian vault $(hmt_releaseinfo())
 
-
-## Read this first
-
-You can use the `HmtArchive` module to build citable objects from the archival content in the `hmtarchive` github repository, and publish delimited-text editions of the archive.
-
-This notebook illustrates how you can use the `HmtArchive.Analysis` module to read a delimited-text edition of the HMT archive.  All of the functions for loading data have two methods: one that takes a string argument with delimited-text content, and one (used here) with no arguments. The second method downloads the most release published release of the HMT archive and uses it as the data source.
+Pages for the $(va)
 
 """
 
-# ╔═╡ a6c80726-e36b-4313-bfda-be5bc8399700
-md"""## Using the package
+# ╔═╡ 6f4edf12-e239-41e6-859d-90639eb91207
+html"""
 
-Be sure to use the `HmtArchive.Analysis` module to load data from a published edition.
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<hr/>
+<p>Previous stuff</p>
 """
 
-# ╔═╡ 79373a39-0793-49b9-a7f0-c471ae58744f
-md""" ## Metadata about the edition"""
-
-# ╔═╡ fe8ac218-2ad8-4a26-adb9-178cde31264f
-hmt_releaseinfo()
 
 # ╔═╡ bd8b9bad-8b9d-4a98-864a-f38f088437cc
 md"""## Working with images
@@ -104,6 +151,7 @@ md"""
 The `hmt_diplomatic` and `htm_normalized` functions each return a `CitableTextCorpus`.
 """
 
+
 # ╔═╡ d8d0482f-4646-42ec-b1cf-c23693396721
 dipltext = hmt_diplomatic()
 
@@ -146,25 +194,22 @@ md"""> The `CitablePhysicalText` package includes functions to query and retriev
 # ╔═╡ c04e2ba5-eac5-4193-8fc7-fc0297720667
 html"""<br/><br/><br/><br/><br/>"""
 
-# ╔═╡ fccfa86d-11d0-4395-b342-3d49d9c1d561
-md"""---
-
-
-
-## TBA
-
-In development: indexing of manuscripts by *Iliad* reference.
-"""
-
-# ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
-#iliadindices()
-
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
+CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
+CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
+CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 
 [compat]
+CitableBase = "~10.2.4"
+CitableCorpus = "~0.13.3"
+CitableObject = "~0.15.1"
+CitablePhysicalText = "~0.9.7"
+CitableText = "~0.15.2"
 HmtArchive = "~0.11.3"
 """
 
@@ -174,7 +219,9 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "8008f0b7f68f3df3a3e76ac71900f6c6da3d2fb3"
+project_hash = "c2477a0c22de1dbf28b1894ed3e4c750bc5583f0"
+
+
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -1456,11 +1503,22 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-# ╟─a6c80726-e36b-4313-bfda-be5bc8399700
+# ╟─e9d1593a-7a5f-454c-95fe-f76d4af6a8a3
 # ╠═b0f8006e-0130-11ee-3603-9b61ee416011
-# ╟─79373a39-0793-49b9-a7f0-c471ae58744f
-# ╠═fe8ac218-2ad8-4a26-adb9-178cde31264f
+# ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
+# ╟─6e60c30f-cec5-4e70-ae4b-fd6f60ce4d20
+# ╠═5c429cbe-9096-4c2e-b123-778673b6c56a
+# ╠═831661cb-8f6d-43b1-a8b5-6ad846b19077
+# ╠═949aad26-8d0c-4268-93de-f46a70053dce
+# ╠═2a38e1b1-ae89-4c5e-a08d-eafac79efadc
+# ╠═55b1a8ec-ff05-4283-8c11-fee6dd3950ce
+# ╟─85d1b7f2-06ec-41a7-ae84-c7e8d5013a6f
+# ╠═d8d0482f-4646-42ec-b1cf-c23693396721
+# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
+# ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
+# ╟─4775ab0e-4f72-40a2-8ebb-bfda45a092bb
+# ╠═4691cb48-2fe3-4fc9-9b06-f46641e9470b
+# ╟─6f4edf12-e239-41e6-859d-90639eb91207
 # ╟─bd8b9bad-8b9d-4a98-864a-f38f088437cc
 # ╠═a0200cfd-0666-4c47-841f-d9f111449e7b
 # ╠═54c6e609-8af2-4e10-9f87-8855bb84a7fb
@@ -1471,20 +1529,7 @@ version = "17.4.0+0"
 # ╟─429b97a7-f02b-4e3b-bf79-01e00ca8747e
 # ╟─834c7038-8001-436d-87d5-12fa1ce4d329
 # ╠═bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-# ╠═a75962b2-a93c-47b5-98f7-132ad2640565
-# ╟─15937351-5202-47f0-a85e-362a589ef53f
-# ╠═f3f5b8fa-86f5-4897-9b9a-9c8d58b2d22d
-# ╠═d601946d-1e52-4813-9aff-0eb798f42a1c
-# ╟─6c880640-2023-47b9-bc5b-5f5398848813
-# ╠═8e9a057e-c43b-402e-a051-1523185f58ac
-# ╠═3011ea53-1570-4f37-ab82-11ae2d260aaf
-# ╟─4245d983-865f-4afa-89ad-337176414455
 # ╠═d8d0482f-4646-42ec-b1cf-c23693396721
-# ╠═4abb3b03-5f1f-4ed7-b006-cba12713387c
-# ╠═8af40eab-8f5e-4c33-87f6-67581e92de51
-# ╟─c68c8937-2cda-41c8-932b-d935466324a0
-# ╟─368806bc-17a5-4f68-b2f2-a9a1ea486be1
-# ╠═5f3dec6c-cb9d-4a3c-a9a6-3c3d56479d9d
 # ╠═cda5bf43-a877-4ea3-bb99-7ae83e55ce53
 # ╟─199b05cb-57bf-4a45-a72a-5b29b3dc04a7
 # ╠═e937c13b-47fc-457a-9be0-520765ebdc0f
