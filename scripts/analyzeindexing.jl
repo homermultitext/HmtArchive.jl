@@ -76,8 +76,9 @@ end
 
 
 
-for pg in va.pages[30:31]
+for pg in va.pages
     pgref = objectcomponent(pg.urn)
+    @info("Analyzing $(pgref)...")
     outfile = joinpath(outputdir, pgref * ".md")
     open(outfile, "w") do io
         write(io, pagereport(pg.urn))
