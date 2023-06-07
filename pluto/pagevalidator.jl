@@ -36,17 +36,22 @@ md"""# Validate content in the HMT archive
 """
 
 # ╔═╡ 13fc6e30-225f-4c18-a4d5-4b7a37ed029d
-md"""### Verify coverage of indexing"""
+md"""### Verify *coverage* of indexing texts"""
 
 # ╔═╡ 214b6095-f3d8-49da-8954-f33ec807f0fc
-md"""### Verify indexing scholia to Iliad"""
-
-# ╔═╡ bf1246bd-d984-49a4-affb-377f1d45e815
-md"""### Verify editing
-"""
+md"""### Verify *referential integrity* of indexing scholia to Iliad"""
 
 # ╔═╡ 52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 html"""<br/><br/><br/><br/><br/><br/>"""
+
+# ╔═╡ fb9ff4ae-5a10-45e7-a1d8-548ded1fa561
+md"""---
+
+
+> #### Background computation you can ignore
+
+
+"""
 
 # ╔═╡ 34e8535b-d6d6-4a13-b97a-9fdc39f2a986
 md"""> Data"""
@@ -114,7 +119,17 @@ md"""*Choose a page* $(@bind chosenpg Select(pgmenu(chosenms)))"""
 # ╔═╡ a8e94767-f562-455d-ab16-59d5a4144edd
 txts = textsforsurface(chosenpg, dse)
 
+# ╔═╡ bf1246bd-d984-49a4-affb-377f1d45e815
+md"""### Verify *accuracy* of indexing and editing
+
+##### **$(length(txts))** citable passages of text have DSE records for this page.
+"""
+
+# ╔═╡ 409e93a9-97f0-428f-a916-b1cd683b50da
+iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
+
 # ╔═╡ 27eeebaa-cac9-4ffe-afee-1ce16eec6555
+"""Compose markdown summary of indexing of scholia to Iliad, and to DSE records."""
 function scholiaindexing()
 	iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
 	scholiadse = filter(u -> startswith(workcomponent(u), "tlg5026"), txts)
@@ -123,31 +138,60 @@ function scholiaindexing()
 		scholia = filter(pr -> pr[2] == ln, commentary.commentary)
 		if isempty(scholia)
 		else
-			push!(indexed, scholia)
+			reff = map(pr -> pr[1], scholia)
+			for r in reff
+				push!(indexed, r)
+			end
 		end
 	end
+	indexed
 	
+	hdr1 = "##### **$(length(indexed))** scholia in XML editions are indexed to *Iliad* lines on this page."
+    hdr2 = "##### **$(length(scholiadse))** scholia have DSE records for this page."
 
-	mdlines = ["$(length(indexed)) scholia indexed to *Iliad* lines on this page.",
-	"$(length(scholiadse)) scholia have DSE records for this page"
+
+	mdlines = [
+	
 	]
 
+	push!(mdlines, hdr2)
+	
+	dsenotindexed = []	
+	for s in scholiadse
+		if s in indexed
+		else
+			push!(dsenotindexed, string(s))
+		end
+	end
+	isempty(dsenotindexed) ? push!(mdlines, "All scholia in DSE records are indexed to an *Iliad* line on this page.") : push!(mdlines, "**$(length(dsenotindexed))** scholia in DSE records are *not* indexed to an *Iliad* line on this page.")
+	push!(mdlines, "")
+	for s in dsenotindexed
+		push!(mdlines, "1. " * string(s))
+	end
+
+push!(mdlines, hdr1)
+	indexednotindse = []
+	for s in indexed
+		if s in scholiadse
+		else
+			push!(indexednotindse, string(s))
+		end
+	end
+	isempty(indexednotindse) ? push!(mdlines, "All scholia indexed to an *Iliad* line on this page also have a DSE record.") : push!(mdlines, "**$(length(indexednotindse))** scholia indexed to *Iliad* lines on this page do *not* appear in DSE records.")
+	push!(mdlines, "")
+	for s in indexednotindse
+		push!(mdlines, "1. " * string(s))
+	end
+	
+	
 	join(mdlines, "\n") |> Markdown.parse
+	
 	
 end
 
 
 # ╔═╡ de2be041-337d-411a-a06f-b9e073b18152
 scholiaindexing()
-
-# ╔═╡ 409e93a9-97f0-428f-a916-b1cd683b50da
-iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
-
-# ╔═╡ cbadd8ab-54f5-4641-b2f8-59188e0d85cb
-iliadlines[1]
-
-# ╔═╡ be4fdaa4-34c7-45a7-9a3f-7a34cbda7b89
-filter(pr -> pr[2] == iliadlines[1], commentary.commentary)
 
 # ╔═╡ 39f736b6-56a8-46b8-942a-3a3839c17af2
 "Compute URL for ICT view of page"
@@ -1560,14 +1604,11 @@ version = "17.4.0+0"
 # ╟─13fc6e30-225f-4c18-a4d5-4b7a37ed029d
 # ╟─32f50dd1-c411-4e6c-ba19-2c707744ac80
 # ╟─214b6095-f3d8-49da-8954-f33ec807f0fc
-# ╠═de2be041-337d-411a-a06f-b9e073b18152
-# ╟─27eeebaa-cac9-4ffe-afee-1ce16eec6555
-# ╠═409e93a9-97f0-428f-a916-b1cd683b50da
-# ╠═cbadd8ab-54f5-4641-b2f8-59188e0d85cb
-# ╠═be4fdaa4-34c7-45a7-9a3f-7a34cbda7b89
+# ╟─de2be041-337d-411a-a06f-b9e073b18152
 # ╟─bf1246bd-d984-49a4-affb-377f1d45e815
 # ╟─e0350c1d-7aa4-4600-b97b-9233c179e5fa
 # ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
+# ╟─fb9ff4ae-5a10-45e7-a1d8-548ded1fa561
 # ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
 # ╟─bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
 # ╟─d0192283-38d3-4cbf-a4f5-f2bdabf16339
@@ -1580,9 +1621,11 @@ version = "17.4.0+0"
 # ╟─e3f35ce0-04ce-4eca-a52c-445223fbb633
 # ╟─15a76a12-91ab-4290-a5de-c687ef9f980b
 # ╟─a8e94767-f562-455d-ab16-59d5a4144edd
+# ╟─409e93a9-97f0-428f-a916-b1cd683b50da
 # ╟─5a36d532-e8e0-4d37-9149-765ad9d0272a
 # ╟─b960ac90-2615-40cb-a5df-93af8e904a19
 # ╟─ac31dcc5-4ec2-42a2-b7e1-8f62517f43a4
+# ╟─27eeebaa-cac9-4ffe-afee-1ce16eec6555
 # ╟─3dba4d78-3dda-4c0b-a24b-ec7aed4ede04
 # ╟─38d2fc3b-e65b-4200-9882-9388242bbf98
 # ╟─39f736b6-56a8-46b8-942a-3a3839c17af2
