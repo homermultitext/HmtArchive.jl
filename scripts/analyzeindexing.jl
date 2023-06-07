@@ -83,25 +83,31 @@ struct PageSummary
 end
 
 
-function summarizeMS(ms; report = true)
+function summarizeMS(ms; writemd = true)
+    
     pagesummaries = PageSummary[]
     for pg in ms.pages
-        report = pagereport(pg.urn)
-        push!(pagesummaries, PageSummary(pg.urn, report.fail1, report.fail2))
-    end
-    if report
         pgref = objectcomponent(pg.urn)
         @info("Analyzing $(pgref)...")
-        outfile = joinpath(outputdir, pgref * ".md")
-        open(outfile, "w") do io
-            write(io, report.md )
+        report = pagereport(pg.urn)
+        push!(pagesummaries, PageSummary(pg.urn, report.fail1, report.fail2))
+        if writemd
+            @info("Writing report...")
+            outfile = joinpath(outputdir, pgref * ".md")
+            open(outfile, "w") do io
+                write(io, report.md )
+            end
         end
     end
+    pagesummaries
 end
 
 summaries = summarizeMS(va)
 
-#=
+
+category1fail = map(summ -> summ.fail1, summaries) |> sum
+category2fail = map(summ -> summ.fail2, summaries) |> sum
+
 outfile = joinpath(outputdir, "README.md")
 summarymd = """# Summary of indexing errors in Venetus A
 
@@ -109,15 +115,12 @@ summarymd = """# Summary of indexing errors in Venetus A
 - Total scholia linked in XML edition to *Iliad* text but **not** recorded in DSE record:  $(category2fail)
 
 """
-
-
-
 open(outfile,"w") do io
     write(io, summarymd)
 end
-=#
 
 
+#=
 summaries |> length
 
 map(summ -> summ.fail1, summaries) |> maximum
@@ -129,3 +132,4 @@ byfail1 = sort(summaries, by = pg -> pg.fail1, rev = true)
 byfail2 = sort(summaries, by = pg -> pg.fail2, rev = true)
 bytotal = sort(summaries, by = pg -> pg.fail1 + pg.fail2, rev = true)
 
+=#
