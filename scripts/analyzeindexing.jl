@@ -2,6 +2,10 @@ using HmtArchive.Analysis
 using CitableBase, CitableObject, CitableText
 using CitablePhysicalText
 
+outputdir = joinpath(pwd(), "scratch", "indexingreport")
+mkpath(outputdir)
+
+
 # Just gonna make these global in this little script
 # rather than pass these huge data sets around all the time.
 dse = hmt_dse()[1]
@@ -16,6 +20,7 @@ function pagereport(pg)
     mdlines = []
     pagetexts = textsforsurface(pg, dse)
 
+    push!(mdlines, "## Text indexing for $(objectcomponent(pg))\n")
     push!(mdlines, "$(length(pagetexts)) citable passages of text indexed to page $(objectcomponent(pg))")
 
 
@@ -23,9 +28,6 @@ function pagereport(pg)
 end
 
 
-
-outputdir = joinpath(pwd(), "scratch", "indexingreport")
-mkpath(outputdir)
 
 for pg in va.pages[30:31]
     pgref = objectcomponent(pg.urn)
