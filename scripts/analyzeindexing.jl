@@ -5,7 +5,6 @@ using CitablePhysicalText
 outputdir = joinpath(pwd(), "scratch", "indexingreport")
 mkpath(outputdir)
 
-
 # Just gonna make these global in this little script
 # rather than pass these huge data sets around all the time.
 dse = hmt_dse()[1]
@@ -17,6 +16,8 @@ va = filter(ms -> urn(ms) == vaurn, mslist)[1]
 
 
 function pagereport(pg)
+
+
     mdlines = ["## Text indexing for $(objectcomponent(pg))\n"]
     
     pagetexts = textsforsurface(pg, dse)
@@ -71,16 +72,60 @@ function pagereport(pg)
 		push!(mdlines, "1. " * string(s))
 	end
 
-    join(mdlines, "\n")
+    (md = join(mdlines, "\n"), fail1 = length(dsenotindexed), fail2 = length(indexednotindse))
+
+end
+
+struct PageSummary
+    urn::Cite2Urn
+    fail1::Integer
+    fail2::Integer
 end
 
 
-
-for pg in va.pages
-    pgref = objectcomponent(pg.urn)
-    @info("Analyzing $(pgref)...")
-    outfile = joinpath(outputdir, pgref * ".md")
-    open(outfile, "w") do io
-        write(io, pagereport(pg.urn))
+function summarizeMS(ms; report = true)
+    pagesummaries = PageSummary[]
+    for pg in ms.pages
+        report = pagereport(pg.urn)
+        push!(pagesummaries, PageSummary(pg.urn, report.fail1, report.fail2))
+    end
+    if report
+        pgref = objectcomponent(pg.urn)
+        @info("Analyzing $(pgref)...")
+        outfile = joinpath(outputdir, pgref * ".md")
+        open(outfile, "w") do io
+            write(io, report.md )
+        end
     end
 end
+
+summaries = summarizeMS(va)
+
+#=
+outfile = joinpath(outputdir, "README.md")
+summarymd = """# Summary of indexing errors in Venetus A
+
+- Total scholia indexed in DSE record but **not** linked in XML edition to *Iliad* text on the same page: $(category1fail)
+- Total scholia linked in XML edition to *Iliad* text but **not** recorded in DSE record:  $(category2fail)
+
+"""
+
+
+
+open(outfile,"w") do io
+    write(io, summarymd)
+end
+=#
+
+
+summaries |> length
+
+map(summ -> summ.fail1, summaries) |> maximum
+map(summ -> summ.fail2, summaries) |> maximum
+map(summ -> summ.fail2 + summ.fail1, summaries) |> maximum
+
+
+byfail1 = sort(summaries, by = pg -> pg.fail1, rev = true)
+byfail2 = sort(summaries, by = pg -> pg.fail2, rev = true)
+bytotal = sort(summaries, by = pg -> pg.fail1 + pg.fail2, rev = true)
+
