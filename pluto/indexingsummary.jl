@@ -19,6 +19,14 @@ md"*To see the Julia environment, unhide the following cell.*"
 # ╔═╡ 35c04da8-0526-11ee-097e-79de20bc0fa4
 md"""## Summary of scholia indexing in Venetus A MS"""
 
+# ╔═╡ 49a2716d-6449-48f1-8fa3-d0662308ad9b
+md"""
+### Types of errors
+
+1. *Category 1 errors* are scholia URNs indexed in DSE records, but not linked in XML editions to *Iliad* lines on the given page.
+2. *Category 2 errors* are scholia URNs linked in XML editions to *Iliad* lines on the given page, but not appearing in DSE records.
+"""
+
 # ╔═╡ 94a68e9f-77e8-4c3f-b9b6-b0e0bf816b56
 html"""
 <br/><br/><br/><br/><br/><br/><br/><br/>
@@ -171,6 +179,37 @@ end
 
 # ╔═╡ 3eb7cb78-0304-47f0-b1ca-bd0b14edc4f2
 totalhisto(va_analyses)
+
+# ╔═╡ ce67ee7d-c5ca-463d-8a9d-f41aa6abda52
+function cat1bar(v::Vector{PageSummary})
+	xlabels = map(report -> objectcomponent(report.urn), v)
+	yvals = map(report -> report.fail1, v)
+	bar(xlabels, yvals, title = "Category 1 errors byt page (in page order)")
+end
+
+# ╔═╡ 4f6c5691-153d-462d-a1ce-357d2d69010e
+cat1bar(va_analyses)
+
+# ╔═╡ 9fd91583-f358-488c-bb52-b1cc77812492
+function cat2bar(v::Vector{PageSummary})
+	
+	xlabels = map(report -> objectcomponent(report.urn), v)
+	yvals = map(report -> report.fail2, v)
+	bar(xlabels, yvals, title = "Category 2 errors by page (in page order)")
+end
+
+# ╔═╡ 570cd547-a445-4625-beb4-016ac686357b
+cat2bar(va_analyses)
+
+# ╔═╡ 06d7355d-6605-48e7-b2a7-dd900af4fa2f
+function totalbar(v::Vector{PageSummary})
+	xlabels = map(report -> objectcomponent(report.urn), v)
+	yvals = map(report -> report.fail1 + report.fail2, v)
+	bar(xlabels, yvals, title = "Total category 1 + category 2 errors (in page order)")
+end
+
+# ╔═╡ f62fc93a-ab1d-4165-b771-5c50a20cf9f4
+totalbar(va_analyses)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1994,18 +2033,22 @@ version = "1.4.1+0"
 # ╟─304e1719-3d4a-4108-ab1e-624106101c39
 # ╟─c6f01e75-4a19-46ce-94cc-e4a76f7bbc00
 # ╟─35c04da8-0526-11ee-097e-79de20bc0fa4
+# ╟─49a2716d-6449-48f1-8fa3-d0662308ad9b
 # ╟─dd76bd8c-7eca-42a4-b806-7e6d2fc4f773
 # ╟─e20f563b-0dea-4dc5-9133-902e01ed7ffb
 # ╟─b061c460-d037-4e14-ad30-130207ec2dde
 # ╟─f247512c-0033-45a0-a5c6-f45cfbc257b8
-# ╠═3eb7cb78-0304-47f0-b1ca-bd0b14edc4f2
+# ╟─3eb7cb78-0304-47f0-b1ca-bd0b14edc4f2
+# ╟─4f6c5691-153d-462d-a1ce-357d2d69010e
+# ╟─570cd547-a445-4625-beb4-016ac686357b
+# ╟─f62fc93a-ab1d-4165-b771-5c50a20cf9f4
 # ╟─94a68e9f-77e8-4c3f-b9b6-b0e0bf816b56
 # ╟─88567b54-593e-47e5-a89a-a338e8a221b8
 # ╟─d0f486c1-84a7-40be-9783-ce83612978af
 # ╟─13bd039d-eebb-466b-bc40-2f4c3de09172
-# ╟─e807e019-b368-4e50-b48a-b824c3f4607e
-# ╟─0fb8c43b-7d55-4514-8fc9-28d14b9d8323
-# ╟─fcda3f09-2d7d-45f4-a502-421caef9a8b0
+# ╠═e807e019-b368-4e50-b48a-b824c3f4607e
+# ╠═0fb8c43b-7d55-4514-8fc9-28d14b9d8323
+# ╠═fcda3f09-2d7d-45f4-a502-421caef9a8b0
 # ╟─9234a609-0260-4bec-b381-42743a67863d
 # ╠═24e3e96e-9774-4188-91d6-eec2391a1c92
 # ╟─bf253882-427a-4281-b3f9-e239561aa173
@@ -2014,5 +2057,8 @@ version = "1.4.1+0"
 # ╠═3dadb9cb-4ea3-47a6-8974-352bf5421bf0
 # ╠═50790143-22d5-4e09-9983-d63b070f48cc
 # ╠═a2e434a2-63c0-4e28-ac86-275837ceab96
+# ╠═ce67ee7d-c5ca-463d-8a9d-f41aa6abda52
+# ╠═9fd91583-f358-488c-bb52-b1cc77812492
+# ╠═06d7355d-6605-48e7-b2a7-dd900af4fa2f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
