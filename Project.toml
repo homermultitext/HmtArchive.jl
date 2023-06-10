@@ -1,8 +1,7 @@
 name = "HmtArchive"
 uuid = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 authors = ["nsmith "]
-version = "0.11.5"
-
+version = "0.11.6"
 
 [deps]
 CitableAnnotations = "63f90415-d3ea-41a7-8107-8cc186a9b888"
@@ -43,11 +42,11 @@ CitableBase = "10"
 CitableCollection = "0.4"
 CitableCorpus = "0.13"
 CitableImage = "0.6"
-CitableObject = "0.15"
+CitableObject = "0.16"
 CitableParserBuilder = "0.24"
 CitablePhysicalText = "0.9"
 CitableTeiReaders = "0.10"
-CitableText = "0.15"
+CitableText = "0.16"
 CiteEXchange = "0.10"
 Compat = "4"
 DocStringExtensions = "0.9"
