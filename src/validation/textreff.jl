@@ -1,6 +1,8 @@
+
+"""Find all Iliad references, cited at canonical level."""
 function iliadreff(urnlist::Vector{CtsUrn})
     allurns = map(u -> dropexemplar(u), urnlist)
-    filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), allurns)
+    filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), allurns) |> unique
 end
 
 function scholiareff(urnlist::Vector{CtsUrn})
