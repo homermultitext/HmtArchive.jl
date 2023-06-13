@@ -134,9 +134,6 @@ md"""### Verify *accuracy* of indexing and editing
 ##### **$(length(txts))** citable passages of text have DSE records for this page.
 """
 
-# ╔═╡ e8447ea3-02eb-4fe1-8ebc-0809dbaa2484
-txts[1]
-
 # ╔═╡ 409e93a9-97f0-428f-a916-b1cd683b50da
 iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
 
@@ -227,7 +224,8 @@ labelworks = Dict(
 "tlg5026.msAim.hmt" => "Intermarginal scholia",
 "tlg5026.msAint.hmt" => "Interior scholia",
 "tlg5026.msAil.hmt" => "Interlinear scholia",
-"tlg5026.msAext.hmt" => "Exterior scholia")
+"tlg5026.msAext.hmt" => "Exterior scholia",
+"tlg7000.tlg001.msA" => "Metrical summaries")
 
 # ╔═╡ b960ac90-2615-40cb-a5df-93af8e904a19
 "Compose Markdown for illustrated text passages on page."
@@ -262,6 +260,20 @@ begin
 	end
 	join(mdtext, "\n\n") |> Markdown.parse
 end
+
+# ╔═╡ b85803bf-ff66-47ea-a936-8e713f61a46a
+function testdisplay()
+	mdtext = []
+	groups = map(u -> workcomponent(u), txts) |> unique
+	
+	for g in groups
+		push!(mdtext, composetext(g))
+	end
+	groups
+	#join(mdtext, "\n\n") |> Markdown.parse
+	
+end
+
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1622,7 +1634,7 @@ version = "17.4.0+0"
 # ╟─de2be041-337d-411a-a06f-b9e073b18152
 # ╟─bf1246bd-d984-49a4-affb-377f1d45e815
 # ╟─e0350c1d-7aa4-4600-b97b-9233c179e5fa
-# ╠═e8447ea3-02eb-4fe1-8ebc-0809dbaa2484
+# ╟─b85803bf-ff66-47ea-a936-8e713f61a46a
 # ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 # ╟─fb9ff4ae-5a10-45e7-a1d8-548ded1fa561
 # ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
