@@ -24,6 +24,15 @@ begin
 	using PlutoUI
 end
 
+# ╔═╡ 1adf8391-1db9-454b-b896-a0434ba96298
+f = joinpath(pwd() |> dirname |> dirname, "hmt-archive", "release-candidates", "hmt-2023b.cex")
+
+# ╔═╡ 7c5b75c0-a8e9-4590-b020-c0c934cdc14c
+f |> isfile
+
+# ╔═╡ df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
+cex = read(f) |> String
+
 # ╔═╡ f5672f84-c90a-4dcd-a299-4d17ac218e19
 md"""> *Warning to users*: this notebook is a quick, mostly untested hack.
 """
@@ -31,7 +40,7 @@ md"""> *Warning to users*: this notebook is a quick, mostly untested hack.
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Validate content in the HMT archive
 
-- uses current published release:  *$(hmt_releaseinfo())*
+- uses current published release:  *$(hmt_releaseinfo(cex))*
 - validation is by MS page
 """
 
@@ -57,17 +66,17 @@ md"""---
 md"""> Data"""
 
 # ╔═╡ bf5e557b-6341-46bb-b0d1-1d4cc0cfd920
-mslist = hmt_codices()
+mslist = hmt_codices(cex)
 
 # ╔═╡ d0192283-38d3-4cbf-a4f5-f2bdabf16339
-dse = hmt_dse()[1]
+dse = hmt_dse(cex)[1]
 
 # ╔═╡ 890e9255-ab3e-4274-b944-cbf64384f012
-dipltext = hmt_diplomatic()
+dipltext = hmt_diplomatic(cex)
 
 # ╔═╡ cb907ec0-b615-4cea-9122-09aa10f30c10
 # ╠═╡ show_logs = false
-commentary = hmt_commentary()[1]
+commentary = hmt_commentary(cex)[1]
 
 # ╔═╡ 170a5a6b-279a-4893-a4b9-dbee97371646
 md"> Image service"
@@ -124,6 +133,9 @@ md"""### Verify *accuracy* of indexing and editing
 
 ##### **$(length(txts))** citable passages of text have DSE records for this page.
 """
+
+# ╔═╡ e8447ea3-02eb-4fe1-8ebc-0809dbaa2484
+txts[1]
 
 # ╔═╡ 409e93a9-97f0-428f-a916-b1cd683b50da
 iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
@@ -204,7 +216,7 @@ end
 # ╔═╡ 32f50dd1-c411-4e6c-ba19-2c707744ac80
 begin
 	 coverageurl = indexcoverage(chosenpg, dse)
-	msg =  ">   --> **See this page** in the [HMT Image Citation Tool]($(coverageurl))"
+	msg =  ">   --> **See $(objectcomponent(chosenpg))** in the [HMT Image Citation Tool]($(coverageurl))"
 	Markdown.parse(msg)
 end
 
@@ -278,7 +290,7 @@ PlutoUI = "~0.7.51"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.9.0"
+julia_version = "1.9.1"
 manifest_format = "2.0"
 project_hash = "a730e3c266db685fdf292519f2f0c185c19ca9ea"
 
@@ -1570,7 +1582,7 @@ version = "1.5.5+0"
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "8e850b90-86db-534c-a0d3-1478176c7d93"
-version = "5.7.0+0"
+version = "5.8.0+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -1597,6 +1609,9 @@ version = "17.4.0+0"
 
 # ╔═╡ Cell order:
 # ╟─b0f8006e-0130-11ee-3603-9b61ee416011
+# ╠═1adf8391-1db9-454b-b896-a0434ba96298
+# ╠═7c5b75c0-a8e9-4590-b020-c0c934cdc14c
+# ╠═df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
 # ╟─f5672f84-c90a-4dcd-a299-4d17ac218e19
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 # ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
@@ -1607,6 +1622,7 @@ version = "17.4.0+0"
 # ╟─de2be041-337d-411a-a06f-b9e073b18152
 # ╟─bf1246bd-d984-49a4-affb-377f1d45e815
 # ╟─e0350c1d-7aa4-4600-b97b-9233c179e5fa
+# ╠═e8447ea3-02eb-4fe1-8ebc-0809dbaa2484
 # ╟─52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 # ╟─fb9ff4ae-5a10-45e7-a1d8-548ded1fa561
 # ╟─34e8535b-d6d6-4a13-b97a-9fdc39f2a986
