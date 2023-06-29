@@ -25,17 +25,13 @@ begin
 end
 
 # ╔═╡ 1adf8391-1db9-454b-b896-a0434ba96298
-f = joinpath(pwd() |> dirname |> dirname, "hmt-archive", "release-candidates", "hmt-2023b.cex")
+f = joinpath(pwd() |> dirname |> dirname, "hmt-archive", "release-candidates", "hmt-2023test.cex")
 
 # ╔═╡ 7c5b75c0-a8e9-4590-b020-c0c934cdc14c
 f |> isfile
 
 # ╔═╡ df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
 cex = read(f) |> String
-
-# ╔═╡ f5672f84-c90a-4dcd-a299-4d17ac218e19
-md"""> *Warning to users*: this notebook is a quick, mostly untested hack.
-"""
 
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 md"""# Validate content in the HMT archive
@@ -49,6 +45,11 @@ md"""### Verify *coverage* of indexing texts"""
 
 # ╔═╡ 214b6095-f3d8-49da-8954-f33ec807f0fc
 md"""### Verify *referential integrity* of indexing scholia to Iliad"""
+
+# ╔═╡ b722fa65-b30d-448e-b48e-96e4f3f95f52
+md"""> NB:  should add check that scholia are indexed to same page as Iliad line they comment on.
+
+"""
 
 # ╔═╡ 52bf2819-4006-46ad-b2c4-f882b1b3f9f7
 html"""<br/><br/><br/><br/><br/><br/>"""
@@ -1624,13 +1625,13 @@ version = "17.4.0+0"
 # ╠═1adf8391-1db9-454b-b896-a0434ba96298
 # ╠═7c5b75c0-a8e9-4590-b020-c0c934cdc14c
 # ╠═df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
-# ╟─f5672f84-c90a-4dcd-a299-4d17ac218e19
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 # ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
 # ╟─c26c53a6-68c4-451b-95b7-9a23f4d7e832
 # ╟─13fc6e30-225f-4c18-a4d5-4b7a37ed029d
 # ╟─32f50dd1-c411-4e6c-ba19-2c707744ac80
 # ╟─214b6095-f3d8-49da-8954-f33ec807f0fc
+# ╟─b722fa65-b30d-448e-b48e-96e4f3f95f52
 # ╟─de2be041-337d-411a-a06f-b9e073b18152
 # ╟─bf1246bd-d984-49a4-affb-377f1d45e815
 # ╟─e0350c1d-7aa4-4600-b97b-9233c179e5fa

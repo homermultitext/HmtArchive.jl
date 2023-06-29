@@ -4,10 +4,6 @@ using Documenter, DocStringExtensions
 using HTTP
 using EzXML
 
-#using TestSetExtensions
-#using Compat.Test
-#using Test
-
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
 
