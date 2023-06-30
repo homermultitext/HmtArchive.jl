@@ -22,6 +22,20 @@ label|Index of scholia to *Iliad* passages they comment on
 scholion|iliad
 """
 
+PERSNAME_INDEX_HEADER = """
+#!datamodels
+Collection|Model|Label|Description
+urn:cite2:hmt:persnameindex.v1:all|urn:cite2:hmt:datamodels.v1:personalname|Index of text passages to occurrences of personal names
+
+
+#!citerelationset
+urn|urn:cite2:hmt:persnameindex.v1:all
+label|Index of text passages to occurrences of personal names
+passage|person
+"""
+
+
+
 
 #
 # Some constant values:  URNs for collections

@@ -47,10 +47,10 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         imagecex(hmt),
         authlistscex(hmt),
         scholiaindexcex(hmt), 
+        persnameindexcex(archivaltexts),
         relationsetscex(hmt)
         ], "\n\n")
 end
-
 
 """Comment lines to introduce CEX release.
 $(SIGNATURES)
@@ -65,6 +65,16 @@ function introcomment(releaseid::AbstractString)
     join(lines,"\n")
 end
 
+"""Compose index of all personal name references in CEX format.
+$(SIGNATURES)
+"""
+function persnameindexcex(c::CitableTextCorpus)
+    (good, bad) = indexpersnames(c)
+    data = map(good) do pr
+        string(pr[1], "|", pr[2])
+    end
+    PERSNAME_INDEX_HEADER * join(data,"\n")
+end
 
 """Collect relation sets.
 $(SIGNATURES)
