@@ -25,7 +25,7 @@ scholion|iliad
 PERSNAME_INDEX_HEADER = """
 #!datamodels
 Collection|Model|Label|Description
-urn:cite2:hmt:persnameindex.v1:all|urn:cite2:hmt:datamodels.v1:personalname|Index of text passages to occurrences of personal names
+urn:cite2:hmt:persnameindex.v1:all|$(CitableAnnotations.NAMED_ENTITY_INDEX_MODEL)|Index of text passages to occurrences of personal names
 
 
 #!citerelationset
@@ -35,6 +35,32 @@ passage|person
 """
 
 
+
+PLACENAME_INDEX_HEADER = """
+#!datamodels
+Collection|Model|Label|Description
+urn:cite2:hmt:placenameindex.v1:all|$(CitableAnnotations.NAMED_ENTITY_INDEX_MODEL)|Index of text passages to occurrences of place names
+
+
+#!citerelationset
+urn|urn:cite2:hmt:placenameindex.v1:all
+label|Index of text passages to occurrences of place names
+passage|place
+"""
+
+
+
+ETHNICGROUP_INDEX_HEADER = """
+#!datamodels
+Collection|Model|Label|Description
+urn:cite2:hmt:ethnicgroupindex.v1:all|$(CitableAnnotations.NAMED_ENTITY_INDEX_MODEL)|Index of text passages to occurrences of names of ethnic groups
+
+
+#!citerelationset
+urn|urn:cite2:hmt:ethnicgroupindex.v1:all
+label|Index of text passages to occurrences of names of ethnic groups
+passage|ethnic
+"""
 
 
 #

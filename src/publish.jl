@@ -48,6 +48,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         authlistscex(hmt),
         scholiaindexcex(hmt), 
         persnameindexcex(archivaltexts),
+        placenameindexcex(archivaltexts),
         relationsetscex(hmt)
         ], "\n\n")
 end
@@ -75,6 +76,19 @@ function persnameindexcex(c::CitableTextCorpus)
     end
     PERSNAME_INDEX_HEADER * join(data,"\n")
 end
+
+
+"""Compose index of all place name references in CEX format.
+$(SIGNATURES)
+"""
+function placenameindexcex(c::CitableTextCorpus)
+    (good, bad) = indexplacenames(c)
+    data = map(good) do pr
+        string(pr[1], "|", pr[2])
+    end
+    PLACENAME_INDEX_HEADER * join(data,"\n")
+end
+
 
 """Collect relation sets.
 $(SIGNATURES)
