@@ -37,7 +37,7 @@ TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9"
 ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
-CitableAnnotations = "0.4"
+CitableAnnotations = "0.5"
 CitableBase = "10"
 CitableCollection = "0.4"
 CitableCorpus = "0.13"
