@@ -15,6 +15,7 @@ macro bind(def, element)
 end
 
 # ╔═╡ b0f8006e-0130-11ee-3603-9b61ee416011
+# ╠═╡ show_logs = false
 begin
 	using HmtArchive
 	using HmtArchive.Analysis
@@ -22,19 +23,22 @@ begin
 	using CitablePhysicalText, CitableImage
 	using EditorsRepo
 	using PlutoUI
+	using Downloads
 end
 
 # ╔═╡ 1adf8391-1db9-454b-b896-a0434ba96298
-f = joinpath(pwd() |> dirname |> dirname, "hmt-archive", "release-candidates", "hmt-2023test.cex")
-
-# ╔═╡ 7c5b75c0-a8e9-4590-b020-c0c934cdc14c
-f |> isfile
+url = "https://github.com/homermultitext/hmt-archive/raw/master/releases-cex/hmt-current.cex"
 
 # ╔═╡ df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
-cex = read(f) |> String
+cex = begin
+	tempfile = Downloads.download(url)
+	currentdata =  tempfile |> read |> String
+	rm(tempfile)
+	currentdata
+end
 
 # ╔═╡ ad9374a2-128e-4e11-a6e5-21f50ea23bf2
-md"""# Validate content in the HMT archive
+md"""# Validate content in the current published release of the HMT archive
 
 - uses current published release:  *$(hmt_releaseinfo(cex))*
 - validation is by MS page
@@ -284,6 +288,7 @@ CitableImage = "17ccb2e5-db19-44b3-b354-4fd16d92c74e"
 CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
 CitablePhysicalText = "e38a874e-a7c2-4ff3-8dea-81ae2e5c9b07"
 CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 EditorsRepo = "3fa2051c-bcb6-4d65-8a68-41ff86d56437"
 HmtArchive = "1e7b0059-6550-4515-8382-5d3f2046a0a7"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
@@ -305,7 +310,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.1"
 manifest_format = "2.0"
-project_hash = "a730e3c266db685fdf292519f2f0c185c19ca9ea"
+project_hash = "054c8e375b27b1089bc1c27a9cc68b090817d865"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -790,7 +795,7 @@ uuid = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 version = "1.2.1"
 
 [[deps.ImageMagick_jll]]
-deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg", "Zlib_jll", "libpng_jll"]
+deps = ["Artifacts", "Ghostscript_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "OpenJpeg_jll", "Pkg", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "124626988534986113cfd876e3093e4a03890f58"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
 version = "6.9.12+3"
@@ -1001,6 +1006,12 @@ version = "4.4.0+0"
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
+[[deps.LittleCMS_jll]]
+deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg"]
+git-tree-sha1 = "110897e7db2d6836be22c18bffd9422218ee6284"
+uuid = "d3a379c0-f9a3-5b72-a4c0-6bf4d2e8af0f"
+version = "2.12.0+0"
+
 [[deps.LogExpFunctions]]
 deps = ["DocStringExtensions", "IrrationalConstants", "LinearAlgebra"]
 git-tree-sha1 = "c3ce8e7420b3a6e071e0fe4745f5d4300e37b13f"
@@ -1144,6 +1155,12 @@ deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
 git-tree-sha1 = "a4ca623df1ae99d09bc9868b008262d0c0ac1e4f"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
 version = "3.1.4+0"
+
+[[deps.OpenJpeg_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll", "LittleCMS_jll", "Pkg", "libpng_jll"]
+git-tree-sha1 = "76374b6e7f632c130e78100b166e5a48464256f8"
+uuid = "643b3616-a352-519d-856d-80112ee9badc"
+version = "2.4.0+0"
 
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1622,9 +1639,8 @@ version = "17.4.0+0"
 
 # ╔═╡ Cell order:
 # ╟─b0f8006e-0130-11ee-3603-9b61ee416011
-# ╠═1adf8391-1db9-454b-b896-a0434ba96298
-# ╠═7c5b75c0-a8e9-4590-b020-c0c934cdc14c
-# ╠═df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
+# ╟─1adf8391-1db9-454b-b896-a0434ba96298
+# ╟─df200bd4-4b8c-46c7-9d2e-a23a26bdf5ce
 # ╟─ad9374a2-128e-4e11-a6e5-21f50ea23bf2
 # ╟─c339ab95-e781-446a-b4b9-b8134c4a4be7
 # ╟─c26c53a6-68c4-451b-95b7-9a23f4d7e832
