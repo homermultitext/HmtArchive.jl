@@ -49,6 +49,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         scholiaindexcex(hmt), 
         persnameindexcex(archivaltexts),
         placenameindexcex(archivaltexts),
+        ethnicgroupindexcex(archivaltexts),
         relationsetscex(hmt)
         ], "\n\n")
 end
@@ -89,6 +90,16 @@ function placenameindexcex(c::CitableTextCorpus)
     PLACENAME_INDEX_HEADER * join(data,"\n")
 end
 
+"""Compose index in CEX format of all references to names of ethnic groups.
+$(SIGNATURES)
+"""
+function ethnicgroupindexcex(c::CitableTextCorpus)
+    (good, bad) = indexethnicgroups(c)
+    data = map(good) do pr
+        string(pr[1], "|", pr[2])
+    end
+    ETHNICGROUP_INDEX_HEADER * join(data,"\n")
+end
 
 """Collect relation sets.
 $(SIGNATURES)

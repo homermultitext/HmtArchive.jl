@@ -71,11 +71,11 @@ function indexpersnames(c::CitableTextCorpus)
 end
 
 """Compute an index of place names to occurrences in corpus `c`.
-The corpus should be a TEI corpus with personal names identified by
+The corpus should be a TEI corpus with place names identified by
 URNs on the `n` attribute of a `placeName` element.
 
 Returns two lists: a list of valid pairs of URNs for text passage + name ID,
-and a list of passages plus invalid CITE2URN values for personal name.
+and a list of passages plus invalid CITE2URN values for place name.
 $(SIGNATURES)
 """
 function indexplacenames(c::CitableTextCorpus)
@@ -104,4 +104,54 @@ function indexplacenames(c::CitableTextCorpus)
         end
     end
     (sheep, goats)
+end
+
+
+
+"""Compute an index of ethnic group names to occurrences in corpus `c`.
+The corpus should be a TEI corpus with ethnic group names identified by
+URNs on the `n` attribute of an `rs` element with `type` attribute = `ethnic`.
+
+Returns two lists: a list of valid pairs of URNs for text passage + name ID,
+and a list of passages plus invalid CITE2URN values for ethnic group name.
+$(SIGNATURES)
+"""
+function indexethnicgroups(c::CitableTextCorpus)
+    sheep = Tuple{CtsUrn, Cite2Urn}[]
+    goats = []
+
+    for psg in c.passages
+        xmlnode = parsexml(psg.text)
+        ethnicnames = findall("//rs", xmlnode) |> collect
+        for pn in ethnicnames
+            if isethnic(pn)
+                attrs = attributes(pn) |> collect
+                nattrs = filter(a -> a.name == "n", attrs)
+                
+                for attr in nattrs
+                    placeurn = nothing
+                    try 
+                        placeurn = Cite2Urn(attr.content)
+                    catch 
+                        @warn("Bad URN in $(psg.urn)", attr.content)
+                        push!(goats, (psg.urn, attr.content))
+                    else
+                        push!(sheep, (psg.urn, placeurn))
+                    end 
+                end
+        end
+        end
+    end
+    (sheep, goats)
+end
+
+function isethnic(nd::EzXML.Node)
+    attrs = attributes(nd)
+    ethnic = false
+    for a in attrs
+        if a.name == "type" && a.content == "ethnic"
+            ethnic = true
+        end
+    end
+    ethnic
 end
