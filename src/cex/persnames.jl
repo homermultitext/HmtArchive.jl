@@ -22,3 +22,19 @@ $(SIGNATURES)
 function hmt_persnames()
     hmt_cex() |> hmt_persnames
 end
+
+
+"""Load indices of named entities, and filter out index of personal names.
+$(SIGNATURES)
+"""
+function hmt_persnamesindex(src::AbstractString; delimiter = "|")
+    indices = fromcex(src, NamedEntityIndex, delimiter = delimiter)
+    filter(i -> i.urn == HmtArchive.PERSNAME_INDEX_URN, indices)[1]
+end
+
+"""Load indices of named entities, and filter out index of personal names.
+$(SIGNATURES)
+"""
+function hmt_persnamesindex()
+    hmt_cex() |> hmt_persnamesindex
+end

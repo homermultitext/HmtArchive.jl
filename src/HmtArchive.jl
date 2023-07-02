@@ -61,6 +61,9 @@ module Analysis
     export hmt_persnames
     export hmt_placenames
     export hmt_paragraphs
+    export hmt_persnamesindex
+    export hmt_placenamesindex
+    export hmt_ethnicgroupsindex
 
     # Summarizing tables:
     export coltbl_pagecounts
@@ -93,8 +96,10 @@ module Analysis
     include("cex/commentary.jl")
     include("cex/pageindex.jl")
     include("cex/persnames.jl")
+    include("cex/ethnicgroups.jl")
     include("cex/placenames.jl")
     include("cex/paragraphs.jl")
+    
 
     include("analysis/scs.jl")
     include("analysis/vertical.jl")

@@ -23,3 +23,20 @@ $(SIGNATURES)
 function hmt_placenames()
     hmt_cex() |> hmt_placenames
 end
+
+
+
+"""Load indices of named entities, and filter out index of place names.
+$(SIGNATURES)
+"""
+function hmt_placenamesindex(src::AbstractString; delimiter = "|")
+    indices = fromcex(src, NamedEntityIndex, delimiter = delimiter)
+    filter(i -> i.urn == HmtArchive.PLACENAME_INDEX_URN, indices)[1]
+end
+
+"""Load indices of named entities, and filter out index of place names.
+$(SIGNATURES)
+"""
+function hmt_placenamesindex()
+    hmt_cex() |> hmt_placenamesindex
+end
