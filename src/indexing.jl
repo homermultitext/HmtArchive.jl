@@ -145,6 +145,9 @@ function indexethnicgroups(c::CitableTextCorpus)
     (sheep, goats)
 end
 
+"""True of XML node `nd` is an `rs` element of type `ethnic`.
+$(SIGNATURES)
+"""
 function isethnic(nd::EzXML.Node)
     attrs = attributes(nd)
     ethnic = false
