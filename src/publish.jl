@@ -50,8 +50,7 @@ function librarycex(hmt::Archive, releaseid::AbstractString)
         persnameindexcex(archivaltexts),
         placenameindexcex(archivaltexts),
         ethnicgroupindexcex(archivaltexts),
-        relationsetscex(hmt),
-        pageroiscex(hmt)
+        relationsetscex(hmt)
         ], "\n\n")
 end
 
@@ -174,21 +173,6 @@ function remoteauthlists()
         push!(datacex, s)
     end
     catalogcex * "\n\n" * join(datacex, "\n\n")
-end
-
-
-"""Read index of image regions for pages of Venetus A manuscript (CEX format).
-$(SIGNATURES)
-"""
-function pageroiscex(hmt::Archive)
-    read(pageroisfile(hmt), String)
-end
-
-"""Find path to CEX file with index of image regions to pages of the Venetus A.
-$(SIGNATURES)
-"""
-function pageroisfile(hmt::Archive)
-    joinpath(hmt.root, "relations", "va-page-imagerois.cex")
 end
 
 """Read text catalog CEX.

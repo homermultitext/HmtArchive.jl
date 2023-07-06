@@ -5,7 +5,7 @@ $(SIGNATURES)
 """
 function hmt_pagerois(src::AbstractString; delimiter = "|")
     indices = fromcex(src, PageImageZone, delimiter = delimiter)
-    filter(i -> i.urn == HmtArchive.PAGEROI_URN, indices)[1]
+    indices[1]
 end
 
 """Load indices of named entities, and filter out index of page RoIs.
