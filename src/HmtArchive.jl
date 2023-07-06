@@ -4,6 +4,8 @@ using Documenter, DocStringExtensions
 using HTTP
 using EzXML
 
+
+
 using CitableBase, CitableText, CitableCorpus
 using CitableTeiReaders, EditionBuilders
 
@@ -33,8 +35,21 @@ module Analysis
     using Documenter, DocStringExtensions
 
     import ..HmtArchive
+
+    import Base: show
+    import Base: ==
     
     using CitableBase
+    import CitableBase: citabletrait
+    import CitableBase: urntype
+    import CitableBase: urn
+    import CitableBase: label
+
+
+    import CitableBase: cextrait
+    import CitableBase: cex
+    import CitableBase: fromcex
+
     using CitableText, CitableCorpus
     using CitableObject, CitableObject.CexUtils
     using CitableCollection
@@ -46,6 +61,9 @@ module Analysis
     using TypedTables, SplitApplyCombine
     # Replace these:
     using Tables, Query
+
+
+    export PageImageZone
 
     # Functions to instantiate parts of a published release:
     export hmt_cex
@@ -64,6 +82,7 @@ module Analysis
     export hmt_persnamesindex
     export hmt_placenamesindex
     export hmt_ethnicgroupsindex
+    export hmt_pagerois
 
     # Summarizing tables:
     export coltbl_pagecounts
@@ -86,6 +105,8 @@ module Analysis
     export missingtexts
     export missingdse, missingbybook
     
+    include("datamodels/pageroimodel.jl")
+
     include("cex/imageservice.jl")
     include("cex/load.jl")
     include("cex/images.jl")
@@ -99,6 +120,7 @@ module Analysis
     include("cex/ethnicgroups.jl")
     include("cex/placenames.jl")
     include("cex/paragraphs.jl")
+    include("cex/pageimagerois.jl")
     
 
     include("analysis/scs.jl")
