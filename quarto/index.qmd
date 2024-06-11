@@ -1,0 +1,23 @@
+---
+title: "HmtArchive.jl"
+---
+
+`HmtArchive` is a Julia package for working with the citable content freely available from the Homer Multitext project's github repository for archival data at https://github.com/homermultitext/hmt-archive. 
+
+In its current early version, its has two primary focal points:
+
+1. generating a complete serialization of all material in the archive in delimited-text format following the CEX specification
+2. instantiating all content in the serialized release as Julia objects
+
+
+
+
+
+
+## Contents
+
+
+| | Learning the package | Using the package |
+| --- | --- | --- |
+| **Hands-on** |  Try a [tutorial](./tutorials/) to start using  the package  | Find [recipes](./guides/) for specific tasks |
+| **Cognition** | Learn [concepts](./concepts/)   | See [reference information](./reference/) (including API documentation for all exported functions) |
