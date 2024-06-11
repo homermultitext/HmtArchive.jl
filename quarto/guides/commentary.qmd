@@ -1,0 +1,21 @@
+# Work with scholiastic commentary
+
+
+We've read the contents of a current HMT project release into a variable named `current_data`.
+```{julia}
+#| echo: false
+#| warning: false
+#| output: false
+parentdir  = pwd() |> dirname |> dirname |> dirname
+srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
+current_data = read(srcfile, String)
+```
+
+
+All commentary indexing in the HMT archive is organized in a single collection, so we can confidently take the first (and only) of the set of commentaries retrieved by the hmt_commentary function.
+
+```{julia}
+#| warning: false
+using HmtArchive, HmtArchive.Analysis
+commentary = hmt_commentary(current_data)[1]
+```

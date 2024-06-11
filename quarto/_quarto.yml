@@ -51,6 +51,11 @@ website:
     - title: "Guides"
       contents:
         - guides/index.qmd
+        - guides/codexdata.qmd
+        - guides/commentary.qmd
+        - guides/imagedata.qmd
+        - guides/paragraphs.qmd
+        
 
     - title: "Reference"
       contents: 

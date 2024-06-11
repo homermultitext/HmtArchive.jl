@@ -1,0 +1,11 @@
+# Indexing text in chunked units
+
+::: {.callout-caution}
+TBA
+:::
+
+
+How it works:
+
+
+`hmt_paragraphs(src)`

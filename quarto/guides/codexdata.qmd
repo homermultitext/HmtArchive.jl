@@ -1,0 +1,47 @@
+# Work with HMT's model of a physical text
+
+
+We've read the contents of a current HMT project release into a variable named `current_data`.
+```{julia}
+#| echo: false
+#| warning: false
+#| output: false
+parentdir  = pwd() |> dirname |> dirname |> dirname
+
+srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
+current_data = read(srcfile, String)
+```
+
+
+Manuscripts are modeled as ordered collections of pages.
+
+
+DSE records are organized in collections. All HMT DSE records are grouped in a single collection, so we can confidently just take the first collection from this array.
+
+
+```{julia}
+using HmtArchive, HmtArchive.Analysis
+dse = hmt_dse(current_data)[1]
+```
+
+
+
+```{julia}
+using CitableObject
+page = Cite2Urn("urn:cite2:hmt:msA.v1:12r")
+```
+
+
+```{julia}
+using CitableText
+line1 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:1.1")
+```
+
+```{julia}
+using CitablePhysicalText
+imagesfortext(line1, dse)
+```
+
+```{julia}
+textsforsurface(page, dse)
+```
