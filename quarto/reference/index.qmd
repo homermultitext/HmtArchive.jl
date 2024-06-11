@@ -2,17 +2,9 @@
 title: Reference
 ---
 
-Look it up here.
+
+
+Look up API documentation here.
 
 
 
-`hmt_cex` 
-
-:::{.callout-note appearance="minimal"}
-```{julia}
-#| echo: false
-#| warning: false
-using HmtArchive
-@doc hmt_cex
-```
-:::
