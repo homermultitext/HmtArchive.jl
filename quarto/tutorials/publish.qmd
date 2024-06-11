@@ -35,6 +35,7 @@ The functions that add content to `hmt-archive` do **not** commit or push anythi
 
 
 ```{julia}
+#| warning: false
 archivecex = librarycex(hmt, "2024testdocs")
 # Length in bytes:
 length(archivecex)

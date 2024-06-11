@@ -1,6 +1,32 @@
-# Work with the current release of the HMT project archive
+# Work with a published release of the HMT project archive
 
 
-::: {.callout-caution}
-TBA
-:::
+To work with the contents of the HMT project archive, use both the `HmtArchive` and `HmtArchive.Analysis` modules.
+
+```{julia}
+using HmtArchive, HmtArchive.Analysis
+```
+
+The HMT project archive is published in delimited-text files following the CEX format.  You can instantiate any of the contents of the archive from one of these published sources.
+
+The current published release is always available at `https://raw.githubusercontent.com/homermultitext/hmt-archive/master/releases-cex/hmt-current.cex`. The function `hmt_cex` is a utility that downloads the current release and reads it into a single string. Verify what release you're using with the `hmt_releaseinfo` function.
+
+```{julia}
+src = hmt_cex()
+hmt_releaseinfo(src)
+```
+
+## Example of getting contents: texts
+
+
+```{julia}
+textcatalog = hmt_textcatalog(src)
+```
+
+```{julia}
+normalizedtexts = hmt_normalized(src)
+```
+
+```{julia}
+diplomatictexts = hmt_diplomatic(src)
+```
