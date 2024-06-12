@@ -2,5 +2,11 @@
 title: Tutorials
 ---
 
-Learn how to use the `HmtArchive` package to work with data in the HMT project archive, and how the archive is published in delimited-text form.
 
+## Use a published release of the HMT project
+
+If you want to learn how use content from the HMT project archive, start with [a simple tutorial](./analyze.qmd) showing how to read all of the citable texts from a publshed release.  Find recipes for different kinds of analysis of material in published HMT releases in the [guides](../guides/) section of this site.
+
+## Build a release 
+
+To learn how the project is published in delimited-text form, see [this introduction](./publish.qmd).

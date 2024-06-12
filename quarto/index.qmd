@@ -6,8 +6,8 @@ title: "HmtArchive.jl"
 
 In its current early version, its has two primary focal points:
 
-1. generating a complete serialization of all material in the archive in delimited-text format following the CEX specification
-2. instantiating all content in the serialized release as Julia objects
+1. generating a complete serialization of all material in the archive in delimited-text format following the CEX specification (the `HmtArchive` module)
+2. instantiating all content in the serialized release as Julia objects (the `HmtArchive.Analysis` module)
 
 
 
