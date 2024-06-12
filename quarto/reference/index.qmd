@@ -3,10 +3,11 @@ title: Reference
 ---
 
 
+Code for working with the HMT project archive:
 
 - [API documentation](./apis.qmd)
 - [assembling citable objects from the archive](./components.qmd)
 
+Assessing quality of data in the HMT project archive:
 
-
-
+- [consistency of records](./editingquality.qmd)

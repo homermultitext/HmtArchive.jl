@@ -1,0 +1,16 @@
+# Assessing the consistency of editing
+
+
+```{julia}
+#| echo: false
+#| warning: false
+#| output: false
+parentdir  = pwd() |> dirname |> dirname |> dirname
+srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
+current_release = read(srcfile, String)
+```
+
+
+```{julia}
+# missingtexts(current_release)
+```

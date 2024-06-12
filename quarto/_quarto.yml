@@ -66,8 +66,11 @@ website:
     - title: "Reference"
       contents: 
         - reference/index.qmd
+        - text: "---"          
         - reference/apis.qmd
         - reference/components.qmd
+        - text: "---"
+        - reference/editingquality.qmd
 
     - title: "Concepts"
       contents: 
