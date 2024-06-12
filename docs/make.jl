@@ -24,14 +24,10 @@ makedocs(
     sitename = "HmtArchive",
     pages = [
         "Home" => "index.md",
-        "Assembling parts of the archive" => "components.md",
-    
+      
         "Analyzing a release" => Any[
             "Comparing texts" => "analysis/comparison.md"
-        ],
-    
-    
-        "Tutorials" => "tutorials.md"
+        ]
     ]
     
 )

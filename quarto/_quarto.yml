@@ -63,6 +63,7 @@ website:
       contents: 
         - reference/index.qmd
         - reference/apis.qmd
+        - reference/components.qmd
 
     - title: "Concepts"
       contents: 
