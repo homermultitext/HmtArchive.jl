@@ -26,3 +26,5 @@ using HmtArchive, HmtArchive.Analysis
 commentary = hmt_commentary(current_release)[1]
 ```
 
+
+This is a `CitableCommentary` object from the Julia [`CitableAnnotations` package](https://neelsmith.quarto.pub/citableannotations/)

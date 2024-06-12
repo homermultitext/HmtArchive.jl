@@ -31,3 +31,6 @@ Get a catalog of the texts from a release:
 ```{julia}
 textcatalog = hmt_textcatalog(current_release)
 ```
+
+
+These are `CitableTextCorpus` and `TextCatalogCollection` objects from the Julia [`CitableCorpus` package](https://neelsmith.quarto.pub/citablecorpus/).
