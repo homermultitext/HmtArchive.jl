@@ -1,7 +1,11 @@
 # Commentary
 
 
-We've read the contents of a current HMT project release into a variable named `current_data`.
+
+::: {.callout-tip title="Try it"}
+Define a variable named `current_release` with the contents of a HMT project release; follow the instuctions in this [introductory tutorial](../tutorials/analyze.qmd)
+:::
+
 ```{julia}
 #| echo: false
 #| warning: false
@@ -10,6 +14,8 @@ parentdir  = pwd() |> dirname |> dirname |> dirname
 srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
 current_release = read(srcfile, String)
 ```
+
+
 
 
 All commentary indexing in the HMT archive is organized in a single collection, so we can confidently take the first (and only) of the set of commentaries retrieved by the hmt_commentary function.
