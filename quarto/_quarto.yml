@@ -51,13 +51,14 @@ website:
     - title: "Guides"
       contents:
         - guides/index.qmd
-        - guides/codexdata.qmd
+        - text: "---"
+        - guides/editions.qmd
         - guides/mss.qmd
         - guides/commentary.qmd
         - guides/imagedata.qmd
         - guides/paragraphs.qmd
-        - text: "---"
-        - guides/assembly.qmd
+        - text: "---"      
+        - guides/codexdata.qmd
         
 
     - title: "Reference"

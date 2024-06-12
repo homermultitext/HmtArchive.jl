@@ -1,4 +1,4 @@
-# Work with scholiastic commentary
+# Commentary
 
 
 We've read the contents of a current HMT project release into a variable named `current_data`.
@@ -8,7 +8,7 @@ We've read the contents of a current HMT project release into a variable named `
 #| output: false
 parentdir  = pwd() |> dirname |> dirname |> dirname
 srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_data = read(srcfile, String)
+current_release = read(srcfile, String)
 ```
 
 
@@ -17,5 +17,6 @@ All commentary indexing in the HMT archive is organized in a single collection, 
 ```{julia}
 #| warning: false
 using HmtArchive, HmtArchive.Analysis
-commentary = hmt_commentary(current_data)[1]
+commentary = hmt_commentary(current_release)[1]
 ```
+

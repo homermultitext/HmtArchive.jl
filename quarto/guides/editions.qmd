@@ -1,4 +1,4 @@
-# Data about manuscripts
+# Editions of texts
 
 
 ::: {.callout-tip title="Try it"}
@@ -14,15 +14,20 @@ srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
 current_release = read(srcfile, String)
 ```
 
+
+Get citable text corpora from a release, in normalized or diplomatic form:
+
 ```{julia}
 using HmtArchive, HmtArchive.Analysis
-mss = hmt_codices(current_release)
+normalizedtexts = hmt_normalized(current_release)
 ```
 
-These are objects of type `Codex` from the Julia `CitablePhysicalText` package.
+```{julia}
+diplomatictexts = hmt_diplomatic(current_release)
+```
 
-::: {.callout-tip title="For more info"}
-See a [tutorial about using code and page types](https://neelsmith.quarto.pub/citablephysicaltext/tutorials/codex.html) from the documentation
- of the `CitablePhysicalText` package.
-:::
+Get a catalog of the texts from a release:
 
+```{julia}
+textcatalog = hmt_textcatalog(current_release)
+```

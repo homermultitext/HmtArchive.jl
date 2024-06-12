@@ -1,4 +1,4 @@
-# Work with HMT's model of a physical text
+# Find content for a manuscript page
 
 
 We've read the contents of a current HMT project release into a variable named `current_data`.

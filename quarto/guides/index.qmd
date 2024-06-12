@@ -2,4 +2,33 @@
 title: "Guides"
 ---
 
-Recipe book for working with `HmtArchive.jl`
+
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+**Getting data from a published release**
+
+[Textual editions](./editions.qmd)
+
+[Manuscripts](./mss.qmd)
+
+
+
+::: 
+
+::: {.column width="5%"}
+
+:::
+
+
+
+::: {.column width="40%"}
+**Recipes for different tasks**
+
+
+[Find content for a manuscript page](./codexdata.qmd)
+::: 
+
+::::
