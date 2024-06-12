@@ -4,7 +4,9 @@ title: Reference
 
 
 
-Look up API documentation here.
+- [API documentation](./apis.qmd)
+- [assembling citable objects from the archive](./components.qmd)
+
 
 
 
