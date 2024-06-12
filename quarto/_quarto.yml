@@ -58,6 +58,8 @@ website:
         - guides/imagedata.qmd
         - guides/paragraphs.qmd
         - text: "---"      
+        - guides/assessment.qmd
+        - guides/pageview.qmd
         - guides/codexdata.qmd
         
 
