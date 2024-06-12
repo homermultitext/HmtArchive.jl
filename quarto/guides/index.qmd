@@ -30,12 +30,16 @@ title: "Guides"
 **Recipes for different tasks**
 
 
+[Visualize coverage](./pageview.qmd) of editing for a page
+
+[Juxtapose text and image selection](./text_w_img.qmd)
+
 [Find content for a manuscript page](./codexdata.qmd)
 
 
 [Assess consistency of coverage](./assessment.qmd) of editing for a page
 
-[Visualize coverage](./pageview.qmd) of editing for a page
+
 
 ::: 
 
