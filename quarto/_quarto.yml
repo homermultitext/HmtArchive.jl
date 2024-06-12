@@ -52,6 +52,7 @@ website:
       contents:
         - guides/index.qmd
         - guides/codexdata.qmd
+        - guides/mss.qmd
         - guides/commentary.qmd
         - guides/imagedata.qmd
         - guides/paragraphs.qmd
