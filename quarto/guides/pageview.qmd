@@ -1,13 +1,14 @@
 # Visualize coverage of editing of a page
 
-::: {.callout-caution}
-Page TBA
-:::
 
+It's straightforward to get all the image references identifying texts on a given page, and then view them in the HMT project's Image Citation Tool.
 
-::: {.callout-tip title="Try it"}
+::: {.callout-tip title="Follow along"}
 Define a variable named `current_release` with the contents of a HMT project release; follow the instuctions in this [introductory tutorial](../tutorials/analyze.qmd)
 :::
+
+
+## Get the triples records (text/artifact/image) for the current release
 
 ```{julia}
 #| echo: false
@@ -18,4 +19,45 @@ srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
 current_release = read(srcfile, String)
 ```
 
+```{julia}
+using HmtArchive, HmtArchive.Analysis
+dse = hmt_dse(current_release)[1]
+```
 
+## Get images for a given page
+Define a page to look for, and get all indexed record for that page. We'll arbitrarily look for page 37 *verso* in the Venetus A manuscript.
+
+```{julia}
+#| output: false
+using CitableObject, CitablePhysicalText
+chosenpg = Cite2Urn("urn:cite2:hmt:msA.v1:37v")
+imgs = imagesforsurface(chosenpg, dse)
+```
+
+
+## Compose a URL 
+
+The Homer Multitext project hosts an Image Citation Tool at this URL:
+
+```{julia}
+#| output: false
+ictbase = "https://www.homermultitext.org/ict2/?"
+```
+
+
+The Image Citation Tool can accept multiple references with a repeated `urn` parameter added to its URL, so all we have to do is to keep tacking `&urn=URN_VALUE` on to the basic URL:
+
+
+```{julia}
+link = ictbase * join(map(i -> "urn=" * string(i), imgs), "&")
+```
+
+## Try it!
+
+```{julia}
+#| asis: true
+#| echo: false
+using Markdown
+msg = """Here's the link displayed above: [try it]($(link))!""" 
+Markdown.parse(msg)
+```

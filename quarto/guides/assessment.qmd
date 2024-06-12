@@ -1,8 +1,5 @@
 # Assess consistency of documentation for a page
 
-::: {.callout-caution}
-Page TBA
-:::
 
 ::: {.callout-tip title="Try it"}
 Define a variable named `current_release` with the contents of a HMT project release; follow the instuctions in this [introductory tutorial](../tutorials/analyze.qmd)
@@ -17,3 +14,40 @@ srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
 current_release = read(srcfile, String)
 ```
 
+## Collect data from the current release
+
+Data we'll need from the current release:
+
+- DSE triples (text/page/image)
+- text edition
+- links between *scholia* and *Iliad* text
+
+```{julia}
+#| warning: false
+#| output: false
+using HmtArchive, HmtArchive.Analysis
+dse = hmt_dse(current_release)[1]
+dipltext = hmt_diplomatic(current_release)
+commentary = hmt_commentary(current_release)[1]
+
+```
+
+
+
+## Choose a manuscript page to evaluate
+
+```{julia}
+#| output: false
+using CitableObject
+chosenpg = Cite2Urn("urn:cite2:hmt:msA.v1:37v")
+```
+
+Find texts for the chosen page:
+
+```{julia}
+#| warning: false
+#| output: false
+using CitablePhysicalText, CitableText
+txts = textsforsurface(chosenpg, dse)
+iliadlines = filter(u -> startswith(workcomponent(u), "tlg0012.tlg001"), txts)
+```
