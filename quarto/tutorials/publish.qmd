@@ -1,0 +1,54 @@
+# Publishing a release of the HMT archive
+
+
+Create an `Archive` object from the path in your local file system to the `archive` directory in a downloaded or cloned copy of the [`hmt-archive` repository](https://github.com/homermultitext/hmt-archive.git).  Here, we've defined a variable `root` with that full path.
+
+```{julia}
+#| echo: false
+#| output: false
+repo = pwd()  |> dirname |> dirname |> dirname
+root =  joinpath(repo, "hmt-archive", "archive")
+```
+
+
+
+```{julia}
+#| output: false
+#| warning: false
+using HmtArchive
+hmt = Archive(root)
+```
+
+
+
+Three exported functions compile a complete description of the archive in CEX format.  All three functions take the same parameters:  an `Archive`, and a string value identifying the release.
+
+1. `librarycex` returns a single (large!) CEX string
+2. `writerc` writes the CEX output to the `hmt-archive`'s `release-candidates` directory
+3. `publish` writes the CEX output to the `hmt-archive`'s `releases-cex` directory
+
+
+
+::: {.callout-note}
+The functions that add content to `hmt-archive` do **not** commit or push anything to the repository.  You still need to do that manually. (That is a feature.)
+:::
+
+
+```{julia}
+#| warning: false
+archivecex = librarycex(hmt, "2024testdocs")
+# Length in bytes:
+length(archivecex)
+```
+
+In the current version of `HmtArchive`, the resulting CEX accounts for the following components:
+
+- diplomatic editions of all texts
+- normalized editions of all texts
+- catalog of all texts
+- all DSE records
+- collection of all data models in the library
+- collection of all codices
+- collection of all images
+- collections of authority lists for personal names, place names, astronomical entities, and texts no longer extant
+- indexes of scholia to *Iliad* passages

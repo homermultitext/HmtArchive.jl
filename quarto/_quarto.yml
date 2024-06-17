@@ -1,0 +1,86 @@
+project:
+  type: website
+jupyter: julia-1.10  
+theme: spacelab
+execute:
+  freeze: auto
+date: last-modified  
+margin-header: "Package version: `0.14.2`"
+format:
+  html: 
+    toc: true
+
+
+website:
+  title: "hmtarchive"
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Concepts"
+        file: concepts/index.qmd           
+      - text: "Tutorials"
+        file: tutorials/index.qmd          
+      - text: "Guides"
+        file: guides/index.qmd           
+      - text: "Reference"
+        file: reference/index.qmd  
+    right:   
+      - icon: github
+        href: https://github.com/homermulitext/HmtArchive.jl
+        aria-label: GitHub
+      - icon: person-circle
+        menu:
+          - text: "About me"
+            href: https://neelsmith.quarto.pub
+          - text: "More of my digital scholarship"
+            href: https://neelsmith.quarto.pub/digschol/
+        aria-label: "More of my work"  
+
+  sidebar:
+    - title: "Tutorials"
+      contents: 
+        - tutorials/index.qmd
+        - text: "---"
+        - tutorials/analyze.qmd
+        - text: "---"
+        - tutorials/publish.qmd
+
+    - title: "Guides"
+      contents:
+        - guides/index.qmd
+        - text: "---"
+        - guides/editions.qmd
+        - guides/mss.qmd
+        - guides/commentary.qmd
+        - guides/imagedata.qmd
+        - guides/paragraphs.qmd
+        - text: "---"      
+        - guides/pageview.qmd
+        - guides/text_w_img.qmd
+        - guides/codexdata.qmd
+        - guides/assessment.qmd
+        
+
+    - title: "Reference"
+      contents: 
+        - reference/index.qmd
+        - text: "---"          
+        - reference/apis.qmd
+        - reference/components.qmd
+        - text: "---"
+        - reference/editingquality.qmd
+
+    - title: "Concepts"
+      contents: 
+        - concepts/index.qmd
+
+        
+
+    - title: "Home"
+      contents:
+        - index.qmd               
+ 
+

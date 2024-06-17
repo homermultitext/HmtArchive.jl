@@ -23,19 +23,8 @@ using HmtArchive.Analysis
 makedocs(
     sitename = "HmtArchive",
     pages = [
-        "Home" => "index.md",
-        "Assembling parts of the archive" => "components.md",
-        "Summarizing a release" => Any[
-            "Loading a release" => "summary/cex.md"
-        ],
-        "Analyzing a release" => Any[
-            "Comparing texts" => "analysis/comparison.md"
-        ],
-        "Archive: API documentation" => "apis.md",
-        "Published releases: API documentation" => "apis2.md",
-        "Tutorials" => "tutorials.md"
-    ]
-    
+        "Home" => "index.md", 
+    ]   
 )
 
 

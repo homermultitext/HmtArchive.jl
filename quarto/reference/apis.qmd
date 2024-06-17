@@ -1,0 +1,221 @@
+# API documentation
+
+## Working with published releases
+
+
+`hmt_cex` 
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+using HmtArchive, HmtArchive.Analysis
+@doc hmt_cex
+```
+:::
+
+`hmt_releaseinfo`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_releaseinfo
+```
+:::
+
+## Instantiating parts of the release
+
+
+
+`hmt_images`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_images
+```
+:::
+
+
+`hmt_codices`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_codices
+```
+:::
+
+`hmt_textcatalog`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_textcatalog
+```
+:::
+
+`hmt_diplomatic`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_diplomatic
+```
+:::
+
+`hmt_normalized`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_normalized
+```
+:::
+
+`hmt_dse`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_dse
+```
+:::
+
+`hmt_commentary`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_commentary
+```
+:::
+
+`hmt_pageindex`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_pageindex
+```
+:::
+
+`hmt_paragraphs`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_paragraphs
+```
+:::
+
+`hmt_persnames`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_persnames
+```
+:::
+
+`hmt_placenames`
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc hmt_placenames
+```
+:::
+
+
+## Tables summarizing parts of the release
+
+
+`coltbl_pagecounts`
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc coltbl_pagecounts
+```
+:::
+
+
+`coltbl_imagecounts`
+
+
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+@doc coltbl_imagecounts
+```
+:::
+
+
+
+
+
+## Publishing the archive
+
+
+
+`librarycex`
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+using HmtArchive
+@doc librarycex
+```
+:::
+
+
+`publish`
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+using HmtArchive
+@doc publish
+```
+:::
+
+`writerc`
+
+:::{.callout-note appearance="minimal"}
+```{julia}
+#| echo: false
+#| warning: false
+using HmtArchive
+@doc writerc
+```
+:::

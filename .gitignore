@@ -6,3 +6,5 @@ scratch/
 Manifest.toml
 *backup*.jl
 obsidian-scratch/
+_site/
+_freeze/
