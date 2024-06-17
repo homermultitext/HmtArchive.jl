@@ -1,48 +1,100 @@
-```@setup components
+# Assembling parts of the archive
+
+```{julia}
+#| echo: false
+#| output: false
 root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive")
+```
+
+
+
+`HmtArchive` includes functions to instantiate parts of the archive as collections of citable content. Behind the scenes, this is how the archive is published, since all of the citable objects built from it can be serialized as simple delimited text.
+
+
+::: {.callout-caution title="Documentation incomplete"}
+This page lacks documentation of some of the content that is included
+in published releases of the HMT archive.
+:::
+
+In the following examples, `root` refers to the `archive` directory of the `hmt-archive` github repository. We begin by creating an `Archive` object.
+
+
+
+
+
+```{julia}
+#| output: false
 using HmtArchive, EditorsRepo
 hmt = Archive(root)
 ```
 
-# Assembling parts of the archive
 
-`HmtArchive` includes functions to instantiate parts of the archive as collections of citable content. In the following examples, the `hmt` variable is an instance of an `Archive`.
 
 ## Text corpora
 
 Create a normalized corpus of all texts in the repository:
 
-```@example components
+```{julia}
 normedcorpus = normalizedcorpus(hmt)
 ```
 Create a diplomatic corpus of all texts in the repository:
 
-```@example components
+```{julia}
 diplcorpus = diplomaticcorpus(hmt)
 ```
 
+These are  instances of a `CitableTextCorpus` from the Julia `CitableCorpus` package. 
 
-## DSE indexing
-
-Collect all DSE records:
+- see [documentation for the `CitableCorpus` package](https://neelsmith.quarto.pub/citablecorpus/).
 
 
-```@example components
+
+## Citable physical texts
+
+HMT project editions follow a model of a citable physical text connecting text contents, physical object such as a manuscript page, and documentary image.
+
+Create a collection of these relations (the "Digital Scholarly Edition," or DSE, model):
+
+
+```{julia}
+#| warning: false
 dsecollection = HmtArchive.dse(hmt)
 ```
+
+The result is a `DSECollection` from the Julia `CitablePhysicalText` package.
+
+- see [documentation for the `CitablePhysicalText` package](https://neelsmith.quarto.pub/citablephysicaltext/)
 
 
 ## Indexing content of XML editions
 
 Index scholia commenting on *Iliad*:
 
-```@example components
+```{julia}
+#| warning: false
+#| output: false
 commentaryindex = HmtArchive.commentpairs(hmt)
 ```
 
+The result is a Vector pairing two `CtsUrn`s, the first refering to the *scholion*, and the second to the *Iliad* passage.
+
+
+
+```{julia}
+commentaryindex[1]
+```
+
+`CtsUrn`s are defined in the Julia `CitableText` package.
+
+- see [documentation for the `CitableText` package](https://neelsmith.quarto.pub/citabletext/)
 
 
 ## Summary
+
+
+::: {.callout-caution title="Documentation out of date"}
+This section needs to be updated.
+:::
 
 In the following summary lines, `hmt` is an instance of an `Archive`; `archivecex` is the output of `cex(hmt)` (a complete representation of the archive in CEX format).
 

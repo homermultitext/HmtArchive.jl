@@ -1,0 +1,51 @@
+# Work with a published release of the HMT project archive
+
+
+To work with a published release of the HMT project archive, use both the `HmtArchive` and `HmtArchive.Analysis` modules.
+
+```{julia}
+using HmtArchive, HmtArchive.Analysis
+```
+
+The current published release is always available at `https://raw.githubusercontent.com/homermultitext/hmt-archive/master/releases-cex/hmt-current.cex`. The function `hmt_cex` is a utility that downloads the current release and reads it into a single string. (Obviously, this requires a connection to the internet.)
+
+Verify what release you're using with the `hmt_releaseinfo` function.
+
+```{julia}
+src = hmt_cex()
+hmt_releaseinfo(src)
+```
+
+## Reading contents: texts
+
+
+
+You can retrieve editions of HMT texts either as pure diplomatic editions, or normalized texts.
+
+
+```{julia}
+normalizedtexts = hmt_normalized(src)
+```
+
+```{julia}
+diplomatictexts = hmt_diplomatic(src)
+```
+
+You can retrieve a catalog of the texts in the release
+
+```{julia}
+textcatalog = hmt_textcatalog(src)
+```
+
+
+## Working with citable texts
+
+The text corpora are instances of the `CitableTextCorpus` type; the text catalog is a `TextCatalogCollection`, both from the Julia `CitableCorpus` package.
+
+To learn about using citable texts in the `CitableCorpus` package, see [its documentation](https://neelsmith.quarto.pub/citablecorpus/).
+
+## Reading other kinds of content
+
+The `HmtArchive.Analysis` module provides functions to read the contents of a published release into citable objects.  
+
+See the [guides section](../guides/) of this site for recipes for working with other kinds of material in HMT publications.

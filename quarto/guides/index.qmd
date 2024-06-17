@@ -1,0 +1,46 @@
+---
+title: "Guides"
+---
+
+
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+**Getting data from a published release**
+
+[Textual editions](./editions.qmd)
+
+[Manuscripts](./mss.qmd)
+
+[Commmentary](./commentary.qmd)
+
+[Image collections](./imagedata.qmd)
+
+::: 
+
+::: {.column width="5%"}
+
+:::
+
+
+
+::: {.column width="40%"}
+**Recipes for different tasks**
+
+
+[Visualize coverage](./pageview.qmd) of editing for a page
+
+[Juxtapose text and image selection](./text_w_img.qmd)
+
+[Find content for a manuscript page](./codexdata.qmd)
+
+
+[Assess consistency of coverage](./assessment.qmd) of editing for a page
+
+
+
+::: 
+
+::::
