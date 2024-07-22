@@ -104,6 +104,10 @@ module Analysis
     export isiliad, isscholion
     export missingtexts
     export missingdse, missingbybook
+
+    # working with scholia:
+    export scholion, scholion_text, scholion_text_md
+    export islemma, iscomment, lemma_text, comment_text
     
     include("datamodels/pageroimodel.jl")
 
@@ -126,6 +130,8 @@ module Analysis
     include("analysis/scs.jl")
     include("analysis/vertical.jl")
     include("analysis/horizontal.jl")
+
+    include("textutils/scholia.jl")
 
     include("validation/dse_missingedition.jl")
     include("validation/edition_unindexed.jl")

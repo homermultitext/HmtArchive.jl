@@ -106,8 +106,3 @@ filter(normalizedtexts.passages) do psg
     psgu in scholia_generic
 end
 ```
-
-
-corpusgeneric = map(normalizedtexts.passages) do psg
-       collapsePassageBy(urn(psg),1) |> dropversion
-       end
