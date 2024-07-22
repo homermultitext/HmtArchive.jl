@@ -58,6 +58,7 @@ website:
         - guides/imagedata.qmd
         - guides/paragraphs.qmd
         - text: "---"      
+        - guides/scholia.qmd
         - guides/pageview.qmd
         - guides/text_w_img.qmd
         - guides/codexdata.qmd
