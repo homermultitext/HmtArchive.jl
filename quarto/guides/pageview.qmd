@@ -4,7 +4,7 @@
 It's straightforward to get all the image references identifying texts on a given page, and then view them in the HMT project's Image Citation Tool.
 
 ::: {.callout-tip title="Follow along"}
-Define a variable named `current_release` with the contents of a HMT project release; follow the instuctions in this [introductory tutorial](../tutorials/analyze.qmd)
+Define a variable named `current_release` with the contents of a HMT project release; follow the instructions in this [introductory tutorial](../tutorials/analyze.qmd)
 :::
 
 

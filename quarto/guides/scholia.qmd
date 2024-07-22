@@ -1,0 +1,108 @@
+# Read *Iliad* text with accompanying scholia
+
+::: {.callout-note title="This should be easier"}
+While it is straightforward to find an *Iliad* passage and *scholia* commenting on it using the current version of `HmtArchive`, this common task should be easier in a future release of the package with higher-order functions minimizing the number of steps required.
+:::
+
+
+::: {.callout-tip title="Follow along"}
+Define a variable named `current_release` with the contents of a HMT project release; follow the instructions in this [introductory tutorial](../tutorials/analyze.qmd)
+:::
+
+
+```{julia}
+#| echo: false
+#| warning: false
+#| output: false
+parentdir  = pwd() |> dirname |> dirname |> dirname
+srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
+current_release = read(srcfile, String)
+```
+
+
+## Get *Iliad* text
+
+Start by extracting a normalized edition of all texts in the archive.
+
+```{julia}
+using HmtArchive, HmtArchive.Analysis
+normalizedtexts = hmt_normalized(current_release)
+```
+
+We'll search in this corpus for the first line of *Iliad* 10 in the Venetus A manuscript, identified with a URN `urn:cts:greekLit:tlg0012.tlg001.msA:10.1`.
+
+In the normalized editions of the HMT archive, CTS URNs have an exemplar identifier, `normalized`. The URN for *Iliad* 1.1 in the Venetus A, for example, is `urn:cts:greekLit:tlg0012.tlg001.msA.normalized:1.1`.  When we filter the texts in our corpus, we'll use the `dropexemplar` function (from the `CitableBase` package) to match the value we want.
+
+```{julia}
+using CitableText, CitableCorpus, CitableBase
+u = CtsUrn("urn:cts:greekLit:tlg0012.tlg001.msA:10.1")
+psgmatches = filter(normalizedtexts.passages) do psg
+    dropexemplar(psg.urn) == u
+end
+```
+
+In this case, the resulting Vector of passages has only one element. We could extract its text value directly from `psgmatches[1]`:
+
+```{julia}
+text(psgmatches[1])
+```
+
+Alternatively, we extract a list of text values using any normal approach to working with Vectors, such as mapping or Julia broadcasting.
+
+
+```{julia}
+map(psg -> text(psg), psgmatches)
+```
+
+```{julia}
+text.(psgmatches)
+```
+
+## Get index of *scholia* to *Iliad* passages
+
+The HMT archive includes an index of *scholia* to passages of the *Iliad*. The index is a `CitableCommentary` (from the `CitableAnnotations` package; see [documentation here](https://neelsmith.quarto.pub/citableannotations/)).
+
+
+Although the `hmt_commentary` returns a Vector of all citable commentaries in the archive, the currrent contents of the archive only have one commentary object, *scholia* on the *Iliad*. Since we know that, we'll just confidently take the first commentary in the returned Vector.
+
+```{julia}
+#| warning: false
+scholia_index = hmt_commentary(current_release)[1]
+```
+
+We can use the  `annotated` and `annotators` functions from the `CitableAnnotations` package to see that the current index includes three texts of the *Iliad* commented on by eight *scholia* documents.
+
+```{julia}
+#| warning: false
+using CitableAnnotations
+annotated(scholia_index)
+```
+
+```{julia}
+#| warning: false
+annotators(scholia_index)
+```
+
+
+## Find relevant *scholia* in index
+
+
+
+A forthcoming version of the `CitableAnnotations` package includes `annotates` and `annotatedby` functions to perform the filtering in the following section with a single function reference. In the mean time, you can just filter the underlying data. It is organized as a Vector of pairs of URNs, with the first URN identifying the annotator, and the second URN the annotated object. We'll get the results we want by filtering on the second part of each pair, and keeping the first part (the *scholion* URN).
+
+```{julia}
+matches = filter(pr -> pr[2] == u, scholia_index.commentary) 
+scholia = map(pr -> pr[1], matches)
+scholia_generic = dropversion.(scholia)
+```
+
+
+## Get text of *scholia* from text corpus
+
+
+```{julia}
+filter(normalizedtexts.passages) do psg
+    psgu = collapsePassageBy(urn(psg),1) |> dropversion
+    psgu in scholia_generic
+end
+```
