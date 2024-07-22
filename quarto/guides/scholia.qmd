@@ -1,7 +1,7 @@
 # Read *Iliad* text with accompanying scholia
 
 ::: {.callout-note title="This should be easier"}
-While it is straightforward to find an *Iliad* passage and *scholia* commenting on it using the current version of `HmtArchive`, this common task should be easier in a future release of the package with higher-order functions minimizing the number of steps required.
+While it is straightforward to find an *Iliad* passage and *scholia* commenting on it with the current version of `HmtArchive`, this common task should be easier in a future release of the package with higher-order functions minimizing the number of steps required.
 :::
 
 
@@ -87,22 +87,70 @@ annotators(scholia_index)
 ## Find relevant *scholia* in index
 
 
+::: {.callout-note title="This will soon be easier"}
+A forthcoming version of the `CitableAnnotations` package includes `annotates` and `annotatedby` functions that can reduce the filtering in the following section to a single function call. 
+:::
 
-A forthcoming version of the `CitableAnnotations` package includes `annotates` and `annotatedby` functions to perform the filtering in the following section with a single function reference. In the mean time, you can just filter the underlying data. It is organized as a Vector of pairs of URNs, with the first URN identifying the annotator, and the second URN the annotated object. We'll get the results we want by filtering on the second part of each pair, and keeping the first part (the *scholion* URN).
+
+The data in a `CitableCommentary` are organized as a Vector of pairs of URNs, with the first URN identifying the annotator, and the second URN the annotated object. We'll get the results we want by filtering on the second part of each pair, and keeping the first part (the *scholion* URN).
 
 ```{julia}
 matches = filter(pr -> pr[2] == u, scholia_index.commentary) 
 scholia = map(pr -> pr[1], matches)
-scholia_generic = dropversion.(scholia)
 ```
 
 
-## Get text of *scholia* from text corpus
+## Utilities for working with the contents of *scholia*
+
+The `HmtArchive.Analysis` module includes several utility functions for working with the contents of *scholia* identified by URN.
+
+To extract `CitablePassage`s from a corpus, use the `scholion` function:
+
+```{julia}
+map(scholia) do sch
+    scholion(sch, normalizedtexts)
+end
+```
+
+If you just want the text contents of the scholion, use `scholion_text`.
 
 
 ```{julia}
-filter(normalizedtexts.passages) do psg
-    psgu = collapsePassageBy(urn(psg),1) |> dropversion
-    psgu in scholia_generic
+map(scholia) do sch
+    scholion_text(sch, normalizedtexts)
 end
+```
+
+
+You can separately extract the text of the lemma (if any) and the comment: 
+
+```{julia}
+map(scholia) do sch
+    lemma_text(sch, normalizedtexts)
+end
+```
+
+
+```{julia}
+map(scholia) do sch
+    comment_text(sch, normalizedtexts)
+end
+```
+
+If you're in an environment using Markdown for text formatting, there is also the `scholion_text_md` function:
+
+
+
+```{julia}
+scholia_list = map(scholia) do sch
+    "- " * scholion_text_md(sch, normalizedtexts)
+end
+```
+
+If the scholion has a lemma, the lemma is strongly emphasized, as you can see in this markdown display:
+
+```{julia}
+using Markdown
+md_text = join(scholia_list, "\n")
+Markdown.parse(md_text)
 ```
