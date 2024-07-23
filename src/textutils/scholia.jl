@@ -32,6 +32,15 @@ function lemma_text(u::CtsUrn, v::Vector{CitablePassage})
     isempty(psgs) ? "" : text(psgs[1])
 end
 
+function lemma_text(p::CitablePassage)
+    islemma(urn(p)) ? text(p) : ""
+end
+
+
+
+function comment_text(p::CitablePassage)
+    iscomment(urn(p)) ? text(p) : ""
+end
 
 """Find text of comment for a scholion.
 $(SIGNATURES)
@@ -96,6 +105,14 @@ function scholion_text(u::CtsUrn, c::CitableTextCorpus)
 end
 
 
+"""Format text of a single scholion in Markdown.
+$(SIGNATURES)
+"""
+function scholion_text_md(v::Vector{CitablePassage})
+    lemm = lemma_text.(v)
+    comm = comment_text.(v)
+    isempty(lemm) ? comm : "**$(lemm)** $(comm)"
+end
 
 """Format text of scholia passages matching URN as Markdown.
 $(SIGNATURES)
