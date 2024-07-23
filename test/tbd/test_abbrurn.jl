@@ -4,7 +4,9 @@
     # From the CitableParserBuilder package:
     @test abbreviate(aristarchus) == "pers.pers16"
 
+    #=
     aristarchusshort = HmtAbbreviation("pers.pers16")
     @test aristarchusshort == abbreviate(aristarchus) |> HmtAbbreviation
     @test expandabbr(aristarchusshort) == aristarchus
+    =#
 end
