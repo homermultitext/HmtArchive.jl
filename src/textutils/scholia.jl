@@ -152,6 +152,11 @@ function scholia_on(iliad::CtsUrn, v::Vector{CitablePassage}, idx::CitableCommen
 end
 
 
+
+
+"""Find text content of scholia commenting on a given URN.
+$(SIGNATURES)
+"""
 function scholia_text_on(iliad::CtsUrn, c::CitableTextCorpus, idx::CitableCommentary)
     scholia_text_on(iliad, c.passages, idx)
 end
@@ -162,5 +167,17 @@ function scholia_text_on(iliad::CtsUrn, v::Vector{CitablePassage}, idx::CitableC
     scholia = map(pr -> pr[1], matches)
     map(scholia) do sch
         scholion_text(sch, v)
+    end
+end
+
+function scholia_text_md_on(iliad::CtsUrn, c::CitableTextCorpus, idx::CitableCommentary)
+    scholia_text_md_on(iliad, c.passages, idx)
+end
+
+function scholia_text_md_on(iliad::CtsUrn, v::Vector{CitablePassage}, idx::CitableCommentary)
+    matches = filter(pr -> pr[2] == iliad, idx.commentary) 
+    scholia = map(pr -> pr[1], matches)
+    map(scholia) do sch
+        scholion_text_md(sch, v)
     end
 end

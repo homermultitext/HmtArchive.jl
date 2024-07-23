@@ -1,10 +1,5 @@
 # Read *Iliad* text with accompanying scholia
 
-::: {.callout-note title="This should be easier"}
-While it is straightforward to find an *Iliad* passage and *scholia* commenting on it with the current version of `HmtArchive`, this common task should be easier in a future release of the package with higher-order functions minimizing the number of steps required.
-:::
-
-
 ::: {.callout-tip title="Follow along"}
 Define a variable named `current_release` with the contents of a HMT project release; follow the instructions in this [introductory tutorial](../tutorials/analyze.qmd)
 :::
@@ -86,15 +81,39 @@ annotators(scholia_index)
 
 ## Find relevant *scholia* in index
 
+To find `CitablePassage`s, use the `scholia_on` function.
 
-::: {.callout-note title="This will soon be easier"}
-A forthcoming version of the `CitableAnnotations` package includes `annotates` and `annotatedby` functions that can reduce the filtering in the following section to a single function call. 
-:::
-
-
-The data in a `CitableCommentary` are organized as a Vector of pairs of URNs, with the first URN identifying the annotator, and the second URN the annotated object. We'll get the results we want by filtering on the second part of each pair, and keeping the first part (the *scholion* URN).
 
 ```{julia}
-matches = filter(pr -> pr[2] == u, scholia_index.commentary) 
-scholia = map(pr -> pr[1], matches)
+scholia_on(u, normalizedtexts, scholia_index)
 ```
+
+The resulting vector has one entry per scholion; each entry will have *two* citable passages, with the lemma and comment for the scholion.
+
+
+To find a Vector of plain text contents for each *scholion* on a passage, use the `scholia_text_on` function.
+
+```{julia}
+scholia_text_on(u, normalizedtexts, scholia_index)
+```
+
+
+You can also get the same contents formatted in Markdown (with lemma, if any, strongly emphasized), using the `scholia_text_md_on` function.
+
+
+```{julia}
+scholia_md = scholia_text_md_on(u, normalizedtexts, scholia_index)
+```
+
+
+You could, for example, use these in a numbered list of results:
+
+```{julia}
+listitems = map(scholia_md) do item
+    "1. " * item
+end 
+using Markdown
+join(listitems, "\n") |> Markdown.parse
+```
+
+Note that the first scholion has a lemma, the second does not.
