@@ -108,6 +108,8 @@ module Analysis
     # working with scholia:
     export scholion, scholion_text, scholion_text_md
     export islemma, iscomment, lemma_text, comment_text
+    export scholia_on, scholia_text_on
+    
     
     include("datamodels/pageroimodel.jl")
 
