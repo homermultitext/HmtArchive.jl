@@ -1,0 +1,94 @@
+# Utilities for working with URNs for *scholia* and *Iliad* passages
+
+```{julia}
+#| echo: false
+#| warning: false
+#| output: false
+parentdir  = pwd() |> dirname |> dirname |> dirname
+srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
+current_release = read(srcfile, String)
+```
+
+
+
+::: {.callout-tip title="Follow along"}
+Define a variable named `current_release` with the contents of a HMT project release; follow the instructions in this [introductory tutorial](../tutorials/analyze.qmd)
+:::
+
+
+## CTS URNs in the HMT archive
+
+Citing texts can be complicated: CTS URNs have both a work hierarchy and a passage hierarchy that can be cited at different levels.
+
+An entire *scholion* can be identified by a CTS URN with two levels to the *passage hierarchy*, like `urn:cts:greekLit:tlg5026.msA.hmt:10.2`. This is how *scholia* are cited in the HMT archive when indexing them to *Iliad* passages.  Each *scholion* in the index is paired with an *Iliad* passage also cited at two levels of the passage hierarchy, like `urn:cts:greekLit:tlg0012.tlg001.msA:10.1`.
+
+This is the deepest level of canonical citation for the *Iliad*, but the HMT's text editions subdivide each *scholion* into two parts, citable at a third level of the passage hierarchy, with a value of `lemma` or `comment` (e.g., `urn:cts:greekLit:tlg5026.msA.hmt:10.2.lemma` or `urn:cts:greekLit:tlg5026.msA.hmt:10.2.comment`).  The `lemma` component may be empty; the `comment` component always has some text contents.
+
+Texts may also have different values for the version or exemplar level of the *work hierarchy*. In the index of *scholia* to *Iliad* passages, both texts are identified with URNs including version identifiers (as above, pairing `urn:cts:greekLit:tlg5026.msA.hmt:10.2` and `urn:cts:greekLit:tlg0012.tlg001.msA:10.1`).
+
+In the HMT archive, normalized and diplomatic editions of texts are distinguished with a further, exemplar level of the work hierarchy. The first line of *Iliad* 10 in a normalized edition, for example, is `urn:cts:greekLit:tlg0012.tlg001.msA.normalized:10.1`, and the comment section of a scholion on it is cited as `urn:cts:greekLit:tlg5026.msA.hmt.normalized:10.2.comment`. 
+
+When *scholia* quote an unspecified edition of the *Iliad*, on the other hand, these are appropriately identified with CTS URNs that have no version or exemplar, like `urn:cts:greekLit:tlg0012.tlg001:10.1`.
+
+
+## Streamlined access to *scholia*
+
+
+The `HmtArchive.Analysis` module includes several utility functions to streamline working with the contents of *scholia* identified by URN.
+
+We can illustrate this with a corpus of the HMT archive in normalized editions.
+
+```{julia}
+#| warning: false
+using HmtArchive, HmtArchive.Analysis
+normalizedtexts = hmt_normalized(current_release)
+```
+
+
+Then we'll cite a *scholion* in the form you would find in the index of *scholia* to *Iliad* passages (that is, one with no exemplar identifier, and only two levels of the passage hierarchy).
+
+```{julia}
+using CitableText
+sch = CtsUrn("urn:cts:greekLit:tlg5026.msA.hmt:10.2")
+```
+
+
+You can extract `CitablePassage`s from a citable corpus with the `scholion` function:
+
+```{julia}
+scholion(sch, normalizedtexts)
+```
+
+As expected, we found two passages, cited at a further, third level of the passage hierarch.
+
+
+If you just want the text contents of the scholion, use `scholion_text`.
+
+
+```{julia}
+scholion_text(sch, normalizedtexts)
+```
+
+Here, we have a single text string that combines lemma and comment.Alternatively, ou can separately extract the text of the lemma (if it has any) and the comment: 
+
+```{julia}
+lemma_text(sch, normalizedtexts)
+```
+
+
+```{julia}
+comment_text(sch, normalizedtexts)
+```
+
+If you're in an environment using Markdown for text formatting, there is also the `scholion_text_md` function:
+
+```{julia}
+item =  "- " * scholion_text_md(sch, normalizedtexts)
+```
+
+If the scholion has a lemma, the lemma is strongly emphasized, as you can see in this markdown display:
+
+```{julia}
+using Markdown
+Markdown.parse(item)
+```

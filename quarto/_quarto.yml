@@ -5,7 +5,7 @@ theme: spacelab
 execute:
   freeze: auto
 date: last-modified  
-margin-header: "Package version: `0.15.0`"
+margin-header: "Package version: `0.16.0`"
 format:
   html: 
     toc: true
@@ -59,6 +59,7 @@ website:
         - guides/paragraphs.qmd
         - text: "---"      
         - guides/scholia.qmd
+        - guides/scholia-utils.qmd
         - guides/pageview.qmd
         - guides/text_w_img.qmd
         - guides/codexdata.qmd
