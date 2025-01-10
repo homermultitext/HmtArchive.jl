@@ -22,7 +22,7 @@ mss = hmt_codices(current_release)
 These are objects of type `Codex` from the Julia `CitablePhysicalText` package.
 
 ::: {.callout-tip title="For more info"}
-See a [tutorial about using code and page types](https://neelsmith.quarto.pub/citablephysicaltext/tutorials/codex.html) from the documentation
+See a [tutorial about using codex and page types](https://neelsmith.quarto.pub/citablephysicaltext/tutorials/codex.html) from the documentation
  of the `CitablePhysicalText` package.
 :::
 
