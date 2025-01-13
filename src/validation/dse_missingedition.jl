@@ -1,41 +1,44 @@
 
-
 """In current published release of HMT, find indexed text references that do not appear in text corpus.
 $(SIGNATURES)
 """
-function missingtexts()
-    missingtexts(hmt_cex())
+function missingtexts(; interval = 50)
+    missingtexts(hmt_cex(); interval = interval)
 end
 
 """In `cexsrc`, find indexed text references that do not appear in text corpus.
 $(SIGNATURES)
 """
-function missingtexts(cexsrc::AbstractString)
-    missingtexts(hmt_normalized(cexsrc), hmt_dse(cexsrc)[1])
+function missingtexts(cexsrc::AbstractString; interval = 50)
+    missingtexts(hmt_normalized(cexsrc), hmt_dse(cexsrc)[1]; interval = interval)
 end
 
 """Find indexed text references in `dse` that do not appear in corpus `c`.
 $(SIGNATURES)
 """
-function missingtexts(c::CitableTextCorpus, dse::DSECollection)
-    missingtexts(map(p -> p.urn, c.passages), dse.data)
+function missingtexts(c::CitableTextCorpus, dse::DSECollection; interval = 50)
+    missingtexts(map(p -> p.urn, c.passages), dse.data; interval = interval)
 end
 
 """Find indexed text references in `dse` that do not appear in corpus `c`.
 $(SIGNATURES)
 """
-function missingtexts(psgs::Vector{CitablePassage}, dse::DSECollection)
-    missingtexts(map(p -> p.urn, psgs), dse.data)
+function missingtexts(psgs::Vector{CitablePassage}, dse::DSECollection; interval = 50)
+    missingtexts(map(p -> p.urn, psgs), dse.data; interval = interval)
 end
 
 """Find indexed text references in `dses` that do not appear in `texturns`.
 $(SIGNATURES)
 """
-function missingtexts(texturns::Vector{CtsUrn}, triples::Vector{DSETriple})
-    textreff = hmtreff(texturns)
-    tripletexts = map(tr -> tr.passage, triples)
+function missingtexts(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 50)
+    textreff = hmtreff(texturns) .|> string
+    tripletexts = map(tr -> string(tr.passage), triples)
     mia = []
-    for txt in tripletexts
+    max = length(tripletexts)
+    for (i, txt) in enumerate(tripletexts)
+        if mod(i,interval) == 0
+            @info("$(i)/$(max)")
+        end
         if txt in textreff
         else
             push!(mia, txt)
@@ -48,9 +51,10 @@ end
 """Find indexed text references in DSE for `pg` that do not appear in `texturns`.
 $(SIGNATURES)
 """
-function missingtexts(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}, pg::Cite2Urn)
+function missingtexts(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 50)
     missingtexts(texturns,
-        filter(tr.surface == pg, triples)
+        filter(tr.surface == pg, triples);
+        interval = interval
     )
 end
 
@@ -59,11 +63,24 @@ end
 """Find indexed text references in DSE for `pg` that do not appear in `psgs`.
 $(SIGNATURES)
 """
-function missingtexts(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}, pg::Cite2Urn)
-    missingtexts(
-        map(p -> p.urn, psgs),
-        filter(tr -> tr.surface == pg, triples)
-    )
+function missingtexts(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 50) @info("Find missing texts for $(pg)")
+    
+    surfacerecords = filter(tr -> string(tr.surface) == string(pg), triples)
+    surfacelist = map(tr -> tr.passage, surfacerecords) .|> string
+    txtlist = map(p -> p.urn, psgs) |> hmtreff .|> string
+    bad = []
+    max = length(surfacelist)
+    for (i,txt) in enumerate(surfacelist)
+        if mod(i, interval) == 0
+            @info("Text $(i)/$(max) on $(pg)")
+        end
+        if txt in txtlist
+            # OK
+        else
+            push!(bad, txt)
+        end
+    end
+    bad 
 end
 
 
@@ -72,19 +89,24 @@ Report results as Tuples pairing a page reference with list of missing passages,
 only including references to pages with missing passages.
 $(SIGNATURES)
 """
-function missingtexts(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{Cite2Urn} )
+function missingtextsperpage(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{Cite2Urn}; interval = 50 )
     @info("Analyzing DSE indexing for $(length(pglist)) pages")
+    
     reports = Tuple{Cite2Urn, Vector{CtsUrn}}[]
+    #reports = []
+  
     for pg in pglist
-        @info("Checking $(pg)")
-        missinglist = missingtexts(c.passages, dsec.data, pg)
+        @debug("Checking $(pg)")
+        missinglist = missingtexts(c.passages, dsec.data, pg; interval = interval)
         if isempty(missinglist)
-            @info("All edited.")
+            @debug("All edited.")
         else
-            push!(reports,(pg, missinglist))
-            @info("> $(length(missinglist)) missing.")
+            @debug("Try to push for $(pg) with list $(missinglist)")
+            @debug("> $(length(missinglist)) missing.")
         end
+        push!(reports,(pg, CtsUrn.(missinglist)))
     end
+ 
     reports
 end
 
@@ -93,7 +115,7 @@ Report results as Tuples pairing a page reference with list of missing passages,
 only including references to pages with missing passages.
 $(SIGNATURES)
 """
-function missingtexts(c::CitableTextCorpus, dsec::DSECollection, codex::Codex)
+function missingtextsperpage(c::CitableTextCorpus, dsec::DSECollection, codex::Codex; interval = 50)
     @info("Analyzing DSE indexing in $(label(codex))")
-    missingtexts(c, dsec, map(p -> p.urn, codex.pages))
+    missingtextsperpage(c, dsec, map(p -> p.urn, codex.pages); interval = interval)
 end

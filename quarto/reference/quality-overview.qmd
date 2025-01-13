@@ -6,3 +6,21 @@ engine: julia
 
 ::: {.callout-note title="Content TBA"}
 :::
+
+```{julia}
+#| warning: false
+using HmtArchive, HmtArchive.Analysis
+using CitableText
+current = hmt_cex()
+normedtexts = hmt_normalized(current)
+dse = hmt_dse(current)[1]
+
+bookreport = HmtArchive.Analysis.missingbybook(normedtexts, dse)
+vareport = filter(bookreport) do r
+    versionid(r.book) == "msA" && groupid(r.book) == "tlg0012"
+end
+```
+
+```{julia}
+length(vareport)
+```
