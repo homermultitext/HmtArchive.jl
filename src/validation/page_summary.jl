@@ -1,54 +1,12 @@
----
-engine: julia
----
-
-# Assessing the consistency of editing
-
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-using HmtArchive, HmtArchive.Analysis
-current_release = hmt_cex()
-
-dse = hmt_dse(current_release)[1]
-commentary = hmt_commentary(current_release)[1]
-mslist = hmt_codices(current_release)
-```
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-using CitableObject, CitableBase
-vaurn = Cite2Urn("urn:cite2:hmt:msA.v1:")
-va = filter(ms -> urn(ms) == vaurn, mslist)[1]
-```
-
-1. *Category 1 errors* are scholia URNs indexed in DSE records, but not linked in XML editions to Iliad lines on the given page.
-2. *Category 2 errors* are scholia URNs linked in XML editions to Iliad lines on the given page, but not appearing in DSE records
-
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
+"""Summary of editing quality for a single page of a MS."""
 struct PageSummary
     urn::Cite2Urn
     fail1::Integer
     fail2::Integer
 end
-```
 
 
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-using CitablePhysicalText
-using CitableText
-
+"""Compose a Markdown report for a page."""
 function pagereport(pg, dse, commentary)
 
 
@@ -109,118 +67,47 @@ function pagereport(pg, dse, commentary)
     (md = join(mdlines, "\n"), fail1 = length(dsenotindexed), fail2 = length(indexednotindse))
 
 end
-```
 
 
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-problempage = Cite2Urn("urn:cite2:hmt:msA.v1:169v")
-pagereport(problempage, dse, commentary)
-```
-
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-function summarizeMS(ms, dse, comm)
+"""Summarize results fora ll pages in a MS."""
+function summarizeMS(ms, dse, comm; interval = 5)
 	pagesummaries = PageSummary[]
+    max = length(ms.pages)
 	for (i,pg) in enumerate(ms.pages)
-		if mod(i,10) == 0
-			@info("Page $(i)...")
+		if mod(i,interval) == 0
+			@info("Page $(i)/$(max)...")
 		end
     	report = pagereport(pg.urn, dse, comm)
     	push!(pagesummaries, PageSummary(pg.urn, report.fail1, report.fail2))
 	end
 	pagesummaries
 end
-```
 
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
+
 function cat1histo(v::Vector{PageSummary})
 	byfail1 = sort(v, by = pg -> pg.fail1, rev = true)
 	xlabels = map(report -> objectcomponent(report.urn), byfail1)
 	yvals = map(report -> report.fail1, byfail1)
 	bar(xlabels, yvals, title = "Category 1 errors")
 end
-```
 
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-msasummary = summarizeMS(va, dse, commentary)
-```
-
-
-Category 1 errors:
-
-```{julia}
-#|  echo: false
-using Plots
-cat1histo(msasummary) |> display
-```
-
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
 function cat2histo(v::Vector{PageSummary})
 	byfail2 = sort(v, by = pg -> pg.fail2, rev = true)
 	xlabels = map(report -> objectcomponent(report.urn), byfail2)
 	yvals = map(report -> report.fail2, byfail2)
 	bar(xlabels, yvals, title = "Category 2 errors")
 end
-```
-
-Category 2 errors:
-
-```{julia}
-#| echo: false
-cat2histo(msasummary) |> display
-```
 
 
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
 function cat1bar(v::Vector{PageSummary})
 	xlabels = map(report -> objectcomponent(report.urn), v)
 	yvals = map(report -> report.fail1, v)
 	bar(xlabels, yvals, title = "Category 1 errors byt page (in page order)")
 end
-```
 
-Category 1 by page order:
-
-```{julia}
-#| echo: false
-cat1bar(msasummary) |> display
-```
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
 function cat2bar(v::Vector{PageSummary})
 	
 	xlabels = map(report -> objectcomponent(report.urn), v)
 	yvals = map(report -> report.fail2, v)
 	bar(xlabels, yvals, title = "Category 2 errors by page (in page order)")
 end
-```
-
-
-Category 2 by page order:
-
-```{julia}
-#| echo: false
-cat2bar(msasummary) |> display
-```

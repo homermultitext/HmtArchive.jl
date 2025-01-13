@@ -11,4 +11,4 @@ Code for working with the HMT project archive:
 
 Assessing quality of data in the HMT project archive:
 
-- [consistency of records](./editingquality.qmd)
+- [consistency of records](./quality-overview.qmd)

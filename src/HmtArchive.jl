@@ -26,10 +26,13 @@ export adjacent
 export writerc, publish
 export librarycex
 
+export PageSummary, pagereport
+
 include("constants.jl")
 include("archive.jl")
 include("indexing.jl")
 include("publish.jl")
+include("validation/page_summary.jl")
 
 module Analysis
     using Documenter, DocStringExtensions
