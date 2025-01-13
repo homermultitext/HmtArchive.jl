@@ -24,3 +24,10 @@ end
 ```{julia}
 length(vareport)
 ```
+
+```{julia}
+using CairoMakie
+xs = 1:length(vareport)
+ys = map(r -> length(r.missinglist), vareport)
+barplot(xs, ys)
+```
