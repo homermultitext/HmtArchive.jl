@@ -1,20 +1,14 @@
+---
+engine: julia
+---
+
 # Editions of texts
 
 
-::: {.callout-tip title="Try it"}
-Define a variable named `current_release` with the contents of a HMT project release; follow the instuctions in this [introductory tutorial](../tutorials/analyze.qmd)
-:::
-
 ```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-parentdir  = pwd() |> dirname |> dirname |> dirname
-srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_release = read(srcfile, String)
+using HmtArchive.Analysis
+current_release = hmt_cex()
 ```
-
-
 Get citable text corpora from a release, in normalized or diplomatic form:
 
 ```{julia}

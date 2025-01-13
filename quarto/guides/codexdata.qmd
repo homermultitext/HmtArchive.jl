@@ -1,15 +1,15 @@
+---
+engine: julia
+---
+
+
 # Find content for a manuscript page
 
 
-We've read the contents of a current HMT project release into a variable named `current_data`.
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-parentdir  = pwd() |> dirname |> dirname |> dirname
 
-srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_data = read(srcfile, String)
+```{julia}
+using HmtArchive.Analysis
+current_release = hmt_cex()
 ```
 
 
@@ -21,7 +21,7 @@ DSE records are organized in collections. All HMT DSE records are grouped in a s
 
 ```{julia}
 using HmtArchive, HmtArchive.Analysis
-dse = hmt_dse(current_data)[1]
+dse = hmt_dse(current_release)[1]
 ```
 
 

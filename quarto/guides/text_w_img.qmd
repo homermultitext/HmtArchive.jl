@@ -1,3 +1,7 @@
+---
+engine: julia
+---
+
 # Juxtaposing text and image selection
 
 ::: {.callout-caution}

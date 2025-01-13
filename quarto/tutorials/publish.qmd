@@ -1,3 +1,7 @@
+---
+engine: julia
+---
+
 # Publishing a release of the HMT archive
 
 
@@ -6,7 +10,10 @@ Create an `Archive` object from the path in your local file system to the `archi
 ```{julia}
 #| echo: false
 #| output: false
-repo = pwd()  |> dirname |> dirname |> dirname
+
+# Setting for correct root when hmt-archive is in
+# adjacent directory to HmtArchive.jl:
+repo = pwd()  |> dirname |> dirname |> dirname 
 root =  joinpath(repo, "hmt-archive", "archive")
 ```
 

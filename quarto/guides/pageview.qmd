@@ -1,3 +1,7 @@
+---
+engine: julia
+---
+
 # Visualize coverage of editing of a page
 
 
@@ -11,16 +15,8 @@ Define a variable named `current_release` with the contents of a HMT project rel
 ## Get the triples records (text/artifact/image) for the current release
 
 ```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-parentdir  = pwd() |> dirname |> dirname |> dirname
-srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_release = read(srcfile, String)
-```
-
-```{julia}
-using HmtArchive, HmtArchive.Analysis
+using HmtArchive.Analysis
+current_release = hmt_cex()
 dse = hmt_dse(current_release)[1]
 ```
 

@@ -1,9 +1,16 @@
+---
+engine: julia
+---
+
 # Assembling parts of the archive
+
+```{julia}
+```
 
 ```{julia}
 #| echo: false
 #| output: false
-root = joinpath(pwd() |> dirname |> dirname |> dirname, "hmt-archive", "archive")
+root = joinpath(pwd() |> dirname, "hmt-archive", "archive")
 ```
 
 

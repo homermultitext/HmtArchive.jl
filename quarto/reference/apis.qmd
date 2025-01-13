@@ -1,3 +1,6 @@
+---
+engine: julia
+---
 # API documentation
 
 ## Working with published releases
@@ -9,6 +12,7 @@
 ```{julia}
 #| echo: false
 #| warning: false
+#| 
 using HmtArchive, HmtArchive.Analysis
 @doc hmt_cex
 ```

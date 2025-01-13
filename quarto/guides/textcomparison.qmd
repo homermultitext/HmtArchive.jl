@@ -1,3 +1,7 @@
+---
+engine: julia
+---
+
 # Comparing texts
 
 - use `HmtArchive.Analysis`

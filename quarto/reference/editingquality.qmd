@@ -1,3 +1,7 @@
+---
+engine: julia
+---
+
 # Assessing the consistency of editing
 
 
@@ -5,19 +9,8 @@
 #| echo: false
 #| warning: false
 #| output: false
-parentdir  = pwd() |> dirname |> dirname |> dirname
-srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_release = read(srcfile, String)
-
-```
-
-
-```{julia}
-#| echo: false
-#| warning: false
-#| output: false
 using HmtArchive, HmtArchive.Analysis
-#current_release = hmt_cex()
+current_release = hmt_cex()
 
 dse = hmt_dse(current_release)[1]
 commentary = hmt_commentary(current_release)[1]

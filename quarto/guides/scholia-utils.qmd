@@ -1,20 +1,13 @@
+---
+engine: julia
+---
+
 # Utilities for working with URNs for *scholia* and *Iliad* passages
 
 ```{julia}
-#| echo: false
-#| warning: false
-#| output: false
-parentdir  = pwd() |> dirname |> dirname |> dirname
-srcfile = joinpath(parentdir, "hmt-archive", "releases-cex", "hmt-current.cex")
-current_release = read(srcfile, String)
+using HmtArchive.Analysis
+current_release = hmt_cex()
 ```
-
-
-
-::: {.callout-tip title="Follow along"}
-Define a variable named `current_release` with the contents of a HMT project release; follow the instructions in this [introductory tutorial](../tutorials/analyze.qmd)
-:::
-
 
 ## CTS URNs in the HMT archive
 
