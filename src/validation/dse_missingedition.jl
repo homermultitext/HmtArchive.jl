@@ -2,35 +2,35 @@
 """In current published release of HMT, find list of texts cited in DSE record that do not appear in the corpus of a release.
 $(SIGNATURES)
 """
-function missing_from_edition(; interval = 50)
+function missing_from_edition(; interval = 5000)
     missing_from_edition(hmt_cex(); interval = interval)
 end
 
 """In `cexsrc`, find list of texts cited in DSE record that do not appear in the corpus of a release.
 $(SIGNATURES)
 """
-function missing_from_edition(cexsrc::AbstractString; interval = 50)
+function missing_from_edition(cexsrc::AbstractString; interval = 5000)
     missing_from_edition(hmt_normalized(cexsrc), hmt_dse(cexsrc)[1]; interval = interval)
 end
 
 """Find indexed text references in `dse` that do not appear in corpus `c`.
 $(SIGNATURES)
 """
-function missing_from_edition(c::CitableTextCorpus, dse::DSECollection; interval = 50)
+function missing_from_edition(c::CitableTextCorpus, dse::DSECollection; interval = 5000)
     missing_from_edition(map(p -> p.urn, c.passages), dse.data; interval = interval)
 end
 
 """Find indexed text references in `dse` that do not appear in corpus `c`.
 $(SIGNATURES)
 """
-function missing_from_edition(psgs::Vector{CitablePassage}, dse::DSECollection; interval = 50)
+function missing_from_edition(psgs::Vector{CitablePassage}, dse::DSECollection; interval = 5000)
     missing_from_edition(map(p -> p.urn, psgs), dse.data; interval = interval)
 end
 
 """Find indexed text references in `dses` that do not appear in `texturns`.
 $(SIGNATURES)
 """
-function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 50)
+function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 10000)
     textreff = hmtreff(texturns) .|> string
     tripletexts = map(tr -> string(tr.passage), triples)
     mia = []

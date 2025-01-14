@@ -141,6 +141,7 @@ module Analysis
     include("validation/dse_missingedition.jl")
     include("validation/text_missingdse.jl")
     include("validation/textreff.jl")
+    include("validation/commentary_reff.jl")
 end
 
 end # module

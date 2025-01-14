@@ -55,8 +55,16 @@ notindse = HmtArchive.Analysis.missing_from_dse(dipltext, dse)
 
 ## Assessing errors by book of the *Iliad*
 
+
+::: {.callout-note title="TBA"}
+:::
+
+
 ## Assessing a single page
 
+
+::: {.callout-note title="TBA"}
+:::
 
 ```{julia}
 #| output: false
