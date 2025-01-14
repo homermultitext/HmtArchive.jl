@@ -50,6 +50,7 @@ Use the `missing_from_dse` function to collect a list of text passages in this r
 ```{julia}
 #| warning: false
 #| asis: true
+#| output: false
 notindse = HmtArchive.Analysis.missing_from_dse(dipltext, dse)
 ```
 
@@ -60,6 +61,7 @@ Use the `bad_xref`  function to collect a list of scholia with invalid cross ref
 #| warning: false
 #| asis: true
 nocrossref = HmtArchive.Analysis.bad_xref(dipltext, dse)
+
 ```
 
 ## Assessing errors by book of the *Iliad*
