@@ -32,5 +32,9 @@ function bad_xref(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval
             push!(bad, psg)
         end
     end
+
+    #@info("SAMPLE urns:") 
+    #@info("$(txtpsgs[1]) and $(dsepsgs[1])")
     bad
+    
 end
