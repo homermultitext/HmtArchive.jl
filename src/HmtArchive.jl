@@ -105,8 +105,8 @@ module Analysis
 
     # validation functions:
     export isiliad, isscholion
-    export missingtexts
-    export missingdse, missingbybook
+    export missing_from_edition
+    export missing_from_dse, missingbybook
 
     # working with scholia:
     export scholion, scholion_text, scholion_text_md
@@ -139,7 +139,7 @@ module Analysis
     include("textutils/scholia.jl")
 
     include("validation/dse_missingedition.jl")
-    include("validation/edition_unindexed.jl")
+    include("validation/text_missingdse.jl")
     include("validation/textreff.jl")
 end
 

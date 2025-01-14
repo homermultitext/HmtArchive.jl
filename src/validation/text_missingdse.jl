@@ -1,23 +1,23 @@
 
 
-"""Find text passages not appearing in DSE records.
+"""Find text passages in the corpus not appearing in DSE records.
 $(SIGNATURES)
 """
-function missingdse(c::CitableTextCorpus, dsec::DSECollection; interval = 50)
-    missingdse(c.passages, dsec.data; interval = interval)
+function missing_from_dse(c::CitableTextCorpus, dsec::DSECollection; interval = 50)
+    missing_from_dse(c.passages, dsec.data; interval = interval)
 end
 
 """Find text passages not appearing in DSE records.
 $(SIGNATURES)
 """
-function missingdse(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}; interval = 50)
-    missingdse(map(p -> p.urn, psgs), triples; interval = interval)
+function missing_from_dse(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}; interval = 50)
+    missing_from_dse(map(p -> p.urn, psgs), triples; interval = interval)
 end
 
 """Find text passages not appearing in DSE records.
 $(SIGNATURES)
 """
-function missingdse(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 50)
+function missing_from_dse(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 50)
     @info("Analyzing indexing of $(length(texturns)) text passages.")
     textreff = hmtreff(texturns) .|> string
     tripletexts = map(tr -> tr.passage, triples) .|> string
@@ -67,7 +67,7 @@ function missingbybook(texturns::Vector{CtsUrn}, triples::Vector{DSETriple})
     for bk in string.(bookreff)
         @debug("Checking indexing of $(bk) against textreff")
         checklist = filter(s -> startswith(s, bk), stringreff) .|> CtsUrn
-        missinglist = missingdse(checklist, triples) .|> CtsUrn
+        missinglist = missing_from_dse(checklist, triples) .|> CtsUrn
         
         push!(report,(book = CtsUrn(bk), missinglist = missinglist))
         if ! isempty(missinglist)

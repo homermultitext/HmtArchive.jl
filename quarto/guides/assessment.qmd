@@ -2,12 +2,15 @@
 engine: julia
 ---
 
-# Assess consistency of documentation for a page
+# Assessing consistency of documentation
 
+`HmtArchive.Analysis` includes several functions for evaluating the referential integrity of the data in a published release of the HMT project.
+
+We'll illustrate theses functions on a specified release, "hmt-2024c" (the last published release in calendar year 2024).
 
 ```{julia}
-using HmtArchive.Analysis
-current_release = hmt_cex()
+using HmtArchive, HmtArchive.Analysis
+release = hmt_cex("hmt-2024c")
 ```
 
 ## Collect data from the current release
@@ -21,16 +24,39 @@ Data we'll need from the current release:
 ```{julia}
 #| warning: false
 #| output: false
-using HmtArchive, HmtArchive.Analysis
-dse = hmt_dse(current_release)[1]
-dipltext = hmt_diplomatic(current_release)
-commentary = hmt_commentary(current_release)[1]
+dse = hmt_dse(release)[1]
+dipltext = hmt_diplomatic(release)
+commentary = hmt_commentary(release)[1]
 
 ```
 
+## Assessing an entire release
 
+Use the `missing_from_edition` function to collect a list of text passages  cited in DSE records that do not appear in this release's text corpus:
 
-## Choose a manuscript page to evaluate
+```{julia}
+#| warning: false
+#| asis: true
+notincorpus = HmtArchive.Analysis.missing_from_edition(dipltext, dse)
+missingcount = length(notincorpus)
+totalpsgs = length(dipltext.passages)
+
+using Markdown
+"> **$(missingcount)** citable passages out of $(totalpsgs) total passages have no record in this release's DSE collection" |> Markdown.parse
+```
+
+Use the `missing_from_dse` function to collect a list of text passages in this release's text corpus that do not appear in a DSE record:
+
+```{julia}
+#| warning: false
+#| asis: true
+notindse = HmtArchive.Analysis.missing_from_dse(dipltext, dse)
+```
+
+## Assessing errors by book of the *Iliad*
+
+## Assessing a single page
+
 
 ```{julia}
 #| output: false
