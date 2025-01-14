@@ -3,6 +3,7 @@
 $(SIGNATURES)
 """
 function missing_from_edition(; interval = 5000)
+    @info("Finding DSE references to texts not in corpus (interval $(interval))")
     missing_from_edition(hmt_cex(); interval = interval)
 end
 
@@ -30,7 +31,7 @@ end
 """Find indexed text references in `dses` that do not appear in `texturns`.
 $(SIGNATURES)
 """
-function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 10000)
+function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 5000)
     textreff = hmtreff(texturns) .|> string
     tripletexts = map(tr -> string(tr.passage), triples)
     mia = []
@@ -51,7 +52,7 @@ end
 """Find indexed text references in DSE for `pg` that do not appear in `texturns`.
 $(SIGNATURES)
 """
-function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 50)
+function missing_from_edition(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 5000)
     missing_from_edition(texturns,
         filter(tr.surface == pg, triples);
         interval = interval
@@ -63,7 +64,7 @@ end
 """Find indexed text references in DSE for `pg` that do not appear in `psgs`.
 $(SIGNATURES)
 """
-function missing_from_edition(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 50) @info("Find missing texts for $(pg)")
+function missing_from_edition(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}, pg::Cite2Urn; interval = 5000) @info("Find missing texts for $(pg)")
     
     surfacerecords = filter(tr -> string(tr.surface) == string(pg), triples)
     surfacelist = map(tr -> tr.passage, surfacerecords) .|> string
@@ -89,7 +90,7 @@ Report results as Tuples pairing a page reference with list of missing passages,
 only including references to pages with missing passages.
 $(SIGNATURES)
 """
-function missing_from_edition_per_page(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{Cite2Urn}; interval = 50 )
+function missing_from_edition_per_page(c::CitableTextCorpus, dsec::DSECollection, pglist::Vector{Cite2Urn}; interval = 5000 )
     @info("Analyzing DSE indexing for $(length(pglist)) pages")
     
     reports = Tuple{Cite2Urn, Vector{CtsUrn}}[]
@@ -115,7 +116,7 @@ Report results as Tuples pairing a page reference with list of missing passages,
 only including references to pages with missing passages.
 $(SIGNATURES)
 """
-function missing_from_edition_per_page(c::CitableTextCorpus, dsec::DSECollection, codex::Codex; interval = 50)
+function missing_from_edition_per_page(c::CitableTextCorpus, dsec::DSECollection, codex::Codex; interval = 5000)
     @info("Analyzing DSE indexing in $(label(codex))")
     missing_from_edition_per_page(c, dsec, map(p -> p.urn, codex.pages); interval = interval)
 end

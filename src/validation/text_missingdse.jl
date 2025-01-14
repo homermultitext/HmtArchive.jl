@@ -3,21 +3,21 @@
 """Find text passages in the corpus not appearing in DSE records.
 $(SIGNATURES)
 """
-function missing_from_dse(c::CitableTextCorpus, dsec::DSECollection; interval = 50)
+function missing_from_dse(c::CitableTextCorpus, dsec::DSECollection; interval = 5000)
     missing_from_dse(c.passages, dsec.data; interval = interval)
 end
 
 """Find text passages not appearing in DSE records.
 $(SIGNATURES)
 """
-function missing_from_dse(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}; interval = 50)
+function missing_from_dse(psgs::Vector{CitablePassage}, triples::Vector{DSETriple}; interval = 5000)
     missing_from_dse(map(p -> p.urn, psgs), triples; interval = interval)
 end
 
 """Find text passages not appearing in DSE records.
 $(SIGNATURES)
 """
-function missing_from_dse(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 50)
+function missing_from_dse(texturns::Vector{CtsUrn}, triples::Vector{DSETriple}; interval = 5000)
     @info("Analyzing indexing of $(length(texturns)) text passages.")
     textreff = hmtreff(texturns) .|> string
     tripletexts = map(tr -> tr.passage, triples) .|> string
