@@ -26,8 +26,16 @@ length(vareport)
 ```
 
 ```{julia}
-using CairoMakie
 xs = 1:length(vareport)
 ys = map(r -> length(r.missinglist), vareport)
-barplot(xs, ys)
+
+
+using CairoMakie
+fig = Figure()
+ax = Axis(fig[1, 1], xlabel="Book of Iliad", ylabel="Unindexed lines", title="Indexing errors")
+
+barplot!(ax, xs, ys)
+
+
+fig
 ```
